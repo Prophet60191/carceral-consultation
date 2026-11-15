@@ -88,6 +88,21 @@ defmodule ClaperWeb.IntroMessengerTest do
     refute has_element?(a, "#intro-messenger-dot")
   end
 
+  test "the theme button sits in the corner, with or without messages", %{
+    event: event,
+    state: state
+  } do
+    a = phone(event, "intro-theme")
+    assert has_element?(a, "#intro-theme #intro-theme-toggle[data-theme-toggle]")
+    assert has_element?(a, ~s(#intro-theme-toggle[data-label-light="Switch to light theme"]))
+    assert has_element?(a, ~s(#intro-theme-toggle[data-label-dark="Switch to dark theme"]))
+
+    {:ok, _} = Presentations.update_presentation_state(state, %{chat_enabled: false})
+    off = phone(event, "intro-theme-off")
+    assert has_element?(off, "#intro-theme-toggle")
+    refute has_element?(off, "#intro-messenger")
+  end
+
   test "no messenger when messages are off, or once the event has started",
        %{event: event, state: state} do
     {:ok, state} = Presentations.update_presentation_state(state, %{chat_enabled: false})

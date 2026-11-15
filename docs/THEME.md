@@ -268,6 +268,7 @@ A second theme, `carceral-light`, uses the same roles with light values. Since
 The previous neutral light theme (white on #f4f4f5, near-black #18181b) is in
 git history. Both themes live in `theme-config.css`.
 
+- **Switching (participants):** a one-click light/dark button in the intro page's bottom-left corner (`[data-theme-toggle]`, 2026-11-15). It sends the same `cc:set-theme` signal as the account menu, so both write one setting.
 - **Switching:** Dark | Light | System in the account menu, above Logout
   (`ClaperWeb.ThemeScript.switcher`). The choice is saved in this browser and
   applied in each page's `<head>` before it draws (`ClaperWeb.ThemeScript.script`),

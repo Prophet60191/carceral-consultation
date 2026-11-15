@@ -162,6 +162,10 @@ On computers (any device with a mouse or trackpad, at any window width; a narrow
 - **Unchanged:** the big screen before the start (the join page and QR code), phones and tablets (to be discussed), and the "About this event" view over the slides.
 - **Files:** server state (open, red dot) in `EventLive.Show`, closing behavior in `assets/js/intro_messenger.js`, the look in `assets/css/intro_messenger.css`.
 
+### Theme button (2026-11-15, Jose)
+
+The bottom-left corner holds, from the bottom up: a **light/dark button**, then the chat bubble (when messages are on), then the messenger when it's open. One click switches between the light and dark themes, starting from what's on screen, including when the device's theme was being followed. The icon and label say where the next click goes: a sun ("Switch to light theme") while dark, a moon while light. It uses the account menu's own setting (`cc:set-theme` in `assets/js/theme.js`), so the choice is remembered on that device and carries into the live room. It shows whether or not messages are on, on computers only for now.
+
 ## Cards (2026-11-15, Jose)
 
 Below the ticket, every block is its own card, shaped for its kind (`IntroLive.Components.page/1`; styles in `assets/css/ticket.css`, "Intro cards"). Before this, all the blocks between two headings shared one card.

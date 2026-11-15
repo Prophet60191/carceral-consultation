@@ -455,13 +455,60 @@
     countdown={@countdown}
   />
 
+  <%!-- Light or dark for participants (Jose, 2026-11-15): the bottom-left
+       corner, under the chat bubble. Same setting as the account menu's
+       switcher (assets/js/theme.js); the page never redraws it, so the
+       script can keep its label in step with the theme. --%>
+  <div id="intro-theme" class="intro-corner" phx-update="ignore">
+    <button
+      type="button"
+      id="intro-theme-toggle"
+      data-theme-toggle
+      data-label-light={gettext("Switch to light theme")}
+      data-label-dark={gettext("Switch to dark theme")}
+      aria-label={gettext("Switch to light theme")}
+      data-tooltip={gettext("Switch to light theme")}
+      data-tooltip-side="right"
+      class="btn btn-secondary btn-circle btn-lg intro-theme-toggle"
+    >
+      <svg
+        class="theme-icon-sun size-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.8"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M12 3v2.25m6.364.386-1.591 1.591M21 12h-2.25m-.386 6.364-1.591-1.591M12 18.75V21m-4.773-4.227-1.591 1.591M5.25 12H3m4.227-4.773L5.636 5.636M15.75 12a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
+        />
+      </svg>
+      <svg
+        class="theme-icon-moon size-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.8"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M21.752 15.002A9.72 9.72 0 0 1 18 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 0 0 3 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 0 0 9.002-5.998Z"
+        />
+      </svg>
+    </button>
+  </div>
+
   <%!-- The messenger (Jose, 2026-11-15): on desktop, when messages are on,
        people can talk before the start. The same message system as the live
        room (MessagesComponents); styles in assets/css/intro_messenger.css. --%>
   <div
     :if={@state.chat_enabled}
     id="intro-messenger"
-    class="intro-messenger"
+    class="intro-corner intro-messenger"
     phx-hook="IntroMessenger"
     data-open={to_string(@messenger_open)}
   >

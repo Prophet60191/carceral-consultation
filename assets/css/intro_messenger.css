@@ -7,22 +7,44 @@
   are the live room's (ClaperWeb.EventLive.MessagesComponents).
 */
 
-.intro-messenger {
+/* The bottom-left corner holds, from the bottom up: the theme button,
+   the chat bubble, then the messenger when it is open. */
+.intro-corner {
   display: none;
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .intro-messenger {
+  .intro-corner {
     display: block;
   }
 }
 
+.intro-theme-toggle,
 .intro-messenger-toggle {
   position: fixed;
   left: 24px;
-  bottom: 24px;
   z-index: 60;
   box-shadow: var(--shadow-xl);
+}
+
+/* The theme button at the bottom; the chat bubble one step above it */
+.intro-theme-toggle {
+  bottom: 24px;
+}
+.intro-messenger-toggle {
+  bottom: 84px;
+}
+
+/* The theme button shows where it will take you: a sun while dark, a moon
+   while light (the <html> theme, set before the page draws) */
+.theme-icon-moon {
+  display: none;
+}
+html[data-theme="carceral-light"] .theme-icon-sun {
+  display: none;
+}
+html[data-theme="carceral-light"] .theme-icon-moon {
+  display: block;
 }
 
 /* The red dot: messages arrived while the messenger was closed */
@@ -40,13 +62,13 @@
 .intro-messenger-panel {
   position: fixed;
   left: 24px;
-  bottom: 96px;
+  bottom: 144px;
   z-index: 60;
   display: flex;
   flex-direction: column;
   /* Shrinks to fit a narrow window, keeping the 24px margins */
   width: min(400px, calc(100vw - 48px));
-  height: min(640px, calc(100vh - 128px));
+  height: min(640px, calc(100vh - 176px));
   overflow: hidden;
   border-radius: 24px;
   border: 1px solid color-mix(in srgb, var(--color-sheen) 14%, var(--color-line));

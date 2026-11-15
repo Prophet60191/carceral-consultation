@@ -30,7 +30,21 @@ export function themeColor(role, alpha = 1) {
 // pick up a new theme on the next page load.
 const THEME_KEY = "cc-theme";
 
+// One-click light/dark buttons (data-theme-toggle; the intro page's corner,
+// Jose 2026-11-15): their label says where the next click takes you.
+function markThemeToggles() {
+  const light =
+    document.documentElement.getAttribute("data-theme") === "carceral-light";
+  document.querySelectorAll("[data-theme-toggle]").forEach((btn) => {
+    const label = light ? btn.dataset.labelDark : btn.dataset.labelLight;
+    if (!label) return;
+    btn.setAttribute("aria-label", label);
+    btn.dataset.tooltip = label;
+  });
+}
+
 function markThemeOptions() {
+  markThemeToggles();
   let choice = "dark";
   try {
     choice = localStorage.getItem(THEME_KEY) || "dark";
@@ -43,6 +57,19 @@ function markThemeOptions() {
 }
 
 export function initThemeSwitcher() {
+  // A toggle switches to the other of light and dark, starting from what is
+  // on screen now (also when the device's theme was being followed).
+  document.addEventListener("click", (e) => {
+    if (!e.target.closest("[data-theme-toggle]")) return;
+    const light =
+      document.documentElement.getAttribute("data-theme") === "carceral-light";
+    window.dispatchEvent(
+      new CustomEvent("cc:set-theme", {
+        detail: { theme: light ? "dark" : "light" },
+      }),
+    );
+  });
+
   window.addEventListener("cc:set-theme", (e) => {
     try {
       localStorage.setItem(THEME_KEY, e.detail.theme);

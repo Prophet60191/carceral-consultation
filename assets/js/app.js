@@ -27,6 +27,7 @@ import { installToaster } from "./toaster";
 import { installLanding } from "./landing";
 import { installPasswordReveal } from "./password_reveal";
 import { installTooltips } from "./tooltip";
+import { IntroMessenger } from "./intro_messenger";
 import "./admin-charts.js";
 
 // Get supported locales from backend configuration or fallback to default list
@@ -65,6 +66,8 @@ let csrfToken = document
   .querySelector("meta[name='csrf-token']")
   .getAttribute("content");
 let Hooks = {};
+// The intro page's messenger (assets/js/intro_messenger.js)
+Hooks.IntroMessenger = IntroMessenger;
 // Format UTC server timestamps in the viewer's timezone after LiveView mounts.
 Hooks.LocalDate = {
   mounted() {

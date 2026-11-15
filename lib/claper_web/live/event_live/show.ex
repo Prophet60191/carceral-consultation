@@ -122,6 +122,10 @@ defmodule ClaperWeb.EventLive.Show do
         Transcriptions.get_transcription_config(event.presentation_file.id)
       )
       |> assign(:nickname, "")
+      # The intro page's messenger (desktop, before Start Event): open or not,
+      # and whether messages arrived while it was closed (the red dot)
+      |> assign(:messenger_open, false)
+      |> assign(:messenger_unread, false)
       |> stream(:posts, posts)
       |> assign(:post_count, Enum.count(posts))
       |> intro_assigns(event)
@@ -252,7 +256,8 @@ defmodule ClaperWeb.EventLive.Show do
     {:noreply,
      socket
      |> stream_insert(:posts, post)
-     |> update(:post_count, fn count -> count + 1 end)}
+     |> update(:post_count, fn count -> count + 1 end)
+     |> mark_messenger_unread(post)}
   end
 
   @impl true
@@ -467,6 +472,18 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  # The intro page's messenger (Jose, 2026-11-15): the bubble opens and
+  # closes it; clicking outside it or Escape closes it (IntroMessenger hook)
+  def handle_event("toggle-messenger", _params, socket) do
+    {:noreply,
+     socket
+     |> update(:messenger_open, &(!&1))
+     |> assign(:messenger_unread, false)}
+  end
+
+  def handle_event("close-messenger", _params, socket),
+    do: {:noreply, assign(socket, :messenger_open, false)}
+
   def handle_event("bk_" <> _ = event, params, socket),
     do: ClaperWeb.BreakoutLive.Phone.handle_event(event, params, socket)
 
@@ -995,6 +1012,14 @@ defmodule ClaperWeb.EventLive.Show do
 
   defp reply_actor(%{assigns: %{attendee_identifier: attendee_identifier, nickname: nickname}}),
     do: {:attendee, attendee_identifier, nickname}
+
+  # The red dot on the intro messenger's bubble: someone else's message
+  # arrived while it was closed, before the event started
+  defp mark_messenger_unread(%{assigns: %{started: false, messenger_open: false}} = socket, post) do
+    if own_post?(socket, post), do: socket, else: assign(socket, :messenger_unread, true)
+  end
+
+  defp mark_messenger_unread(socket, _post), do: socket
 
   defp own_post?(%{assigns: %{current_user: %{id: user_id}}}, %{user_id: user_id}), do: true
 

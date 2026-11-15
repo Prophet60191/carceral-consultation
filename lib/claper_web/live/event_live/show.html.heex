@@ -74,58 +74,11 @@
         {gettext("Reconnecting...")}
       </div>
 
-      <div
-        id="identity-menu"
-        phx-click-away={JS.hide(to: "#identity-menu")}
-        class="absolute bottom-16 left-2 z-40 hidden w-64 rounded-2xl border border-line bg-base-100 p-2 text-base-content shadow-2xl"
-      >
-        <p class="px-3 pb-2 pt-1 text-xs font-semibold uppercase tracking-wide text-muted">
-          {gettext("Post as")}
-        </p>
-        <button
-          :if={@state.anonymous_chat_enabled}
-          id="setAnonymous"
-          type="button"
-          phx-click={JS.push("set-nickname") |> JS.hide(to: "#identity-menu")}
-          phx-value-nickname=""
-          phx-hook="EmptyNickname"
-          data-storage-key={"nickname:#{@event.uuid}"}
-          class="menu-item"
-        >
-          <span class="grid h-8 w-8 place-items-center rounded-full bg-base-300">?</span>
-          <span class="font-semibold">{gettext("Anonymous")}</span>
-        </button>
-        <button
-          :if={!@state.anonymous_chat_enabled}
-          type="button"
-          disabled
-          class="menu-item"
-          aria-disabled="true"
-        >
-          <span class="grid h-8 w-8 place-items-center rounded-full bg-base-300">?</span>
-          <span class="font-semibold">{gettext("Anonymous")} ({gettext("disabled")})</span>
-        </button>
-        <button
-          id="nicknamepicker"
-          type="button"
-          data-prompt={gettext("Enter your name")}
-          data-invalid={gettext("Nickname must be between 2 and 20 characters")}
-          data-close={JS.hide(to: "#identity-menu")}
-          data-storage-key={"nickname:#{@event.uuid}"}
-          phx-hook="NicknamePicker"
-          class="menu-item"
-        >
-          <span class="grid h-8 w-8 place-items-center rounded-full bg-primary">
-            {if @nickname in [nil, ""], do: "A", else: String.first(@nickname)}
-          </span>
-          <span class="min-w-0">
-            <span class="block text-xs text-muted">{gettext("Nickname")}</span>
-            <span class="block truncate font-semibold">
-              {if @nickname in [nil, ""], do: gettext("Set your nickname"), else: @nickname}
-            </span>
-          </span>
-        </button>
-      </div>
+      <ClaperWeb.EventLive.MessagesComponents.identity_menu
+        state={@state}
+        event={@event}
+        nickname={@nickname}
+      />
 
       <header
         id="room-topbar"
@@ -368,50 +321,20 @@
       </section>
 
       <section id="chat-panel" class="relative min-h-0 overflow-visible bg-stage">
-        <div
-          id="chat-feed"
-          class={[
-            "h-full space-y-3 overflow-y-auto overscroll-contain px-4 pt-4",
-            @state.message_reaction_enabled && "pb-40",
-            !@state.message_reaction_enabled && "pb-24"
-          ]}
-          data-room-reactions={to_string(@state.message_reaction_enabled)}
-          phx-update="stream"
-          phx-hook="RoomFeed"
-          data-chip="#new-messages-chip"
-          data-posts-nb={@post_count}
-        >
-          <.live_component
-            :for={{id, post} <- @streams.posts}
-            module={ClaperWeb.EventLive.PostComponent}
-            id={id}
-            post={post}
-            leaders={@leaders}
-            is_leader={@is_leader}
-            current_user={@current_user}
-            attendee_identifier={@attendee_identifier}
-            event={@event}
-            reaction_enabled={@state.message_reaction_enabled}
-            liked_posts={@like_posts}
-            loved_posts={@love_posts}
-            loled_posts={@lol_posts}
-          />
-        </div>
-
-        <div
-          :if={@post_count == 0 && @state.chat_enabled}
-          class="pointer-events-none absolute inset-0 flex items-center justify-center px-8 text-center text-sm text-muted"
-        >
-          {gettext("Be the first to ask a question or share a thought.")}
-        </div>
-
-        <button
-          id="new-messages-chip"
-          type="button"
-          class="btn btn-primary btn-sm absolute bottom-20 left-1/2 z-20 hidden -translate-x-1/2"
-        >
-          <span data-unread-count></span> {gettext("new messages")}&nbsp;↓
-        </button>
+        <ClaperWeb.EventLive.MessagesComponents.feed
+          streams={@streams}
+          post_count={@post_count}
+          state={@state}
+          event={@event}
+          leaders={@leaders}
+          is_leader={@is_leader}
+          current_user={@current_user}
+          attendee_identifier={@attendee_identifier}
+          like_posts={@like_posts}
+          love_posts={@love_posts}
+          lol_posts={@lol_posts}
+          feed_class={if @state.message_reaction_enabled, do: "pb-40", else: "pb-24"}
+        />
 
         <div
           id="reacts"
@@ -508,56 +431,12 @@
         id="room-composer"
         class="absolute inset-x-0 bottom-0 z-30 bg-transparent px-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] pt-2"
       >
-        <%= if @state.chat_enabled do %>
-          <.form
-            :let={f}
-            for={@post_changeset}
-            id="post-form"
-            class="attendee-composer flex items-center gap-1.5 rounded-2xl border border-line px-1.5 py-1 shadow-2xl"
-            phx-hook="PostForm"
-            data-nickname={@nickname}
-            data-storage-key={"post-draft:#{@event.uuid}"}
-            phx-submit="save"
-          >
-            <button
-              id="composer-identity-button"
-              type="button"
-              aria-label={gettext("Choose identity")}
-              phx-click={JS.toggle(to: "#identity-menu")}
-              class="btn btn-secondary btn-circle btn-xs shrink-0"
-            >
-              {if @nickname in [nil, ""], do: "A", else: String.first(@nickname)}
-            </button>
-
-            {textarea(f, :body,
-              id: "postFormTA",
-              disabled: !@state.anonymous_chat_enabled && @nickname in [nil, ""],
-              rows: 1,
-              maxlength: 255,
-              class:
-                "composer-input min-h-9 max-h-16 min-w-0 flex-1 resize-none border-0 bg-transparent px-2 py-2 text-base leading-5 text-base-content outline-hidden placeholder:text-muted focus:ring-0 disabled:cursor-not-allowed disabled:opacity-50",
-              placeholder:
-                if(!@state.anonymous_chat_enabled && @nickname in [nil, ""],
-                  do: gettext("Set your nickname to participate"),
-                  else: gettext("Ask, comment...")
-                )
-            )}
-
-            <button
-              type="submit"
-              id="submitBtn"
-              disabled
-              aria-label={gettext("Send message")}
-              class="btn btn-ghost btn-circle btn-xs shrink-0"
-            >
-              <ClaperWeb.Icons.send />
-            </button>
-          </.form>
-        <% else %>
-          <div class="attendee-composer flex min-h-10 items-center rounded-2xl border border-line px-3 text-sm text-muted shadow-2xl">
-            {gettext("Messages deactivated")}
-          </div>
-        <% end %>
+        <ClaperWeb.EventLive.MessagesComponents.composer
+          state={@state}
+          event={@event}
+          nickname={@nickname}
+          post_changeset={@post_changeset}
+        />
       </footer>
     </main>
   </div>
@@ -575,6 +454,117 @@
     show_brand={@intro_page.show_brand}
     countdown={@countdown}
   />
+
+  <%!-- The messenger (Jose, 2026-11-15): on desktop, when messages are on,
+       people can talk before the start. The same message system as the live
+       room (MessagesComponents); styles in assets/css/intro_messenger.css. --%>
+  <div
+    :if={@state.chat_enabled}
+    id="intro-messenger"
+    class="intro-messenger"
+    phx-hook="IntroMessenger"
+    data-open={to_string(@messenger_open)}
+  >
+    <section
+      id="intro-messenger-panel"
+      class="intro-messenger-panel"
+      role="dialog"
+      aria-labelledby="intro-messenger-title"
+      inert={!@messenger_open}
+    >
+      <header class="intro-messenger-head">
+        <div class="min-w-0">
+          <h2 id="intro-messenger-title" class="text-base font-bold leading-tight">
+            {gettext("Messages")}
+          </h2>
+          <p class="truncate text-sm text-muted">{@event.name}</p>
+        </div>
+        <button
+          type="button"
+          phx-click="close-messenger"
+          aria-label={gettext("Close messages")}
+          data-tooltip={gettext("Close")}
+          class="btn btn-ghost btn-circle btn-sm shrink-0"
+        >
+          <svg
+            class="size-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </header>
+
+      <div class="relative min-h-0 flex-1">
+        <ClaperWeb.EventLive.MessagesComponents.feed
+          streams={@streams}
+          post_count={@post_count}
+          state={@state}
+          event={@event}
+          leaders={@leaders}
+          is_leader={@is_leader}
+          current_user={@current_user}
+          attendee_identifier={@attendee_identifier}
+          like_posts={@like_posts}
+          love_posts={@love_posts}
+          lol_posts={@lol_posts}
+          feed_class="pb-4"
+          chip_class="bottom-3"
+        />
+      </div>
+
+      <footer class="relative px-3 pb-3 pt-1">
+        <ClaperWeb.EventLive.MessagesComponents.identity_menu
+          state={@state}
+          event={@event}
+          nickname={@nickname}
+          class="absolute bottom-full left-3 z-40 mb-2"
+        />
+        <ClaperWeb.EventLive.MessagesComponents.composer
+          state={@state}
+          event={@event}
+          nickname={@nickname}
+          post_changeset={@post_changeset}
+        />
+      </footer>
+    </section>
+
+    <button
+      id="intro-messenger-toggle"
+      type="button"
+      phx-click="toggle-messenger"
+      aria-controls="intro-messenger-panel"
+      aria-expanded={to_string(@messenger_open)}
+      aria-label={
+        if @messenger_open, do: gettext("Close messages"), else: gettext("Open messages")
+      }
+      data-tooltip={if @messenger_open, do: gettext("Close messages"), else: gettext("Messages")}
+      data-tooltip-side="right"
+      class="btn btn-primary btn-circle btn-lg intro-messenger-toggle"
+    >
+      <svg
+        class="size-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.8"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0ZM2.25 12c0 4.556 4.03 8.25 9 8.25a9.764 9.764 0 0 0 2.555-.337A5.972 5.972 0 0 0 18.6 21a5.969 5.969 0 0 0 .474-2.32c1.778-1.53 2.676-3.53 2.676-5.68 0-4.556-4.03-8.25-9-8.25s-9 3.694-9 8.25Z"
+        />
+      </svg>
+      <span :if={@messenger_unread} id="intro-messenger-dot" class="intro-messenger-dot">
+        <span class="sr-only">{gettext("New messages")}</span>
+      </span>
+    </button>
+  </div>
 <% end %>
 
 <%!-- "About this event": the intro page over the slides (docs/INTRO.md) --%>

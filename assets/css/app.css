@@ -9,6 +9,7 @@
 @import './badges.css';
 @import './fields.css';
 @import './tooltip.css';
+@import './intro_messenger.css';
 
 @plugin "daisyui" {
   themes: carceral --default, carceral-light;

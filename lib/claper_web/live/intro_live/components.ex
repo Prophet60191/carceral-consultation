@@ -28,6 +28,7 @@ defmodule ClaperWeb.IntroLive.Components do
   attr :interactive, :boolean, default: false, doc: "whether the interactions can be answered"
   attr :banner_src, :string, default: nil
   attr :banner_alt, :string, default: nil
+  attr :show_brand, :boolean, default: true, doc: "the brand at the top (the page's setting)"
   attr :close, :string, default: nil, doc: "an event that closes this view (About this event)"
 
   def intro_screen(assigns) do
@@ -37,8 +38,8 @@ defmodule ClaperWeb.IntroLive.Components do
         {gettext("Back to the event")}
       </button>
 
-      <%!-- The brand on top (Jose, 2026-11-14) --%>
-      <ClaperWeb.Wordmark.lockup class="intro-brand" />
+      <%!-- The brand on top (Jose, 2026-11-14); each page can hide it (2026-11-15) --%>
+      <ClaperWeb.Wordmark.lockup :if={@show_brand} class="intro-brand" />
 
       <div class="ticket" id={"#{@id}-ticket"} phx-hook="TicketTilt">
         <div class="texture"></div>

@@ -120,6 +120,7 @@ defmodule ClaperWeb.IntroLive.Preview do
       countdown={@countdown}
       banner_src={@page.banner_src}
       banner_alt={@page.banner_alt}
+      show_brand={@page.show_brand}
     />
     """
   end

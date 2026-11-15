@@ -42,6 +42,20 @@
                 )}
           </p>
 
+          <%!-- The brand at the top of the page (Jose, 2026-11-15) --%>
+          <div id="brand-setting">
+            <ClaperWeb.Component.Switch.switch_row
+              label={gettext("Show the brand at the top")}
+              description={
+                gettext(
+                  "The name and mark above the card (Admin › Brand). Turn off for a page without them."
+                )
+              }
+              checked={@page.show_brand}
+              key={:show_brand}
+            />
+          </div>
+
           <%!-- The banner: a cover image across the top of the ticket card --%>
           <form
             id="banner-form"

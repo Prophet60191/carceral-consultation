@@ -152,6 +152,10 @@ removed in the builder's Banner section (drop zone, description for screen
 readers, Save banner); copied with the page into the library, from it, and
 when an event is duplicated.
 
+## Hiding the brand (2026-11-15, Jose)
+
+The builder's first setting, **Show the brand at the top**, is a switch row that is on by default (`intro_pages.show_brand`). Off removes the brand pill (the mark and name from Admin › Brand) above the ticket card, on participants' phones and in the preview at once. It is copied with the page into and out of the library, and when an event is duplicated. The footer's "Powered by Claper" and "About this app" stay: they are the license notices (AGPL-3.0), not branding. The big screen's join page before the start keeps its own brand.
+
 ## The phone preview (2026-11-14, Jose)
 
 The builder's preview is the real phone page, not a sketch of it:

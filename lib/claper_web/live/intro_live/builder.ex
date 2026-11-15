@@ -257,6 +257,19 @@ defmodule ClaperWeb.IntroLive.Builder do
   def handle_event("cancel_upload", %{"ref" => ref}, socket),
     do: {:noreply, cancel_upload(socket, :image, ref)}
 
+  ## The brand at the top of the page (the shared switch row sends "checked")
+
+  def handle_event("checked", %{"key" => "show_brand", "value" => value}, socket) do
+    {:ok, _} = Intro.set_show_brand(socket.assigns.page, value == true)
+
+    message =
+      if value == true,
+        do: gettext("The brand shows at the top"),
+        else: gettext("The brand is hidden on this page")
+
+    {:noreply, socket |> changed() |> ClaperWeb.Toast.push(:success, message)}
+  end
+
   ## The banner across the top of the ticket card
 
   def handle_event("banner_change", _params, socket), do: {:noreply, socket}

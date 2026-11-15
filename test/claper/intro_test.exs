@@ -171,6 +171,22 @@ defmodule Claper.IntroTest do
     assert page.banner_src == nil
   end
 
+  test "the brand can be hidden, and the choice is copied with the page", %{
+    user: user,
+    event: event,
+    page: page
+  } do
+    assert page.show_brand == true
+    {:ok, page} = Intro.set_show_brand(page, false)
+    refute page.show_brand
+
+    {:ok, copy} = Claper.Events.duplicate_event(user.id, event.uuid)
+    refute Intro.get_event_page(copy).show_brand
+
+    {:ok, saved} = Intro.save_to_library(page, user.id, "No brand")
+    refute saved.show_brand
+  end
+
   describe "interactions (decisions 11-16)" do
     setup %{event: event} do
       pf = Claper.PresentationsFixtures.presentation_file_fixture(%{event: event})

@@ -13,6 +13,8 @@ defmodule Claper.Intro.Page do
     # An optional cover image across the top of the ticket card
     field :banner_src, :string
     field :banner_alt, :string
+    # The brand at the top of the page (Jose, 2026-11-15); off hides it
+    field :show_brand, :boolean, default: true
 
     belongs_to :user, Claper.Accounts.User
     belongs_to :event, Claper.Events.Event

@@ -106,6 +106,27 @@ defmodule ClaperWeb.IntroLiveTest do
     assert hd(Intro.get_event_page(event).blocks).data["text"] == "Welcome, everyone"
   end
 
+  test "the brand switch hides the brand on the page and its preview", %{
+    conn: conn,
+    event: event,
+    path: path
+  } do
+    {:ok, preview, _} = live(conn, ~p"/e/#{event.code}/intro/preview")
+    assert has_element?(preview, ".intro-brand")
+
+    {:ok, view, _html} = live(conn, path)
+    assert has_element?(view, "#brand-setting", "Show the brand at the top")
+
+    render_click(view, "checked", %{"key" => "show_brand", "value" => false})
+    refute Intro.get_event_page(event).show_brand
+    # The preview reloads when the builder announces the change
+    refute has_element?(preview, ".intro-brand")
+
+    render_click(view, "checked", %{"key" => "show_brand", "value" => true})
+    assert Intro.get_event_page(event).show_brand
+    assert has_element?(preview, ".intro-brand")
+  end
+
   describe "the library" do
     test "pages are created, edited and deleted from the library", %{conn: conn, user: user} do
       {:ok, view, html} = live(conn, ~p"/intros")

@@ -70,7 +70,8 @@ defmodule Claper.Intro do
           event_id: event.id,
           source_intro_page_id: page.id,
           banner_src: page.banner_src,
-          banner_alt: page.banner_alt
+          banner_alt: page.banner_alt,
+          show_brand: page.show_brand
         })
 
       Enum.each(page.blocks, &copy_block!(copy, &1))
@@ -128,7 +129,8 @@ defmodule Claper.Intro do
                  user_id: user_id,
                  source_intro_page_id: page.id,
                  banner_src: page.banner_src,
-                 banner_alt: page.banner_alt
+                 banner_alt: page.banner_alt,
+                 show_brand: page.show_brand
                },
                %{title: title}
              )
@@ -147,6 +149,10 @@ defmodule Claper.Intro do
   def set_banner(%Page{} = page, src, alt) do
     page |> Page.banner_changeset(%{banner_src: src, banner_alt: alt}) |> Repo.update()
   end
+
+  @doc "Shows or hides the brand at the top of the page."
+  def set_show_brand(%Page{} = page, show?) when is_boolean(show?),
+    do: page |> Ecto.Changeset.change(show_brand: show?) |> Repo.update()
 
   def remove_banner(%Page{} = page),
     do: page |> Ecto.Changeset.change(banner_src: nil, banner_alt: nil) |> Repo.update()

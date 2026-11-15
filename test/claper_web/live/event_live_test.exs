@@ -2,7 +2,14 @@ defmodule ClaperWeb.EventLiveTest do
   use ClaperWeb.ConnCase
 
   import Phoenix.LiveViewTest
-  import Claper.{FormsFixtures, PollsFixtures, PresentationsFixtures, WordCloudsFixtures}
+
+  import Claper.{
+    EventsFixtures,
+    FormsFixtures,
+    PollsFixtures,
+    PresentationsFixtures,
+    WordCloudsFixtures
+  }
 
   @update_attrs %{name: "some updated name"}
 
@@ -274,18 +281,34 @@ defmodule ClaperWeb.EventLiveTest do
     test "deletes event in listing", %{conn: conn, presentation_file: presentation_file} do
       {:ok, index_live, _html} = live(conn, ~p"/events/#{presentation_file.event.uuid}/edit")
 
-      {:ok, conn} =
-        index_live
-        |> element(~s{a[phx-click="delete"][phx-value-id=#{presentation_file.event.uuid}]})
-        |> render_click()
-        |> follow_redirect(conn, ~p"/events")
+      index_live
+      |> element(~s{a[phx-click="delete"][phx-value-id=#{presentation_file.event.uuid}]})
+      |> render_click()
 
-      # The deletion is confirmed with a toast.
-      assert Phoenix.Flash.get(conn.assigns.flash, :info) == "Event deleted"
+      # The form closes back to the list, without reloading the page, and
+      # the deletion is confirmed with a toast.
+      assert_patch(index_live, ~p"/events")
+      assert render(index_live) =~ "Event deleted"
+      refute has_element?(index_live, "#event-#{presentation_file.event.id}")
+    end
+
+    test "deleting from the Done tab stays on the Done tab", %{conn: conn, user: user} do
+      past = NaiveDateTime.add(NaiveDateTime.utc_now(), -3600) |> NaiveDateTime.truncate(:second)
+      done = event_fixture(%{user: user, expired_at: past, name: "Old workshop"})
+      kept = event_fixture(%{user: user, expired_at: past, name: "Older workshop"})
+      # Every event has its slide-deck record, as the app's own form makes
+      for e <- [done, kept], do: presentation_file_fixture(%{event: e})
 
       {:ok, index_live, _html} = live(conn, ~p"/events")
+      index_live |> render_click("change-tab", %{"tab" => "expired"})
 
-      refute has_element?(index_live, "#event-#{presentation_file.event.id}")
+      render_click(index_live, "delete", %{"id" => done.uuid})
+
+      assert render(index_live) =~ "Event deleted"
+      # Still on Done: its other event is listed, the deleted one is gone
+      assert render(index_live) =~ kept.name
+      refute render(index_live) =~ ~s(id="event-#{done.id}")
+      assert has_element?(index_live, ~s([phx-value-tab="expired"][aria-selected]))
     end
 
     test "renders the saved list view mode on first render", %{conn: conn} do

@@ -68,7 +68,11 @@ defmodule ClaperWeb.EventLive.Index do
     {:noreply,
      socket
      |> put_flash(:info, gettext("Event deleted"))
-     |> redirect(to: ~p"/events")}
+     # Stay on the same tab and search (Jose, 2026-11-15): the list updates
+     # in place; from the edit form, it closes back to the list (a patch, so
+     # the tab is kept)
+     |> refresh_events()
+     |> push_patch(to: ~p"/events")}
   end
 
   @impl true
@@ -88,7 +92,11 @@ defmodule ClaperWeb.EventLive.Index do
     {:noreply,
      socket
      |> put_flash(:info, gettext("Event ended"))
-     |> redirect(to: ~p"/events")}
+     # Stay on the same tab and search (Jose, 2026-11-15): the list updates
+     # in place; from the edit form, it closes back to the list (a patch, so
+     # the tab is kept)
+     |> refresh_events()
+     |> push_patch(to: ~p"/events")}
   end
 
   @impl true
@@ -99,7 +107,11 @@ defmodule ClaperWeb.EventLive.Index do
     {:noreply,
      socket
      |> put_flash(:info, gettext("Event duplicated"))
-     |> redirect(to: ~p"/events")}
+     # Stay on the same tab and search (Jose, 2026-11-15): the list updates
+     # in place; from the edit form, it closes back to the list (a patch, so
+     # the tab is kept)
+     |> refresh_events()
+     |> push_patch(to: ~p"/events")}
   end
 
   @impl true

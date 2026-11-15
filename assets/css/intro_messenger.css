@@ -1,8 +1,9 @@
 /*
   The intro page's messenger (Jose, 2026-11-15): a chat bubble in the
   bottom-left corner that opens a frosted-glass messenger over the intro
-  page, before the event starts. Desktop only for now (a mouse or trackpad
-  and at least 1024px); phones and tablets come later. The messages inside
+  page, before the event starts. Computers only for now: any device with a
+  mouse or trackpad, at any window width (Jose, 2026-11-15: a narrowed
+  browser is still a computer); phones and tablets come later. The messages inside
   are the live room's (ClaperWeb.EventLive.MessagesComponents).
 */
 
@@ -10,7 +11,7 @@
   display: none;
 }
 
-@media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+@media (hover: hover) and (pointer: fine) {
   .intro-messenger {
     display: block;
   }
@@ -43,7 +44,8 @@
   z-index: 60;
   display: flex;
   flex-direction: column;
-  width: 400px;
+  /* Shrinks to fit a narrow window, keeping the 24px margins */
+  width: min(400px, calc(100vw - 48px));
   height: min(640px, calc(100vh - 128px));
   overflow: hidden;
   border-radius: 24px;

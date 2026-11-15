@@ -154,7 +154,7 @@ when an event is duplicated.
 
 ## Messages before the start (2026-11-15, Jose)
 
-On desktop (a mouse or trackpad, 1024 px and wider), when **Allow messages** is on, a chat bubble sits in the bottom-left corner of the intro page.
+On computers (any device with a mouse or trackpad, at any window width; a narrowed browser window still gets it, Jose 2026-11-15), when **Allow messages** is on, a chat bubble sits in the bottom-left corner of the intro page.
 - **The messenger:** clicking the bubble opens a frosted-glass messenger above it. It holds the event's messages as chat bubbles, with replies and reactions, and the message box with the name or anonymous choice. It is the live room's message system: `ClaperWeb.EventLive.MessagesComponents` draws the feed, the message box and the "post as" menu for both. Messages sent here are the event's messages and carry into the live feed at Start Event.
 - **Closing:** clicking the bubble again, anywhere outside the messenger, its close button or Escape closes it. Clicking a confirmation dialog or tooltip doesn't count as outside.
 - **The red dot:** a red dot on the bubble means someone else's message arrived while the messenger was closed; opening it clears the dot. Your own messages never light it.

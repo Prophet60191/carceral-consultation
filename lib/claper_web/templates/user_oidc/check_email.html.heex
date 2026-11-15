@@ -1,0 +1,24 @@
+<div>
+  <div class="relative min-h-screen bg-stage">
+    <div class="flex justify-center md:items-center h-screen w-full p-8 md:p-10 lg:p-14">
+      <div class="max-w-xl w-full space-y-4 mx-auto text-center">
+        <ClaperWeb.Icons.envelope class="inline h-16 w-16 mt-6 text-muted" />
+        <p id="oidc-check-email" class="mt-6 text-lg md:text-xl font-bold text-base-content">
+          {gettext("Check your email to finish signing in with %{provider}.",
+            provider: @provider_name
+          )}
+        </p>
+        <p class="text-muted">
+          {gettext(
+            "We sent a confirmation link to the email address of your account. Open it in this browser within 15 minutes."
+          )}
+        </p>
+        <div class="mt-10">
+          <.link href={~p"/"} class="text-sm text-base-content underline">
+            {gettext("back to the home page")}
+          </.link>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

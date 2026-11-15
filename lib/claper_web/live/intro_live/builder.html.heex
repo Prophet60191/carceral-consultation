@@ -1,0 +1,608 @@
+<ClaperWeb.AppHeader.header user={@current_user} title={gettext("Intro page")} />
+
+<div class="w-full px-4 pb-24 lg:px-6 xl:px-12">
+  <div class="flex flex-wrap items-center justify-between gap-3 py-4">
+    <ClaperWeb.Breadcrumbs.trail items={crumbs(assigns)} />
+  </div>
+
+  <div class="grid grid-cols-[minmax(0,1fr)] items-start gap-6 lg:grid-cols-[minmax(0,1fr)_25rem]">
+    <%!-- Left: the blocks, then (an event's page) the library --%>
+    <div class="flex min-w-0 flex-col gap-6">
+      <%!-- ===== The blocks ===== --%>
+      <section class="panel">
+        <div class="panel-header gap-3">
+          <ClaperWeb.IntroLive.Components.icon kind="text" class="size-5 text-muted" />
+          <h2 class="text-base font-semibold text-base-content">{gettext("Intro page")}</h2>
+        </div>
+        <div class="flex flex-col gap-3 p-3">
+          <%!-- A library page has a name; an event's page is the event's own --%>
+          <form :if={is_nil(@event)} id="library-name" phx-change="rename" phx-submit="rename">
+            <.field label={gettext("Name")} error={@title_error}>
+              <input
+                type="text"
+                name="title"
+                value={@page.title}
+                class="input"
+                maxlength="255"
+                autocomplete="off"
+                phx-debounce="500"
+                aria-invalid={@title_error && "true"}
+              />
+            </.field>
+          </form>
+          <p class="text-sm text-muted">
+            {if @event,
+              do:
+                gettext(
+                  "Participants see this on their phones from the moment they join until you start the event. Add blocks in the order they should read them."
+                ),
+              else:
+                gettext(
+                  "A page saved for reuse. Bring it into any event from that event's intro page; changing it here never changes events that already use it."
+                )}
+          </p>
+
+          <%!-- The banner: a cover image across the top of the ticket card --%>
+          <form
+            id="banner-form"
+            phx-change="banner_change"
+            phx-submit="save_banner"
+            class="flex flex-col gap-2 rounded-lg border border-line bg-base-100 p-3"
+          >
+            <div class="flex items-center justify-between gap-2">
+              <span class="text-sm font-bold text-base-content">
+                {gettext("Banner (optional)")}
+              </span>
+              <button
+                :if={@page.banner_src}
+                type="button"
+                class="btn btn-ghost btn-sm text-error"
+                phx-click="remove_banner"
+                data-confirm-title={gettext("Remove the banner?")}
+                data-confirm={gettext("The ticket card goes back to having no image.")}
+                data-confirm-action={gettext("Remove")}
+                data-confirm-variant="destructive"
+              >
+                {gettext("Remove")}
+              </button>
+            </div>
+            <p class="text-xs text-muted">
+              {gettext(
+                "A wide image across the top of the title and countdown card. Wide pictures work best (about 2:1)."
+              )}
+            </p>
+            <div
+              class="rounded-2xl border-2 border-dashed border-base-300 bg-base-200/50 p-3"
+              phx-drop-target={@uploads.banner.ref}
+            >
+              <div :for={entry <- @uploads.banner.entries} class="flex flex-col gap-2">
+                <.live_img_preview
+                  entry={entry}
+                  class="aspect-[2/1] w-full max-w-sm self-center rounded-xl object-cover"
+                />
+                <div class="flex items-center justify-between gap-2 text-sm text-muted">
+                  <span class="truncate">{entry.client_name}</span>
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-sm"
+                    phx-click="cancel_banner"
+                    phx-value-ref={entry.ref}
+                  >
+                    {gettext("Remove")}
+                  </button>
+                </div>
+                <p :for={err <- upload_errors(@uploads.banner, entry)} class="text-sm text-error">
+                  {upload_error(err)}
+                </p>
+              </div>
+              <div
+                :if={@uploads.banner.entries == []}
+                class="flex flex-col items-center gap-2 text-center"
+              >
+                <img
+                  :if={@page.banner_src}
+                  src={@page.banner_src}
+                  alt=""
+                  class="aspect-[2/1] w-full max-w-sm self-center rounded-xl object-cover"
+                />
+                <p class="text-xs text-muted">{gettext("Drag and drop an image here, or")}</p>
+                <label for={@uploads.banner.ref} class="btn btn-outline btn-sm">
+                  {if @page.banner_src,
+                    do: gettext("Replace image"),
+                    else: gettext("Choose image")}
+                </label>
+              </div>
+              <.live_file_input upload={@uploads.banner} class="sr-only" />
+            </div>
+            <p :for={err <- upload_errors(@uploads.banner)} class="text-sm text-error">
+              {upload_error(err)}
+            </p>
+            <.field label={gettext("Description (read aloud by screen readers)")}>
+              <input
+                type="text"
+                name="banner_alt"
+                value={@page.banner_alt}
+                class="input"
+                maxlength="200"
+              />
+            </.field>
+            <div>
+              <button type="submit" class="btn btn-outline btn-sm">
+                {gettext("Save banner")}
+              </button>
+            </div>
+          </form>
+
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-sm text-muted">{gettext("Add:")}</span>
+            <.link
+              :for={kind <- ~w(heading text image stat agenda link)}
+              patch={"#{base_path(assigns)}?add=#{kind}"}
+              class="btn btn-outline btn-sm"
+            >
+              <ClaperWeb.IntroLive.Components.icon kind={kind} class="size-4" />
+              {ClaperWeb.IntroLive.Components.kind_label(kind)}
+            </.link>
+            <button type="button" class="btn btn-outline btn-sm" phx-click="add_divider">
+              <ClaperWeb.IntroLive.Components.icon kind="divider" class="size-4" />
+              {ClaperWeb.IntroLive.Components.kind_label("divider")}
+            </button>
+            <%!-- Interactions (docs/INTRO.md, decision 11) --%>
+            <.link
+              :for={kind <- ~w(poll quiz form word_cloud embed)}
+              patch={"#{base_path(assigns)}?add=#{kind}"}
+              class="btn btn-outline btn-sm"
+            >
+              <ClaperWeb.IntroLive.Components.icon kind={kind} class="size-4" />
+              {ClaperWeb.IntroLive.Components.kind_label(kind)}
+            </.link>
+          </div>
+
+          <p :if={@page.blocks == []} class="text-sm text-muted">
+            {gettext("Nothing here yet. Use the buttons above to add the first block.")}
+          </p>
+
+          <ol :if={@page.blocks != []} class="flex flex-col gap-2">
+            <li
+              :for={{block, i} <- Enum.with_index(@page.blocks)}
+              id={"block-#{block.id}"}
+              class="flex items-center gap-3 rounded-lg border border-line bg-base-100 p-3"
+            >
+              <div class="flex size-9 shrink-0 items-center justify-center rounded-md bg-base-300 text-base-content">
+                <ClaperWeb.IntroLive.Components.icon kind={block.kind} />
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm text-muted">
+                  {i + 1}. {ClaperWeb.IntroLive.Components.kind_label(block.kind)}
+                </p>
+                <p class="line-clamp-2 break-words text-sm font-medium text-base-content">
+                  {if Map.has_key?(@contents, block.id),
+                    do: (@contents[block.id] && @contents[block.id].title) || "",
+                    else: ClaperWeb.IntroLive.Components.summary(block)}
+                </p>
+              </div>
+              <div class="flex shrink-0 items-center gap-1">
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-square btn-sm"
+                  phx-click="move"
+                  phx-value-id={block.id}
+                  phx-value-dir="up"
+                  disabled={i == 0}
+                  aria-label={gettext("Move up")}
+                >
+                  <ClaperWeb.BreakoutLive.Icons.arrow dir="up" class="size-4" />
+                </button>
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-square btn-sm"
+                  phx-click="move"
+                  phx-value-id={block.id}
+                  phx-value-dir="down"
+                  disabled={i == length(@page.blocks) - 1}
+                  aria-label={gettext("Move down")}
+                >
+                  <ClaperWeb.BreakoutLive.Icons.arrow dir="down" class="size-4" />
+                </button>
+                <.link
+                  :if={block.kind != "divider"}
+                  patch={"#{base_path(assigns)}?edit=#{block.id}"}
+                  class="btn btn-ghost btn-square btn-sm"
+                  aria-label={gettext("Edit")}
+                >
+                  <ClaperWeb.BreakoutLive.Icons.pencil class="size-4" />
+                </.link>
+                <button
+                  type="button"
+                  class="btn btn-ghost btn-square btn-sm text-error"
+                  phx-click="delete"
+                  phx-value-id={block.id}
+                  data-confirm-title={gettext("Remove this block?")}
+                  data-confirm={gettext("It is taken off the intro page.")}
+                  data-confirm-action={gettext("Remove")}
+                  data-confirm-variant="destructive"
+                  aria-label={gettext("Remove")}
+                >
+                  <ClaperWeb.BreakoutLive.Icons.trash class="size-4" />
+                </button>
+              </div>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <%!-- ===== The library (an event's page only) ===== --%>
+      <section :if={@event} id="intro-library" class="panel">
+        <div class="panel-header gap-3">
+          <ClaperWeb.BreakoutLive.Icons.library class="size-5 text-muted" />
+          <h2 class="text-base font-semibold text-base-content">{gettext("Intro library")}</h2>
+        </div>
+        <div class="flex flex-col gap-4 p-3">
+          <form id="save-to-library" phx-submit="save_to_library" class="flex flex-col gap-2">
+            <.field label={gettext("Save a copy of this page to your library")}>
+              <div class="flex flex-wrap gap-2">
+                <input
+                  type="text"
+                  name="title"
+                  value={@event.name}
+                  class="input min-w-0 flex-1"
+                  maxlength="255"
+                  autocomplete="off"
+                  aria-label={gettext("Name for the copy")}
+                />
+                <button type="submit" class="btn btn-outline">{gettext("Save a copy")}</button>
+              </div>
+            </.field>
+          </form>
+
+          <form
+            :if={@library != []}
+            id="use-library"
+            phx-submit="use_library"
+            class="flex flex-col gap-2"
+          >
+            <.field label={gettext("Replace this page with one from your library")}>
+              <div class="flex flex-wrap gap-2">
+                <select name="library_id" class="select min-w-0 flex-1">
+                  <option :for={lib <- @library} value={lib.id}>
+                    {lib.title} ({ngettext("1 block", "%{count} blocks", length(lib.blocks))})
+                  </option>
+                </select>
+                <button
+                  type="submit"
+                  class="btn btn-outline"
+                  data-confirm-title={gettext("Replace this intro page?")}
+                  data-confirm={
+                    gettext(
+                      "Its blocks are replaced by a copy of the library page. Phones showing it update right away."
+                    )
+                  }
+                  data-confirm-action={gettext("Replace")}
+                  data-confirm-variant="destructive"
+                >
+                  {gettext("Use this page")}
+                </button>
+              </div>
+            </.field>
+          </form>
+          <p :if={@library == []} class="text-sm text-muted">
+            {gettext("Pages you save to your library can be brought into any event from here.")}
+          </p>
+        </div>
+      </section>
+    </div>
+
+    <%!-- ===== Phone preview ===== --%>
+    <aside class="flex flex-col items-center gap-2 lg:sticky lg:top-20">
+      <p class="text-sm font-semibold text-muted">{gettext("Phone preview")}</p>
+      <%!-- The real phone page in a phone-width frame (IntroLive.Preview), so it
+           shows exactly what participants see, in the phone layout --%>
+      <div class="w-[390px] max-w-full overflow-hidden rounded-[2.25rem] border border-line-strong bg-stage shadow-xl">
+        <iframe
+          id="intro-preview"
+          src={preview_path(assigns)}
+          title={gettext("Phone preview")}
+          class="block h-[44rem] max-h-[78vh] w-full"
+          phx-update="ignore"
+        >
+        </iframe>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<%!-- ===== Block editor ===== --%>
+<div
+  :if={@editor}
+  id="block-editor"
+  class="modal modal-open"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="block-editor-title"
+>
+  <div class="modal-box max-w-xl p-0">
+    <.link
+      patch={base_path(assigns)}
+      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-10"
+      aria-label={gettext("Close")}
+    >
+      &times;
+    </.link>
+    <div class="overflow-y-auto p-6">
+      <p id="block-editor-title" class="mb-5 text-base font-bold text-base-content">
+        {editor_title(@editor)}
+      </p>
+
+      <%= if @editor[:interaction] do %>
+        <%= case @editor.kind do %>
+          <% "poll" -> %>
+            <.live_component
+              module={ClaperWeb.PollLive.FormComponent}
+              id="intro-poll"
+              poll={@editor.content}
+              live_action={@editor.action}
+              piece_target={@editor.target}
+              return_to={base_path(assigns)}
+            />
+          <% "quiz" -> %>
+            <.live_component
+              module={ClaperWeb.QuizLive.QuizComponent}
+              id="intro-quiz"
+              quiz={@editor.content}
+              live_action={@editor.action}
+              piece_target={@editor.target}
+              return_to={base_path(assigns)}
+            />
+          <% "form" -> %>
+            <.live_component
+              module={ClaperWeb.FormLive.FormComponent}
+              id="intro-form"
+              form={@editor.content}
+              live_action={@editor.action}
+              piece_target={@editor.target}
+              return_to={base_path(assigns)}
+            />
+          <% "word_cloud" -> %>
+            <.live_component
+              module={ClaperWeb.WordCloudLive.FormComponent}
+              id="intro-word-cloud"
+              word_cloud={@editor.content}
+              live_action={@editor.action}
+              piece_target={@editor.target}
+              return_to={base_path(assigns)}
+            />
+          <% "embed" -> %>
+            <.live_component
+              module={ClaperWeb.EmbedLive.FormComponent}
+              id="intro-embed"
+              embed={@editor.content}
+              live_action={@editor.action}
+              piece_target={@editor.target}
+              current_user={@current_user}
+              return_to={base_path(assigns)}
+            />
+        <% end %>
+      <% else %>
+        <form id="block-form" phx-change="change" phx-submit="save" class="flex flex-col gap-4">
+          <%= case @editor.kind do %>
+            <% "heading" -> %>
+              <.field label={gettext("Heading")} error={@editor.errors["text"]}>
+                <input
+                  type="text"
+                  name="block[text]"
+                  value={@editor.params["text"]}
+                  class="input"
+                  maxlength="120"
+                  aria-invalid={@editor.errors["text"] && "true"}
+                  autofocus
+                />
+              </.field>
+            <% "text" -> %>
+              <.field label={gettext("Text")} error={@editor.errors["body"]}>
+                <textarea
+                  name="block[body]"
+                  rows="8"
+                  class="textarea"
+                  aria-invalid={@editor.errors["body"] && "true"}
+                  autofocus
+                  phx-debounce="300"
+                  phx-no-format
+                >{@editor.params["body"]}</textarea>
+              </.field>
+            <% "image" -> %>
+              <input type="hidden" name="block[src]" value={@editor.params["src"]} />
+              <div class="flex flex-col gap-2">
+                <span class="text-sm font-bold text-base-content">{gettext("Image")}</span>
+                <%!-- The same drop zone as a presentation upload (event form) --%>
+                <div
+                  class="rounded-2xl border-2 border-dashed border-base-300 bg-base-200/50 p-4"
+                  phx-drop-target={@uploads.image.ref}
+                >
+                  <div :for={entry <- @uploads.image.entries} class="flex flex-col gap-2">
+                    <.live_img_preview
+                      entry={entry}
+                      class="max-h-56 w-full rounded-xl object-contain"
+                    />
+                    <div class="flex items-center justify-between gap-2 text-sm text-muted">
+                      <span class="truncate">{entry.client_name}</span>
+                      <button
+                        type="button"
+                        class="btn btn-ghost btn-sm"
+                        phx-click="cancel_upload"
+                        phx-value-ref={entry.ref}
+                      >
+                        {gettext("Remove")}
+                      </button>
+                    </div>
+                    <p
+                      :for={err <- upload_errors(@uploads.image, entry)}
+                      class="text-sm text-error"
+                    >
+                      {upload_error(err)}
+                    </p>
+                  </div>
+                  <div
+                    :if={@uploads.image.entries == []}
+                    class="flex flex-col items-center gap-2 py-2 text-center"
+                  >
+                    <img
+                      :if={@editor.params["src"] not in [nil, ""]}
+                      src={@editor.params["src"]}
+                      alt=""
+                      class="max-h-48 w-full rounded-xl object-contain"
+                    />
+                    <p class="text-sm font-bold text-base-content">
+                      {if @editor.params["src"] in [nil, ""],
+                        do: gettext("Add an image"),
+                        else: gettext("Replace the image")}
+                    </p>
+                    <p class="text-xs text-muted">{gettext("Drag and drop an image here, or")}</p>
+                    <label for={@uploads.image.ref} class="btn btn-outline btn-sm">
+                      {gettext("Choose image")}
+                    </label>
+                    <p class="text-xs text-muted">
+                      {gettext("PNG, JPG, WebP or GIF, up to 8 MB.")}
+                    </p>
+                  </div>
+                  <.live_file_input upload={@uploads.image} class="sr-only" />
+                </div>
+                <p :for={err <- upload_errors(@uploads.image)} class="text-sm text-error">
+                  {upload_error(err)}
+                </p>
+                <p :if={@editor.errors["src"]} class="text-sm text-error">
+                  {gettext("Choose an image.")}
+                </p>
+              </div>
+              <.field
+                label={gettext("Description (read aloud by screen readers)")}
+                error={@editor.errors["alt"]}
+              >
+                <input
+                  type="text"
+                  name="block[alt]"
+                  value={@editor.params["alt"]}
+                  class="input"
+                  maxlength="200"
+                />
+              </.field>
+              <.field label={gettext("Caption (optional)")} error={@editor.errors["caption"]}>
+                <input
+                  type="text"
+                  name="block[caption]"
+                  value={@editor.params["caption"]}
+                  class="input"
+                  maxlength="200"
+                />
+              </.field>
+            <% "stat" -> %>
+              <.field label={gettext("Number")} error={@editor.errors["value"]}>
+                <input
+                  type="text"
+                  name="block[value]"
+                  value={@editor.params["value"]}
+                  placeholder={gettext("e.g. 26 years")}
+                  class="input"
+                  maxlength="40"
+                  aria-invalid={@editor.errors["value"] && "true"}
+                  autofocus
+                />
+              </.field>
+              <.field label={gettext("What it means")} error={@editor.errors["label"]}>
+                <input
+                  type="text"
+                  name="block[label]"
+                  value={@editor.params["label"]}
+                  placeholder={gettext("e.g. average time served before a first parole hearing")}
+                  class="input"
+                  maxlength="160"
+                  aria-invalid={@editor.errors["label"] && "true"}
+                />
+              </.field>
+            <% "agenda" -> %>
+              <div class="flex flex-col gap-2">
+                <div class="grid grid-cols-[7rem_minmax(0,1fr)_2.25rem] gap-2 text-sm font-bold text-base-content">
+                  <span>{gettext("Time")}</span>
+                  <span>{gettext("Item")}</span>
+                </div>
+                <div
+                  :for={{item, i} <- Enum.with_index(@editor.params["items"] || [])}
+                  class="grid grid-cols-[7rem_minmax(0,1fr)_2.25rem] items-center gap-2"
+                >
+                  <input
+                    type="text"
+                    name={"block[items][#{i}][time]"}
+                    value={item["time"]}
+                    placeholder={gettext("6:00 PM")}
+                    class="input"
+                    maxlength="20"
+                    aria-label={gettext("Time")}
+                  />
+                  <input
+                    type="text"
+                    name={"block[items][#{i}][title]"}
+                    value={item["title"]}
+                    placeholder={gettext("e.g. Welcome and introductions")}
+                    class="input"
+                    maxlength="160"
+                    aria-label={gettext("Item")}
+                  />
+                  <button
+                    type="button"
+                    class="btn btn-ghost btn-square btn-sm"
+                    phx-click="agenda_remove"
+                    phx-value-index={i}
+                    aria-label={gettext("Remove this item")}
+                  >
+                    &times;
+                  </button>
+                </div>
+                <div>
+                  <button type="button" class="btn btn-outline btn-sm" phx-click="agenda_add">
+                    <ClaperWeb.BreakoutLive.Icons.plus class="size-4" />
+                    {gettext("Add an item")}
+                  </button>
+                </div>
+                <p :if={@editor.errors["items"]} class="text-sm text-error">
+                  {gettext("Agenda")}: {@editor.errors["items"]}
+                </p>
+              </div>
+            <% "link" -> %>
+              <.field label={gettext("Button text")} error={@editor.errors["label"]}>
+                <input
+                  type="text"
+                  name="block[label]"
+                  value={@editor.params["label"]}
+                  placeholder={gettext("e.g. Read the full report")}
+                  class="input"
+                  maxlength="80"
+                  aria-invalid={@editor.errors["label"] && "true"}
+                  autofocus
+                />
+              </.field>
+              <.field label={gettext("Web address")} error={@editor.errors["url"]}>
+                <input
+                  type="url"
+                  name="block[url]"
+                  value={@editor.params["url"]}
+                  placeholder="https://"
+                  class="input"
+                  aria-invalid={@editor.errors["url"] && "true"}
+                />
+              </.field>
+          <% end %>
+
+          <button
+            type="submit"
+            class="btn btn-primary w-full"
+            phx-disable-with={gettext("Saving...")}
+          >
+            {if @editor.action == :new, do: gettext("Add to the page"), else: gettext("Save")}
+          </button>
+        </form>
+      <% end %>
+    </div>
+  </div>
+  <.link patch={base_path(assigns)} class="modal-backdrop">
+    <span class="sr-only">{gettext("Close")}</span>
+  </.link>
+</div>

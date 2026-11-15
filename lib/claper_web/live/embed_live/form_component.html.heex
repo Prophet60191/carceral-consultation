@@ -1,0 +1,122 @@
+<div>
+  <.form
+    :let={f}
+    for={@changeset}
+    id="embed-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+    class="flex flex-col gap-6"
+  >
+    <div class="flex flex-col gap-4">
+      <.text_field
+        form={f}
+        key={:title}
+        label={gettext("Title")}
+        placeholder={gettext("Enter your title")}
+        autocomplete="off"
+        required
+        autofocus
+      />
+
+      <div class="flex gap-4 items-end">
+        <div class="w-44 shrink-0">
+          <.select_field
+            form={f}
+            key={:provider}
+            label={gettext("Provider")}
+            options={@providers}
+            required
+          />
+        </div>
+        <div class="flex-1 min-w-0">
+          <.text_field
+            form={f}
+            key={:content}
+            label={
+              case Ecto.Changeset.get_field(@changeset, :provider) do
+                "custom" -> gettext("Iframe code")
+                "website" -> gettext("Web address")
+                _ -> gettext("Link to the content")
+              end
+            }
+            placeholder={
+              if Ecto.Changeset.get_field(@changeset, :provider) == "website",
+                do: "https://",
+                else: gettext("Add a link")
+            }
+            autocomplete="off"
+            phx-debounce="500"
+            required
+          />
+        </div>
+      </div>
+
+      <div
+        :if={Ecto.Changeset.get_field(@changeset, :provider) == "website"}
+        class="flex flex-col gap-1 text-sm"
+        aria-live="polite"
+      >
+        <p class="text-muted">
+          {gettext(
+            "Any web page. It shows in a protected frame, with an \"Open in a new tab\" button for you and the audience."
+          )}
+        </p>
+        <p :if={@frame_check == :checking} class="text-muted">
+          {gettext("Checking whether this site can be shown here…")}
+        </p>
+        <p :if={@frame_check == :embeddable} class="text-success">
+          {gettext("This site can be shown here.")}
+        </p>
+        <p :if={match?({:blocked, _}, @frame_check)} class="text-warning">
+          {gettext(
+            "This site does not allow other sites to show it, so the frame will be blank. You can still add it: the \"Open in a new tab\" button will work."
+          )}
+        </p>
+        <p :if={@frame_check == :unknown} class="text-muted">
+          {gettext(
+            "Could not reach this site to check it. It may still work; preview it before your session."
+          )}
+        </p>
+      </div>
+    </div>
+
+    <div :if={is_nil(@piece_target)} class="flex flex-col gap-1">
+      <p class="text-sm font-bold text-base-content">{gettext("Options")}</p>
+
+      <.checkbox
+        form={f}
+        key={:attendee_visibility}
+        label={gettext("Attendees can view the web content on their device")}
+      />
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <button
+        type="submit"
+        phx-disable-with={gettext("Loading...")}
+        class="btn btn-primary w-full"
+      >
+        {case @live_action do
+          :new -> gettext("Add web content")
+          :edit -> gettext("Save")
+        end}
+      </button>
+      <%= if @live_action == :edit and is_nil(@piece_target) do %>
+        {link(gettext("Delete"),
+          to: "#",
+          phx_click: "delete",
+          phx_target: @myself,
+          phx_value_id: @embed.id,
+          data: [
+            confirm_title: gettext("Delete this web content?"),
+            confirm: gettext("This cannot be undone."),
+            confirm_action: gettext("Delete"),
+            confirm_variant: "destructive"
+          ],
+          class: "btn btn-outline btn-error w-full"
+        )}
+      <% end %>
+    </div>
+  </.form>
+</div>

@@ -1,0 +1,33 @@
+<div class="min-h-screen flex items-center justify-center bg-base-300">
+  <div class="max-w-3xl w-full p-10">
+    <div class="text-center">
+      <h1 class="text-4xl font-bold text-base-content mb-2">
+        {gettext("CSRF Verification Failed")}
+      </h1>
+      <p class="text-lg text-base-content mb-8">
+        {gettext("A required security token was not found or was invalid.")}
+      </p>
+    </div>
+
+    <div class="space-y-6 text-center">
+      <p class="text-base-content">
+        {gettext("If you're continually seeing this issue, try the following:")}
+      </p>
+      <ol class="list-decimal list-inside space-y-2 text-muted">
+        <li>{gettext("Clear cookies for this site")}</li>
+        <li>{gettext("Reload the page you're trying to access (don't re-submit data)")}</li>
+        <li>{gettext("Try logging in again")}</li>
+        <li>{gettext("Ensure the URL does not contain an extra \"/\" anywhere")}</li>
+      </ol>
+      <p class="text-base-content mt-6">
+        {gettext("If the problem persists, please contact support.")}
+      </p>
+      <div class="mt-8">
+        {link(gettext("Back to log in"),
+          to: ~p"/users/log_in",
+          class: "text-info underline font-semibold transition duration-300 ease-in-out"
+        )}
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,72 @@
+<div>
+  <div class="relative min-h-screen grid bg-stage">
+    <div class="flex min-h-screen flex-col md:flex-row items-stretch">
+      <ClaperWeb.BrandPanel.panel />
+      <div class="flex w-full items-center justify-center p-8 md:w-1/2 md:p-10 lg:p-14 xl:w-2/5">
+        <div class="w-full max-w-xl">
+          <div class="space-y-6">
+            <div class="text-center md:text-left">
+              <h2 class="text-4xl font-bold uppercase tracking-[0.15em] text-base-content lg:text-5xl">
+                {gettext("Confirm it's you")}
+              </h2>
+              <p class="mt-4 text-sm text-muted">
+                {gettext("This change needs your password, because you signed in a while ago.")}
+              </p>
+            </div>
+
+            <.form for={@conn} action={~p"/users/confirm_password"} as={:reauth} class="space-y-5">
+              <%= if @error_message do %>
+                <ClaperWeb.Component.Alert.error message={@error_message} />
+              <% end %>
+
+              <input type="hidden" name="reauth[return_to]" value={@return_to} />
+
+              <div>
+                <label for="reauth_password" class="block text-sm font-medium text-base-content">
+                  {gettext("Password")}
+                </label>
+                <div class="mt-1">
+                  <input
+                    id="reauth_password"
+                    name="reauth[password]"
+                    type="password"
+                    autocomplete="current-password"
+                    required
+                    autofocus
+                    class="input"
+                  />
+                </div>
+              </div>
+
+              <div :if={@two_factor}>
+                <label for="reauth_code" class="block text-sm font-medium text-base-content">
+                  {gettext("Code from your authenticator app")}
+                </label>
+                <div class="mt-1">
+                  <input
+                    id="reauth_code"
+                    name="reauth[code]"
+                    type="text"
+                    autocomplete="one-time-code"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    maxlength="20"
+                    required
+                    class="input"
+                  />
+                </div>
+              </div>
+
+              <div class="flex gap-3 pt-3">
+                <a href={@return_to} class="btn btn-outline flex-1">{gettext("Cancel")}</a>
+                <button type="submit" class="btn btn-primary flex-1">
+                  {gettext("Confirm")}
+                </button>
+              </div>
+            </.form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

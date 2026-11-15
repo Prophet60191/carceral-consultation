@@ -1,0 +1,66 @@
+<div>
+  <div class="relative min-h-screen grid bg-stage">
+    <div class="flex min-h-screen flex-col md:flex-row items-stretch">
+      <ClaperWeb.BrandPanel.panel />
+      <div class="flex w-full items-center justify-center p-8 md:w-1/2 md:p-10 lg:p-14 xl:w-2/5">
+        <div class="w-full max-w-xl">
+          <div class="space-y-6">
+            <div class="text-center md:text-left">
+              <h2 class="text-4xl font-bold uppercase tracking-[0.15em] text-base-content lg:text-5xl">
+                {gettext("Two-step sign-in")}
+              </h2>
+              <p class="mt-4 text-sm text-muted">
+                {gettext("Enter the 6-digit code from your authenticator app.")}
+              </p>
+            </div>
+
+            <.form for={@conn} action={~p"/users/two_factor"} as={:two_factor} class="space-y-5">
+              <%= if @error_message do %>
+                <ClaperWeb.Component.Alert.error message={@error_message} />
+              <% end %>
+
+              <div>
+                <label for="two_factor_code" class="block text-sm font-medium text-base-content">
+                  {gettext("Code")}
+                </label>
+                <div class="mt-1">
+                  <input
+                    id="two_factor_code"
+                    name="two_factor[code]"
+                    type="text"
+                    inputmode="text"
+                    autocomplete="one-time-code"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    maxlength="20"
+                    required
+                    autofocus
+                    class="input"
+                  />
+                </div>
+              </div>
+
+              <div class="pt-3">
+                <button type="submit" class="btn btn-primary w-full">
+                  {gettext("Continue")}
+                </button>
+              </div>
+            </.form>
+
+            <div class="space-y-3 border-t border-line pt-6 text-sm text-muted">
+              <p>
+                {gettext("No phone? Enter one of your backup codes instead. Each one works once.")}
+              </p>
+              <p>
+                {link(gettext("Back to sign in"),
+                  to: ~p"/users/log_in",
+                  class: "font-semibold text-primary transition hover:text-primary"
+                )}
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

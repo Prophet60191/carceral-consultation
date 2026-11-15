@@ -1,0 +1,327 @@
+<div class="mb-8">
+  <ClaperWeb.AdminBar.bar
+    title={gettext("Brand")}
+    user={@current_user}
+    return_event={@return_event}
+    active_tab={@active_tab}
+  />
+</div>
+
+<p class="mb-6 max-w-3xl text-sm text-muted">
+  {gettext(
+    "How your organization appears to everyone who uses this copy of the app: on the sign-in pages, on phones, on the big screen, in emails and in browser tabs. Anything left empty shows a plain default."
+  )}
+</p>
+
+<div class="grid gap-6 xl:grid-cols-2">
+  <%!-- Name and description --%>
+  <div class="card" id="brand-identity">
+    <div class="card-body min-w-0">
+      <h2 class="card-title">{gettext("Name and description")}</h2>
+      <.form
+        for={@identity_form}
+        id="brand-identity-form"
+        phx-change="validate_identity"
+        phx-submit="save_identity"
+        class="flex flex-col gap-4"
+      >
+        <div class="flex flex-col gap-1">
+          <.text_field
+            form={@identity_form}
+            key={:name}
+            label={gettext("Organization name")}
+            placeholder={Claper.Branding.name(%Claper.Branding.Brand{})}
+            maxlength={80}
+            autocomplete="organization"
+          />
+          <p class="text-xs text-muted">
+            {gettext(
+              "In page titles and emails, and in place of a logo on phones and the big screen."
+            )}
+          </p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <.text_field
+            form={@identity_form}
+            key={:monogram}
+            label={gettext("Short mark")}
+            placeholder={Claper.Branding.monogram(%{@brand | monogram: nil})}
+            maxlength={3}
+            autocomplete="off"
+            class="w-28"
+          />
+          <p class="text-xs text-muted">
+            {gettext(
+              "Up to three letters for small spots, like the round tile beside the name. Empty: the name's initials (%{initials}). An uploaded mark image is used instead.",
+              initials: Claper.Branding.monogram(%{@brand | monogram: nil})
+            )}
+          </p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <.text_field
+            form={@identity_form}
+            key={:short_name}
+            label={gettext("Home-screen name")}
+            placeholder={Claper.Branding.short_name(%{@brand | short_name: nil})}
+            maxlength={Claper.Branding.short_name_max()}
+            autocomplete="off"
+            class="w-48"
+          />
+          <p class="text-xs text-muted">
+            {gettext(
+              "The name under the app's icon when someone saves it to a phone's home screen. Up to %{max} characters; phones cut off longer names. Empty: %{default}.",
+              max: Claper.Branding.short_name_max(),
+              default: Claper.Branding.short_name(%{@brand | short_name: nil})
+            )}
+          </p>
+        </div>
+        <div class="flex flex-col gap-1">
+          <label for="brand-description" class="text-sm font-bold text-base-content">
+            {gettext("Description")}
+          </label>
+          <textarea
+            id="brand-description"
+            name="brand[description]"
+            class="textarea w-full"
+            rows="4"
+            maxlength="600"
+            placeholder={Claper.Branding.description(%Claper.Branding.Brand{})}
+          >{@identity_form[:description].value}</textarea>
+          <p class="text-xs text-muted">
+            {gettext("On the sign-in pages, beside the photo. Up to 600 characters.")}
+          </p>
+        </div>
+        <div class="card-actions justify-stretch sm:justify-end">
+          <button type="submit" class="btn btn-primary w-full sm:w-auto">
+            {gettext("Save")}
+          </button>
+        </div>
+      </.form>
+    </div>
+  </div>
+
+  <%!-- Logo --%>
+  <div class="card" id="brand-logo">
+    <div class="card-body min-w-0">
+      <h2 class="card-title">{gettext("Logo")}</h2>
+      <.upload_zone
+        kind={:logo}
+        upload={@uploads.logo}
+        current={@brand.logo_src}
+        error={@image_errors[:logo]}
+        hint={
+          gettext(
+            "Your name as a picture, on phones, the big screen and the sign-in pages. Use a %{types} with a transparent background, up to %{mb} MB: its shape is drawn in the text color of each theme, so one file works on dark and light. Without one, the name shows in type.",
+            types: types(:logo),
+            mb: megabytes(Claper.Branding.max_size(:logo))
+          )
+        }
+      >
+        <:preview>
+          <div class="grid w-full gap-2 sm:grid-cols-2">
+            <div
+              :for={theme <- ["carceral", "carceral-light"]}
+              data-theme={theme}
+              class="flex min-h-20 items-center justify-center rounded-xl border border-line bg-base-100 p-4"
+            >
+              <ClaperWeb.Wordmark.mark size={:md} class="text-base-content" brand={@brand} />
+            </div>
+          </div>
+        </:preview>
+      </.upload_zone>
+    </div>
+  </div>
+
+  <%!-- Mark --%>
+  <div class="card" id="brand-mark">
+    <div class="card-body min-w-0">
+      <h2 class="card-title">{gettext("Mark")}</h2>
+      <.upload_zone
+        kind={:mark}
+        upload={@uploads.mark}
+        current={@brand.mark_src}
+        error={@image_errors[:mark]}
+        hint={
+          gettext(
+            "A small symbol or monogram, in the round tile beside the name and on event cards without slides. A %{types} with a transparent background, up to %{mb} MB, drawn in the text color like the logo. Without one, the short mark's letters show.",
+            types: types(:mark),
+            mb: megabytes(Claper.Branding.max_size(:mark))
+          )
+        }
+      >
+        <:preview>
+          <div class="grid w-full gap-2">
+            <div
+              :for={theme <- ["carceral", "carceral-light"]}
+              data-theme={theme}
+              class="flex min-h-20 items-center justify-center overflow-hidden rounded-xl border border-line bg-base-100 p-4"
+            >
+              <ClaperWeb.Wordmark.lockup brand={@brand} />
+            </div>
+          </div>
+        </:preview>
+      </.upload_zone>
+    </div>
+  </div>
+
+  <%!-- Sign-in photo --%>
+  <div class="card" id="brand-photo">
+    <div class="card-body min-w-0">
+      <h2 class="card-title">{gettext("Sign-in photo")}</h2>
+      <.upload_zone
+        kind={:photo}
+        upload={@uploads.photo}
+        current={@brand.photo_src}
+        error={@image_errors[:photo]}
+        hint={
+          gettext(
+            "The picture beside the sign-in form, darkened at the bottom left so the name and description stay readable. A %{types}, up to %{mb} MB; tall pictures suit computers, and phones show a wide strip of it. Without one, the panel is plain.",
+            types: types(:photo),
+            mb: megabytes(Claper.Branding.max_size(:photo))
+          )
+        }
+      >
+        <:preview>
+          <img
+            :if={@brand.photo_src}
+            src={@brand.photo_src}
+            alt=""
+            class={["h-40 w-full max-w-sm rounded-xl object-cover", object_position(@brand)]}
+          />
+          <p :if={!@brand.photo_src} class="text-sm text-muted">{gettext("No photo yet")}</p>
+        </:preview>
+      </.upload_zone>
+      <div :if={@brand.photo_src} class="mt-4 flex flex-col gap-2">
+        <p class="text-sm font-medium text-base-content">{gettext("Keep in view")}</p>
+        <ClaperWeb.Component.Tabs.tabs
+          style={:segmented}
+          class="self-start"
+          aria-label={gettext("Keep in view")}
+        >
+          <:tab
+            :for={{value, label} <- positions()}
+            active={photo_position(@brand) == value}
+            phx-click="photo_position"
+            phx-value-tab={value}
+          >
+            {label}
+          </:tab>
+        </ClaperWeb.Component.Tabs.tabs>
+        <p class="text-xs text-muted">
+          {gettext("Which side of the photo stays visible when the screen crops it.")}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <%!-- Browser icon --%>
+  <div class="card" id="brand-icon">
+    <div class="card-body min-w-0">
+      <h2 class="card-title">{gettext("Browser icon")}</h2>
+      <.upload_zone
+        kind={:icon}
+        upload={@uploads.icon}
+        current={@brand.icon_src}
+        error={@image_errors[:icon]}
+        hint={
+          gettext(
+            "The small picture on browser tabs and bookmarks. A square %{types}, at least 64 × 64 pixels, up to %{mb} MB, shown as it is. Phones use it for the home-screen icon when it is at least 180 × 180 (512 × 512 is best); a smaller one gets the short mark's letters there instead.",
+            types: types(:icon),
+            mb: megabytes(Claper.Branding.max_size(:icon))
+          )
+        }
+      >
+        <:preview>
+          <div class="flex items-end gap-4">
+            <img src={Claper.Branding.icon_src(@brand)} alt="" class="size-16 rounded-md" />
+            <img src={Claper.Branding.icon_src(@brand)} alt="" class="size-8 rounded" />
+            <img src={Claper.Branding.icon_src(@brand)} alt="" class="size-4" />
+            <div class="ml-4 flex flex-col items-center gap-1 border-l border-line pl-6">
+              <img
+                id="brand-home-icon-preview"
+                src={"/home-icon/180.png?v=#{Claper.Branding.HomeIcon.version(@brand)}"}
+                alt=""
+                class="size-16 rounded-2xl"
+              />
+              <span class="max-w-20 truncate text-xs text-muted">
+                {Claper.Branding.short_name(@brand)}
+              </span>
+            </div>
+          </div>
+        </:preview>
+      </.upload_zone>
+    </div>
+  </div>
+
+  <%!-- Source code: the license's one requirement for people who run a copy --%>
+  <div class="card" id="brand-source">
+    <div class="card-body min-w-0">
+      <h2 class="card-title">{gettext("Source code")}</h2>
+      <p class="text-sm text-muted">
+        {gettext(
+          "This app is free software under the GNU Affero General Public License. Everyone who uses your copy must be able to get its source code, so the About page links to it. If you changed the code, enter where your version is published."
+        )}
+      </p>
+      <.form
+        for={@source_form}
+        id="brand-source-form"
+        phx-change="validate_source"
+        phx-submit="save_source"
+        class="flex flex-col gap-4"
+      >
+        <.text_field
+          form={@source_form}
+          key={:source_url}
+          type="url"
+          label={gettext("Source code address")}
+          placeholder={Claper.Branding.default_source_url()}
+          autocomplete="url"
+        />
+        <div class="card-actions justify-stretch sm:justify-between sm:items-center">
+          <.link navigate={~p"/about"} class="btn btn-ghost btn-sm">
+            {gettext("See the About page")}
+          </.link>
+          <button type="submit" class="btn btn-primary w-full sm:w-auto">
+            {gettext("Save")}
+          </button>
+        </div>
+      </.form>
+    </div>
+  </div>
+
+  <%!-- Privacy: the contact on the privacy page --%>
+  <div class="card" id="brand-privacy">
+    <div class="card-body min-w-0">
+      <h2 class="card-title">{gettext("Privacy")}</h2>
+      <p class="text-sm text-muted">
+        {gettext(
+          "The privacy page says what this app keeps and for how long. Give the address where people can ask about their information or have it deleted."
+        )}
+      </p>
+      <.form
+        for={@privacy_form}
+        id="brand-privacy-form"
+        phx-change="validate_privacy"
+        phx-submit="save_privacy"
+        class="flex flex-col gap-4"
+      >
+        <.text_field
+          form={@privacy_form}
+          key={:privacy_email}
+          type="email"
+          label={gettext("Privacy contact email")}
+          placeholder="privacy@example.org"
+          autocomplete="email"
+        />
+        <div class="card-actions justify-stretch sm:justify-between sm:items-center">
+          <a href={ClaperWeb.Privacy.url()} class="btn btn-ghost btn-sm">
+            {gettext("See the privacy page")}
+          </a>
+          <button type="submit" class="btn btn-primary w-full sm:w-auto">
+            {gettext("Save")}
+          </button>
+        </div>
+      </.form>
+    </div>
+  </div>
+</div>

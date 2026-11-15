@@ -1,0 +1,24 @@
+# Production on Dynames (2026-11-15). Loaded after docker-compose.yml and
+# docker-compose.override.yml through COMPOSE_FILE in that machine's .env:
+#   COMPOSE_FILE=docker-compose.yml:docker-compose.override.yml:docker-compose.dynames.yml
+#
+# - A real database password (the base file's "claper" stays for local copies);
+#   it is read from .env and only applies when the database is first created.
+# - A fixed network range outside Docker's own pool, so the address the
+#   Cloudflare tunnel arrives from (the gateway, 10.89.40.1) never changes:
+#   REMOTE_IP_PROXIES trusts exactly that address (docs/SECURITY.md).
+# - Both containers come back after a reboot.
+services:
+  db:
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set POSTGRES_PASSWORD in .env}
+  app:
+    restart: unless-stopped
+
+networks:
+  claper-net:
+    ipam:
+      config:
+        - subnet: 10.89.40.0/24
+          gateway: 10.89.40.1

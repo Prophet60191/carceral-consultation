@@ -1,0 +1,13 @@
+# Carceral Consultation local setup (2026-11-12): runs alongside Jose's other Docker apps.
+# Unique project name, app on port 4100 (4000 left untouched), database not exposed to the host.
+name: carceral-consultation
+services:
+  app:
+    image: carceral-consultation:local
+    build: .
+    # APP_BIND (in .env): 0.0.0.0 on the Mac (the home network can reach it);
+    # 127.0.0.1 on Dynames, where only the Cloudflare tunnel reaches it.
+    ports: !override
+      - "${APP_BIND:-0.0.0.0}:4100:4000"
+    healthcheck:
+      test: curl --fail http://localhost:4000 || exit 1

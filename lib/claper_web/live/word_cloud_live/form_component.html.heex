@@ -1,0 +1,77 @@
+<div>
+  <.form
+    :let={f}
+    for={@changeset}
+    id="word-cloud-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+    class="flex flex-col gap-6"
+  >
+    <div class="flex flex-col gap-4">
+      <.text_field
+        form={f}
+        key={:title}
+        label={gettext("Question")}
+        placeholder={gettext("What comes to mind when you hear...")}
+        autocomplete="off"
+        required
+        autofocus
+      />
+
+      <div class="w-44">
+        <.select_field
+          form={f}
+          key={:max_entries}
+          label={gettext("Words per attendee")}
+          options={Enum.to_list(1..5)}
+          required
+        />
+      </div>
+    </div>
+
+    <div :if={is_nil(@piece_target)} class="flex flex-col gap-1">
+      <p class="text-sm font-bold text-base-content">{gettext("Options")}</p>
+
+      <.checkbox form={f} key={:show_results} label={gettext("Show the word cloud on phones")} />
+      <.checkbox
+        form={f}
+        key={:results_on_screen}
+        label={gettext("Show the word cloud on the big screen")}
+      />
+    </div>
+
+    <ClaperWeb.BreakoutLive.PieceEditor.answer_choice
+      :if={@piece_target}
+      piece_target={@piece_target}
+    />
+
+    <div class="flex flex-col gap-2">
+      <button
+        type="submit"
+        phx-disable-with={gettext("Loading...")}
+        class="btn btn-primary w-full"
+      >
+        {case @live_action do
+          :new -> gettext("Create word cloud")
+          :edit -> gettext("Save")
+        end}
+      </button>
+      <%= if @live_action == :edit and is_nil(@piece_target) do %>
+        {link(gettext("Delete"),
+          to: "#",
+          phx_click: "delete",
+          phx_target: @myself,
+          phx_value_id: @word_cloud.id,
+          data: [
+            confirm_title: gettext("Delete this word cloud?"),
+            confirm: gettext("All the words submitted are deleted too. This cannot be undone."),
+            confirm_action: gettext("Delete"),
+            confirm_variant: "destructive"
+          ],
+          class: "btn btn-outline btn-error w-full"
+        )}
+      <% end %>
+    </div>
+  </.form>
+</div>

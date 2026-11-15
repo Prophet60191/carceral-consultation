@@ -1,0 +1,184 @@
+<!-- Header -->
+<div class="mb-8">
+  <ClaperWeb.AdminBar.bar
+    title={gettext("Settings")}
+    user={@current_user}
+    return_event={@return_event}
+    active_tab={@active_tab}
+  />
+</div>
+
+<!-- Transcription Settings -->
+<div class="card">
+  <div class="card-body min-w-0">
+    <h2 class="card-title">{gettext("Transcription Settings")}</h2>
+    <p class="text-sm text-muted mb-4">
+      {gettext("Configure the Mistral API for real-time transcription features.")}
+    </p>
+
+    <form phx-submit="save" class="min-w-0">
+      <!-- Global Enable/Disable -->
+      <div class="form-control mb-6 min-w-0">
+        <label class="switch-card items-start">
+          <input type="hidden" name="transcription_enabled" value="false" />
+          <div class="min-w-0 flex-1">
+            <span class="block text-sm font-medium text-base-content">
+              {gettext("Enable transcription feature globally")}
+            </span>
+            <p class="block text-sm text-muted">
+              {gettext("When disabled, no events can use transcription.")}
+            </p>
+          </div>
+          <input
+            type="checkbox"
+            name="transcription_enabled"
+            value="true"
+            class="switch mt-0.5"
+            checked={@transcription_enabled}
+            phx-click="toggle_transcription"
+          />
+        </label>
+      </div>
+      
+<!-- API Key -->
+      <div :if={@transcription_enabled} class="form-control mb-6 min-w-0">
+        <label class="label">
+          <span class="label-text font-medium">{gettext("Mistral API Key")}</span>
+        </label>
+        <div class="flex min-w-0 flex-col gap-2 sm:flex-row">
+          <input
+            type="password"
+            name="transcription_api_key"
+            placeholder={
+              if @api_key_configured,
+                do: gettext("Leave blank to keep current key"),
+                else: gettext("Enter your Mistral API key")
+            }
+            class="input w-full min-w-0 sm:flex-1"
+            autocomplete="off"
+          />
+          <button
+            :if={@api_key_configured}
+            type="button"
+            phx-click="clear_api_key"
+            class="btn btn-outline btn-error w-full sm:w-auto"
+            data-confirm-title={gettext("Clear the API key?")}
+            data-confirm={gettext("It is removed from these settings.")}
+            data-confirm-action={gettext("Clear")}
+            data-confirm-variant="destructive"
+          >
+            {gettext("Clear")}
+          </button>
+        </div>
+        <label class="label min-w-0">
+          <span class={"label-text-alt min-w-0 whitespace-normal break-words #{if @api_key_configured, do: "text-success", else: "text-warning"}"}>
+            {if @api_key_configured,
+              do: gettext("API key is configured"),
+              else: gettext("No API key configured")}
+          </span>
+        </label>
+      </div>
+      
+<!-- Default Language -->
+      <div :if={@transcription_enabled} class="form-control mb-6 min-w-0">
+        <label class="label">
+          <span class="label-text font-medium">{gettext("Default Language")}</span>
+        </label>
+        <select
+          name="transcription_default_language"
+          class="select select-bordered w-full min-w-0"
+        >
+          <%= for {label, value} <- @languages do %>
+            <option value={value} selected={value == (@default_language || "")}>{label}</option>
+          <% end %>
+        </select>
+        <label class="label min-w-0">
+          <span class="label-text-alt min-w-0 whitespace-normal break-words text-muted">
+            {gettext(
+              "Default language for new transcription sessions. Can be overridden per event."
+            )}
+          </span>
+        </label>
+      </div>
+      
+<!-- Submit -->
+      <div class="card-actions justify-stretch sm:justify-end">
+        <button type="submit" class="btn btn-primary w-full sm:w-auto">
+          {gettext("Save settings")}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card mt-8">
+  <div class="card-body min-w-0">
+    <h2 class="card-title">{gettext("LTI Settings")}</h2>
+    <form id="lti-settings-form" phx-submit="save_lti" class="min-w-0">
+      <div class="form-control mb-6 min-w-0">
+        <label class="switch-card items-start">
+          <input type="hidden" name="lti_enabled" value="false" />
+          <div class="min-w-0 flex-1">
+            <span class="block text-sm font-medium text-base-content">
+              {gettext("Enable LTI globally")}
+            </span>
+            <p class="block text-sm text-muted">
+              {gettext(
+                "When disabled, LTI registration, login, launches and outbound LMS requests are blocked. Existing registrations and quiz data are preserved."
+              )}
+            </p>
+          </div>
+          <input
+            id="lti-enabled"
+            type="checkbox"
+            name="lti_enabled"
+            value="true"
+            class="switch mt-0.5"
+            checked={@lti_enabled}
+          />
+        </label>
+      </div>
+      <div class="card-actions justify-stretch sm:justify-end">
+        <button type="submit" class="btn btn-primary w-full sm:w-auto">
+          {gettext("Save settings")}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="card mt-8">
+  <div class="card-body min-w-0">
+    <h2 class="card-title">{gettext("Sign-in security")}</h2>
+    <form id="security-settings-form" phx-submit="save_security" class="min-w-0">
+      <div class="form-control mb-6 min-w-0">
+        <label class="switch-card items-start">
+          <input type="hidden" name="two_factor_required" value="false" />
+          <div class="min-w-0 flex-1">
+            <span class="block text-sm font-medium text-base-content">
+              {gettext("Require two-step sign-in for everyone")}
+            </span>
+            <p class="block text-sm text-muted">
+              {gettext(
+                "When this is on, everyone must use it, administrators included, and nobody can turn it off. When it's off, each person chooses in My account. People who sign in through an outside provider (single sign-on or an LMS) aren't asked."
+              )}
+            </p>
+          </div>
+          <input
+            id="two-factor-required"
+            type="checkbox"
+            name="two_factor_required"
+            value="true"
+            class="switch mt-0.5"
+            checked={@two_factor_required}
+          />
+        </label>
+      </div>
+      <div class="card-actions justify-stretch sm:justify-end">
+        <button type="submit" class="btn btn-primary w-full sm:w-auto">
+          {gettext("Save settings")}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

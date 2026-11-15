@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang={Gettext.get_locale(ClaperWeb.Gettext)}>
+  <head>
+    <ClaperWeb.ThemeScript.script />
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    {csrf_meta_tag()}
+    <%= if assigns[:page_title] do %>
+      <.live_title suffix={" · " <> brand_name()}>{@page_title}</.live_title>
+    <% else %>
+      <.live_title>{brand_name()}</.live_title>
+    <% end %>
+    <link rel="icon" type="image/png" href={brand_icon()} />
+    <ClaperWeb.HomeScreen.tags />
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+    <link phx-track-static rel="stylesheet" href={~p"/assets/custom.css"} />
+    <%!-- Read by assets/js/app.js (no inline script: docs/SECURITY.md) --%>
+    <meta
+      name="supported-locales"
+      content={
+        Jason.encode!(Application.get_env(:claper, :languages, ["en", "fr", "es", "it", "de"]))
+      }
+    />
+    <script defer phx-track-static type="text/javascript" src={~p"/assets/app.js"}>
+    </script>
+  </head>
+  <body class="">
+    <div class="min-h-full">
+      <!-- Main column -->
+      <div class="flex flex-col">
+        <main class="flex-1">
+          {@inner_content}
+        </main>
+      </div>
+    </div>
+    <ClaperWeb.AlertDialog.dialog />
+  </body>
+</html>

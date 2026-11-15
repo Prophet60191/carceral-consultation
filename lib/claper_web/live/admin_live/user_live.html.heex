@@ -1,0 +1,430 @@
+<%= case @live_action do %>
+  <% :index -> %>
+    <div>
+      <ClaperWeb.AdminBar.bar
+        title={gettext("Users")}
+        user={@current_user}
+        return_event={@return_event}
+        active_tab={@active_tab}
+      >
+        <:actions>
+          <.link navigate={~p"/admin/users/new"} class="btn btn-primary btn-lg">
+            {gettext("Invite someone")}
+          </.link>
+        </:actions>
+        <:tools :if={@live_action == :index}>
+          <.form
+            for={@form}
+            class="flex flex-wrap items-center justify-end gap-2 [&>div]:w-56"
+            phx-change="filter-users"
+          >
+            <Flop.Phoenix.filter_fields :let={i} form={@form} fields={@fields}>
+              <ClaperWeb.CoreComponents.input
+                field={i.field}
+                label={i.label}
+                type={i.type}
+                phx-debounce="300"
+                {i.rest}
+              />
+            </Flop.Phoenix.filter_fields>
+          </.form>
+        </:tools>
+      </ClaperWeb.AdminBar.bar>
+
+      <Flop.Phoenix.table
+        items={@users}
+        meta={@meta}
+        path={~p"/admin/users"}
+        opts={[
+          container: true,
+          container_attrs: [class: "card overflow-x-auto my-5"],
+          no_results_content: ~H"""
+          <p class="text-center py-10">{gettext("No users found")}</p>
+          """,
+          table_attrs: [class: "table table-zebra w-full"],
+          symbol_asc: ~H"""
+          <span aria-hidden="true"><ClaperWeb.Icons.arrow_up /></span>
+          """,
+          symbol_desc: ~H"""
+          <span aria-hidden="true"><ClaperWeb.Icons.arrow_down /></span>
+          """
+        ]}
+      >
+        <:col :let={user} label={gettext("Email")} field={:email}>
+          <.link navigate={~p"/admin/users/#{user}"} class="link font-bold">
+            {user.email}
+          </.link>
+        </:col>
+        <:col :let={user} label={gettext("First name")} field={:first_name}>
+          {user.first_name || "—"}
+        </:col>
+        <:col :let={user} label={gettext("Last name")} field={:last_name}>
+          {user.last_name || "—"}
+        </:col>
+        <:col :let={user} label={gettext("Role")} field={:role_id}>
+          {Claper.Accounts.Administration.role_label(user)}
+        </:col>
+        <:col :let={user} label={gettext("Status")} field={:confirmed_at}>
+          <.status_badge user={user} />
+        </:col>
+        <:col :let={user} label={gettext("Two-step")}>
+          <.two_factor_badge user={user} />
+        </:col>
+        <:col :let={user} label={gettext("Last sign-in")} field={:last_signed_in_at}>
+          {if user.last_signed_in_at,
+            do: Calendar.strftime(user.last_signed_in_at, "%Y-%m-%d %H:%M"),
+            else: "—"}
+        </:col>
+      </Flop.Phoenix.table>
+
+      <div>
+        <ClaperWeb.CoreComponents.pagination meta={@meta} path={~p"/admin/users"} />
+      </div>
+    </div>
+  <% :show -> %>
+    <div>
+      <div>
+        <ClaperWeb.AdminBar.bar
+          title={gettext("User details")}
+          user={@current_user}
+          return_event={@return_event}
+          active_tab={@active_tab}
+        >
+          <:actions>
+            <.link navigate={~p"/admin/users"} class="btn btn-outline btn-lg">
+              {gettext("Back to users")}
+            </.link>
+            <.link navigate={~p"/admin/users/#{@user}/edit"} class="btn btn-primary btn-lg">
+              {gettext("Edit")}
+            </.link>
+            <button
+              :if={is_nil(@user.deleted_at) && @can_disable}
+              type="button"
+              phx-click="disable"
+              phx-value-id={@user.id}
+              data-confirm-title={gettext("Disable this user?")}
+              data-confirm={
+                gettext(
+                  "They can no longer log in, but their data is kept. You can enable them again."
+                )
+              }
+              data-confirm-action={gettext("Disable")}
+              class="btn btn-outline btn-lg"
+            >
+              {gettext("Disable")}
+            </button>
+            <button
+              :if={@user.deleted_at}
+              type="button"
+              phx-click="enable"
+              phx-value-id={@user.id}
+              class="btn btn-outline btn-lg"
+            >
+              {gettext("Enable")}
+            </button>
+            <button
+              :if={@can_delete}
+              type="button"
+              phx-click="delete"
+              phx-value-id={@user.id}
+              data-confirm-title={gettext("Delete this user permanently?")}
+              data-confirm={
+                gettext(
+                  "All their events are deleted. Their interactions in other events are kept anonymously. This cannot be undone."
+                )
+              }
+              data-confirm-action={gettext("Delete permanently")}
+              data-confirm-variant="destructive"
+              class="btn btn-error btn-outline btn-lg"
+            >
+              {gettext("Delete permanently")}
+            </button>
+          </:actions>
+        </ClaperWeb.AdminBar.bar>
+      </div>
+
+      <div class="mt-6">
+        <.detail_card>
+          <.detail_row label={gettext("First name")}>
+            {@user.first_name || "—"}
+          </.detail_row>
+          <.detail_row label={gettext("Last name")}>
+            {@user.last_name || "—"}
+          </.detail_row>
+          <.detail_row label={gettext("Email")}>
+            <a href={"mailto:#{@user.email}"} class="link link-primary">{@user.email}</a>
+          </.detail_row>
+          <.detail_row label={gettext("Role")}>
+            {Claper.Accounts.Administration.role_label(@user)}
+          </.detail_row>
+          <.detail_row label={gettext("Status")}>
+            <.status_badge user={@user} />
+          </.detail_row>
+          <.detail_row label={gettext("Two-step sign-in")}>
+            <.two_factor_badge user={@user} />
+          </.detail_row>
+          <.detail_row label={gettext("Last sign-in")}>
+            {if @user.last_signed_in_at,
+              do: format_admin_timestamp(@user.last_signed_in_at),
+              else: gettext("Never")}
+          </.detail_row>
+          <.detail_row label={gettext("Open sessions")}>
+            <span id="open-sessions">{@open_sessions}</span>
+          </.detail_row>
+          <.detail_row label={gettext("Created At")}>
+            {format_admin_timestamp(@user.inserted_at)}
+          </.detail_row>
+          <.detail_row label={gettext("Last Updated")}>
+            {format_admin_timestamp(@user.updated_at)}
+          </.detail_row>
+          <.detail_row label={gettext("Confirmed At")} show={!is_nil(@user.confirmed_at)}>
+            {format_admin_timestamp(@user.confirmed_at)}
+          </.detail_row>
+        </.detail_card>
+      </div>
+
+      <%!-- Account access (docs/SECURITY.md, "Managing accounts") --%>
+      <div class="card mt-6">
+        <div class="card-body space-y-4">
+          <h2 class="card-title">{gettext("Access")}</h2>
+
+          <div :if={@invitation_pending} class="flex flex-wrap items-center justify-between gap-3">
+            <p class="text-sm text-muted">
+              {gettext("They haven't accepted the invitation yet.")}
+            </p>
+            <button
+              id="resend-invitation"
+              type="button"
+              phx-click="resend_invitation"
+              phx-value-id={@user.id}
+              class="btn btn-outline"
+            >
+              {gettext("Send the invitation again")}
+            </button>
+          </div>
+
+          <div
+            :if={!@invitation_pending && is_nil(@user.deleted_at)}
+            class="flex flex-wrap items-center justify-between gap-3"
+          >
+            <p class="text-sm text-muted">
+              {gettext("Forgot their password? They choose a new one from the link.")}
+            </p>
+            <button
+              id="send-reset"
+              type="button"
+              phx-click="send_reset"
+              phx-value-id={@user.id}
+              class="btn btn-outline"
+            >
+              {gettext("Send a password reset link")}
+            </button>
+          </div>
+
+          <div :if={@open_sessions > 0} class="flex flex-wrap items-center justify-between gap-3">
+            <p class="text-sm text-muted">
+              {gettext("Ends every session on every device, open pages included.")}
+            </p>
+            <button
+              id="sign-out-everywhere"
+              type="button"
+              phx-click="sign_out_everywhere"
+              phx-value-id={@user.id}
+              data-confirm-title={gettext("Sign them out everywhere?")}
+              data-confirm={gettext("They'll need to sign in again on every device.")}
+              data-confirm-action={gettext("Sign out everywhere")}
+              class="btn btn-outline"
+            >
+              {gettext("Sign out everywhere")}
+            </button>
+          </div>
+
+          <div :if={@two_factor_on} class="flex flex-wrap items-center justify-between gap-3">
+            <p class="text-sm text-muted">
+              {gettext("Lost their phone and backup codes? Turn it off; they set it up again.")}
+            </p>
+            <button
+              id="reset-two-factor"
+              type="button"
+              phx-click="reset_two_factor"
+              phx-value-id={@user.id}
+              data-confirm-title={gettext("Turn off their two-step sign-in?")}
+              data-confirm={
+                gettext(
+                  "Only do this once you're sure it's really them asking. They'll be signed out everywhere."
+                )
+              }
+              data-confirm-action={gettext("Turn off")}
+              data-confirm-variant="destructive"
+              class="btn btn-outline"
+            >
+              {gettext("Turn off two-step sign-in")}
+            </button>
+          </div>
+
+          <p :if={!@can_delete} class="text-sm text-muted">
+            {if @user.id == @current_user.id,
+              do: gettext("You can't disable or delete your own account here."),
+              else:
+                gettext(
+                  "This is the last administrator, so they can't be disabled or deleted. Make someone else an administrator first."
+                )}
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-8">
+        <h2 class="text-2xl font-bold mb-4">{gettext("Events")}</h2>
+
+        <Flop.Phoenix.table
+          id="user-events"
+          items={@events}
+          meta={@events_meta}
+          path={@events_path}
+          opts={[
+            container: true,
+            container_attrs: [class: "card overflow-x-auto"],
+            no_results_content: ~H"""
+            <p class="text-center py-10">{gettext("No events for this user.")}</p>
+            """,
+            table_attrs: [class: "table table-zebra w-full"],
+            symbol_asc: ~H"""
+            <span aria-hidden="true"><ClaperWeb.Icons.arrow_up /></span>
+            """,
+            symbol_desc: ~H"""
+            <span aria-hidden="true"><ClaperWeb.Icons.arrow_down /></span>
+            """
+          ]}
+        >
+          <:col :let={event} label={gettext("Name")} field={:name}>
+            <.link navigate={~p"/admin/events/#{event}"} class="link font-bold">
+              {event.name}
+            </.link>
+          </:col>
+          <:col :let={event} label={gettext("Code")} field={:code}>
+            <ClaperWeb.Component.Badge.event_code code={event.code} />
+          </:col>
+          <:col :let={event} label={gettext("Started At")} field={:started_at}>
+            {format_admin_timestamp(event.started_at)}
+          </:col>
+          <:col :let={event} label={gettext("Expired At")} field={:expired_at}>
+            {if event.expired_at,
+              do: format_admin_timestamp(event.expired_at),
+              else: gettext("Not expired")}
+          </:col>
+          <:col :let={event} label={gettext("Audience Peak")} field={:audience_peak}>
+            <div class="badge badge-outline">{event.audience_peak || 0}</div>
+          </:col>
+        </Flop.Phoenix.table>
+
+        <div>
+          <ClaperWeb.CoreComponents.pagination meta={@events_meta} path={@events_path} />
+        </div>
+      </div>
+
+      <div class="mt-8">
+        <h2 class="text-2xl font-bold mb-4">{gettext("Audit Logs")}</h2>
+
+        <Flop.Phoenix.table
+          items={@audit_logs}
+          meta={@audit_meta}
+          path={@audit_path}
+          opts={[
+            container: true,
+            container_attrs: [class: "card overflow-x-auto"],
+            no_results_content: ~H"""
+            <p class="text-center py-10">{gettext("No audit logs for this user.")}</p>
+            """,
+            table_attrs: [class: "table table-zebra w-full"],
+            symbol_asc: ~H"""
+            <span aria-hidden="true"><ClaperWeb.Icons.arrow_up /></span>
+            """,
+            symbol_desc: ~H"""
+            <span aria-hidden="true"><ClaperWeb.Icons.arrow_down /></span>
+            """
+          ]}
+        >
+          <:col :let={log} label={gettext("ID")} field={:id}>
+            <.link navigate={~p"/admin/audit_logs/#{log}"} class="link font-bold">
+              {log.id}
+            </.link>
+          </:col>
+          <:col :let={log} label={gettext("Action")} field={:action}>
+            <span class="badge badge-outline">{log.action}</span>
+          </:col>
+          <:col :let={log} label={gettext("Timestamp")} field={:inserted_at}>
+            {format_admin_timestamp(log.inserted_at)}
+          </:col>
+          <:col
+            :let={log}
+            label={gettext("Metadata")}
+            tbody_td_attrs={[class: "max-w-xs truncate text-sm text-muted"]}
+          >
+            {format_audit_metadata(log.metadata)}
+          </:col>
+        </Flop.Phoenix.table>
+
+        <div>
+          <ClaperWeb.CoreComponents.pagination meta={@audit_meta} path={@audit_path} />
+        </div>
+      </div>
+    </div>
+  <% :new -> %>
+    <div>
+      <div>
+        <ClaperWeb.AdminBar.bar
+          title={gettext("Invite someone")}
+          user={@current_user}
+          return_event={@return_event}
+          active_tab={@active_tab}
+        />
+      </div>
+
+      <div class="mt-6">
+        <div class="card">
+          <div class="card-body">
+            <.live_component
+              module={ClaperWeb.AdminLive.UserLive.FormComponent}
+              id="user-form"
+              title={gettext("Invite someone")}
+              action={:new}
+              user={@user}
+              navigate={~p"/admin/users"}
+              signed_in_at={@signed_in_at}
+              actor={@current_user}
+              client_ip={@client_ip}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+  <% :edit -> %>
+    <div>
+      <div>
+        <ClaperWeb.AdminBar.bar
+          title={gettext("Edit user")}
+          user={@current_user}
+          return_event={@return_event}
+          active_tab={@active_tab}
+        />
+      </div>
+
+      <div class="mt-6">
+        <div class="card">
+          <div class="card-body">
+            <.live_component
+              module={ClaperWeb.AdminLive.UserLive.FormComponent}
+              id={"user-form-#{@user.id}"}
+              title={gettext("Edit user")}
+              action={:edit}
+              user={@user}
+              navigate={~p"/admin/users"}
+              signed_in_at={@signed_in_at}
+              actor={@current_user}
+              client_ip={@client_ip}
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+<% end %>

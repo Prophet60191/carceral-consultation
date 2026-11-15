@@ -1,0 +1,53 @@
+<div>
+  <div class="relative min-h-screen grid bg-stage">
+    <div class="flex flex-col sm:flex-row items-center md:items-start sm:justify-center md:justify-start flex-auto min-w-0 ">
+      <div
+        data-theme="carceral"
+        class="sm:w-1/2 xl:w-3/5 bg-base-200 h-full hidden md:flex flex-auto items-center justify-center p-10 overflow-hidden text-base-content bg-no-repeat bg-cover relative"
+        style="background-image: url(/images/education.jpg); background-position: 0% 60%;"
+      >
+        <div class="absolute bg-stage  opacity-25 inset-0 z-0"></div>
+        <div class="w-full  lg:max-w-2xl md:max-w-md z-10 items-center text-center ">
+          <div class=" font-bold leading-tight mb-6 mx-auto w-full content-center items-center ">
+            <ClaperWeb.Wordmark.mark
+              size={:none}
+              class="text-base-content [--wm-h:3.75rem] lg:[--wm-h:5rem]"
+            />
+          </div>
+        </div>
+      </div>
+      <div class="md:flex md:items-center md:justify-left w-full sm:w-auto md:h-full xl:w-1/2 p-8 md:p-10 lg:p-14 sm:rounded-lg md:rounded-none ">
+        <div class="max-w-xl w-full space-y-4">
+          <div class="lg:text-left text-center">
+            <div class="mt-6 font-bold text-base-content flex items-center gap-x-3">
+              <ClaperWeb.Wordmark.mark short size={:lg} class="text-base-content" />
+              <span class="text-2xl font-thin text-base-content">x</span>
+              <img src="/images/lms-platforms.png" class="h-12 w-auto inline" />
+            </div>
+            <h2 class="mt-6 text-4xl md:text-6xl font-bold text-base-content">
+              {gettext("Bring %{name} to your LMS",
+                name: Claper.Branding.name(Claper.Branding.get())
+              )}
+            </h2>
+            <p class="mt-10 text-2xl md:text-4xl text-base-content">
+              {gettext("Register your platform")}
+            </p>
+          </div>
+          <div class="flex flex-row justify-center items-center space-x-3"></div>
+
+          <form action={~p"/lti/register"} method="post">
+            <input type="hidden" name="_csrf_token" value={Plug.CSRFProtection.get_csrf_token()} />
+            <input type="hidden" name="openid_configuration" value={@conf} />
+            <input type="hidden" name="registration_token" value={@token} />
+            <button :if={@current_user} type="submit" class="btn btn-primary">
+              {gettext("Add %{name}", name: Claper.Branding.name(Claper.Branding.get()))}
+            </button>
+            <p :if={!@current_user} class="text-base-content italic">
+              {gettext("You must log in to continue")}
+            </p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

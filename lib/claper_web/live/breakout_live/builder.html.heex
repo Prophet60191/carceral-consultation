@@ -1,0 +1,434 @@
+<ClaperWeb.AppHeader.header user={@current_user} title={gettext("Breakout")} />
+
+<div class="w-full px-4 pb-24 lg:px-6 xl:px-12">
+  <div class="flex flex-wrap items-center justify-between gap-3 py-4">
+    <ClaperWeb.Breadcrumbs.trail items={crumbs(assigns)} />
+    <.link
+      :if={@event && @breakout}
+      navigate={~p"/e/#{@event.code}/breakouts/#{@breakout.id}/live"}
+      class="btn btn-primary"
+    >
+      {gettext("Run live")}
+    </.link>
+  </div>
+
+  <%!-- ===== New breakout ===== --%>
+  <div :if={is_nil(@breakout)} class="flex flex-col gap-6">
+    <section class="panel">
+      <div class="panel-header gap-3">
+        <ClaperWeb.BreakoutLive.Icons.breakout class="size-5 text-muted" />
+        <h2 class="text-base font-semibold text-base-content">{gettext("New breakout")}</h2>
+      </div>
+      <.form for={@form} id="breakout-new" phx-submit="create" class="flex flex-col gap-4 p-3">
+        <p class="text-sm text-muted">
+          {gettext(
+            "Give it a name you and the groups will recognize. You'll add the material and questions next."
+          )}
+        </p>
+        <.text_field
+          form={@form}
+          key={:title}
+          label={gettext("Name")}
+          placeholder={gettext("e.g. Case review")}
+          autocomplete="off"
+          required
+          autofocus
+        />
+        <div>
+          <button type="submit" class="btn btn-primary">{gettext("Create breakout")}</button>
+        </div>
+      </.form>
+    </section>
+
+    <section :if={@event} class="panel">
+      <div class="panel-header gap-3">
+        <ClaperWeb.BreakoutLive.Icons.library class="size-5 text-muted" />
+        <h2 class="text-base font-semibold text-base-content">
+          {gettext("Or start from your library")}
+        </h2>
+      </div>
+      <p :if={@library == []} class="p-3 text-sm text-muted">
+        {gettext(
+          "Your breakout library is empty. Breakouts you save to it appear here, ready to bring into any event."
+        )}
+      </p>
+      <ul :if={@library != []} class="flex flex-col divide-y divide-line">
+        <li :for={item <- @library} class="flex items-center gap-3 p-3">
+          <div class="min-w-0 flex-1">
+            <p class="truncate text-sm font-medium text-base-content">{item.title}</p>
+            <p class="text-sm text-muted">
+              {if item.material_mode == "per_case",
+                do: gettext("Different material for each group"),
+                else: gettext("Same material for every group")}
+            </p>
+          </div>
+          <button
+            type="button"
+            class="btn btn-outline btn-sm"
+            phx-click="use_library"
+            phx-value-id={item.id}
+          >
+            {gettext("Use")}
+          </button>
+        </li>
+      </ul>
+    </section>
+  </div>
+
+  <%!-- ===== Builder ===== --%>
+  <div :if={@breakout} class="flex flex-col gap-6">
+    <%!-- Settings: saved as they change --%>
+    <section class="panel">
+      <div class="panel-header gap-3">
+        <ClaperWeb.BreakoutLive.Icons.breakout class="size-5 text-muted" />
+        <h2 class="text-base font-semibold text-base-content">{gettext("Settings")}</h2>
+        <span class="ml-auto text-sm text-muted">{gettext("Changes save automatically")}</span>
+      </div>
+      <.form
+        for={@form}
+        id="breakout-settings"
+        phx-change="save_settings"
+        phx-submit="save_settings"
+        class="grid gap-4 p-3 sm:grid-cols-2 xl:grid-cols-4"
+      >
+        <div class="sm:col-span-2 xl:col-span-4">
+          <.text_field
+            form={@form}
+            key={:title}
+            label={gettext("Name")}
+            autocomplete="off"
+            phx-debounce="500"
+            required
+          />
+        </div>
+
+        <.select_field
+          form={@form}
+          key={:group_sizing}
+          label={gettext("How groups are made")}
+          options={[
+            {gettext("Largest group size"), "max_size"},
+            {gettext("Exact number of groups"), "group_count"}
+          ]}
+        />
+        <.text_field
+          :if={Phoenix.HTML.Form.input_value(@form, :group_sizing) != "group_count"}
+          form={@form}
+          key={:max_group_size}
+          type="number"
+          label={gettext("Largest group size")}
+          min="2"
+          max="12"
+          phx-debounce="500"
+        />
+        <.text_field
+          :if={Phoenix.HTML.Form.input_value(@form, :group_sizing) == "group_count"}
+          form={@form}
+          key={:group_count}
+          type="number"
+          label={gettext("Number of groups")}
+          min="1"
+          max="50"
+          phx-debounce="500"
+        />
+
+        <.select_field
+          form={@form}
+          key={:material_mode}
+          label={gettext("Material")}
+          options={[
+            {gettext("Same for every group"), "same"},
+            {gettext("Different for each group"), "per_case"}
+          ]}
+        />
+        <.text_field
+          form={@form}
+          key={:timer_minutes}
+          type="number"
+          label={gettext("Timer (minutes)")}
+          placeholder={gettext("No timer")}
+          min="1"
+          max="240"
+          phx-debounce="500"
+        />
+
+        <p class="text-sm text-muted sm:col-span-2 xl:col-span-4">
+          {if Phoenix.HTML.Form.input_value(@form, :group_sizing) == "group_count",
+            do:
+              gettext(
+                "The room is split into this many groups, as even as possible. Groups are set when the breakout starts; anyone who arrives later asks you for a group."
+              ),
+            else:
+              gettext(
+                "The app makes as few groups as it can without going over this size, keeping groups within one person of each other. Groups are set when the breakout starts; anyone who arrives later asks you for a group."
+              )}
+          {gettext("The timer only signals time's up; you stop the breakout when you choose.")}
+        </p>
+      </.form>
+    </section>
+
+    <%!-- Material: one packet, or one per case --%>
+    <section
+      :for={{packet, index} <- Enum.with_index(@breakout.packets)}
+      id={"packet-#{packet.id}"}
+      class="panel"
+    >
+      <div class="panel-header gap-3">
+        <ClaperWeb.BreakoutLive.Icons.packet class="size-5 text-muted" />
+        <h2 class="text-base font-semibold text-base-content">
+          {gettext("Material and questions")}
+        </h2>
+        <%!-- No name: the breakout's own text says what the material is (Jose, 2026-11-14) --%>
+        <span :if={length(@breakout.packets) > 1} class="text-sm text-muted">
+          {gettext("%{n} of %{total}", n: index + 1, total: length(@breakout.packets))}
+        </span>
+        <button
+          :if={length(@breakout.packets) > 1}
+          type="button"
+          class="btn btn-ghost btn-sm ml-auto text-error"
+          phx-click="delete_packet"
+          phx-value-id={packet.id}
+          data-confirm-title={gettext("Remove this material?")}
+          data-confirm={gettext("Everything in it is removed too.")}
+          data-confirm-action={gettext("Remove")}
+          data-confirm-variant="destructive"
+        >
+          {gettext("Remove")}
+        </button>
+      </div>
+
+      <div class="flex flex-col gap-3 p-3">
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-sm text-muted">{gettext("Add:")}</span>
+          <.link
+            :for={type <- Claper.Breakouts.PieceType.types()}
+            patch={"#{base_path(assigns)}?add=#{type.kind()}&packet=#{packet.id}"}
+            class="btn btn-outline btn-sm"
+          >
+            <ClaperWeb.BreakoutLive.Icons.piece kind={type.kind()} class="size-4" />
+            {type.label()}
+          </.link>
+        </div>
+        <p :if={packet.pieces == []} class="text-sm text-muted">
+          {gettext(
+            "Nothing here yet. Use the buttons above to add something to read or look at, then the questions, in the order the group should work through them."
+          )}
+        </p>
+
+        <ol :if={packet.pieces != []} class="flex flex-col gap-2">
+          <li
+            :for={{piece, i} <- Enum.with_index(packet.pieces)}
+            id={"piece-#{piece.id}"}
+            class="flex flex-col gap-3 rounded-lg border border-line bg-base-100 p-3 sm:flex-row sm:items-center"
+          >
+            <div class="flex min-w-0 flex-1 items-center gap-3">
+              <div class="flex size-9 shrink-0 items-center justify-center rounded-md bg-base-300 text-base-content">
+                <ClaperWeb.BreakoutLive.Icons.piece kind={piece.kind} class="size-5" />
+              </div>
+              <div class="min-w-0 flex-1">
+                <p class="text-sm text-muted">{i + 1}. {piece_label(piece)}</p>
+                <p class="line-clamp-2 text-sm font-medium text-base-content">
+                  {piece_summary(piece, @contents[piece.id])}
+                </p>
+              </div>
+            </div>
+
+            <div :if={answerable?(piece)} class="flex flex-wrap items-center gap-3">
+              <span class={[
+                "badge",
+                piece.answer_scope == "group" && "badge-primary",
+                piece.answer_scope != "group" && "badge-soft"
+              ]}>
+                {if piece.answer_scope == "group",
+                  do: gettext("Group answer · note-taker"),
+                  else: gettext("Each person answers")}
+              </span>
+              <label
+                :if={piece.answer_scope == "individual"}
+                class="flex items-center gap-2 text-sm text-base-content"
+              >
+                <ClaperWeb.Component.Switch.switch
+                  size={:sm}
+                  checked={piece.visible_to_group}
+                  phx-click="toggle_visible"
+                  phx-value-key={piece.id}
+                  aria-label={gettext("Group-mates see each other's answers")}
+                />
+                {gettext("Group sees answers")}
+              </label>
+            </div>
+
+            <div class="flex items-center gap-1 self-end sm:self-auto">
+              <button
+                type="button"
+                class="btn btn-ghost btn-square btn-sm"
+                phx-click="move_piece"
+                phx-value-id={piece.id}
+                phx-value-dir="up"
+                disabled={i == 0}
+                aria-label={gettext("Move up")}
+              >
+                <ClaperWeb.BreakoutLive.Icons.arrow dir="up" class="size-4" />
+              </button>
+              <button
+                type="button"
+                class="btn btn-ghost btn-square btn-sm"
+                phx-click="move_piece"
+                phx-value-id={piece.id}
+                phx-value-dir="down"
+                disabled={i == length(packet.pieces) - 1}
+                aria-label={gettext("Move down")}
+              >
+                <ClaperWeb.BreakoutLive.Icons.arrow dir="down" class="size-4" />
+              </button>
+              <.link
+                patch={"#{base_path(assigns)}?edit=#{piece.id}"}
+                class="btn btn-ghost btn-square btn-sm"
+                aria-label={gettext("Edit")}
+              >
+                <ClaperWeb.BreakoutLive.Icons.pencil class="size-4" />
+              </.link>
+              <button
+                type="button"
+                class="btn btn-ghost btn-square btn-sm text-error"
+                phx-click="delete_piece"
+                phx-value-id={piece.id}
+                data-confirm-title={gettext("Remove this task?")}
+                data-confirm={gettext("It is taken out of this case.")}
+                data-confirm-action={gettext("Remove")}
+                data-confirm-variant="destructive"
+                aria-label={gettext("Remove")}
+              >
+                <ClaperWeb.BreakoutLive.Icons.trash class="size-4" />
+              </button>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <div :if={@breakout.material_mode == "per_case"}>
+      <button type="button" class="btn btn-outline" phx-click="add_packet">
+        <ClaperWeb.BreakoutLive.Icons.plus class="size-4" />
+        {gettext("Add material for another group")}
+      </button>
+      <p class="mt-2 text-sm text-muted">
+        {gettext(
+          "The groups get the material in turn: with 3 sets, groups 1 and 4 get the first, 2 and 5 the second, 3 and 6 the third."
+        )}
+      </p>
+    </div>
+
+    <%!-- Library and removal --%>
+    <section class="panel">
+      <div class="panel-header gap-3">
+        <ClaperWeb.BreakoutLive.Icons.library class="size-5 text-muted" />
+        <h2 class="text-base font-semibold text-base-content">
+          {if @event, do: gettext("Library"), else: gettext("This breakout")}
+        </h2>
+      </div>
+      <div class="flex flex-wrap items-center gap-3 p-3">
+        <button :if={@event} type="button" class="btn btn-outline" phx-click="save_to_library">
+          {gettext("Save a copy to your library")}
+        </button>
+        <button
+          type="button"
+          class="btn btn-outline btn-error"
+          phx-click="delete_breakout"
+          data-confirm-title={gettext("Delete this breakout?")}
+          data-confirm={gettext("This cannot be undone.")}
+          data-confirm-action={gettext("Delete breakout")}
+          data-confirm-variant="destructive"
+        >
+          {gettext("Delete breakout")}
+        </button>
+      </div>
+      <p :if={@event} class="px-3 pb-3 text-sm text-muted">
+        {gettext(
+          "The library copy is separate: changing this breakout doesn't change it, and changing it doesn't change this one."
+        )}
+      </p>
+    </section>
+  </div>
+</div>
+
+<%!-- ===== Piece editor pop-up ===== --%>
+<div :if={@editor} id="piece-editor" class="modal modal-open" role="dialog" aria-modal="true">
+  <div class="modal-box max-w-xl p-0">
+    <.link
+      patch={base_path(assigns)}
+      class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-10"
+      aria-label={gettext("Close")}
+    >
+      &times;
+    </.link>
+    <div class="scroll-py-3 overflow-y-auto p-6">
+      <p class="mb-5 text-base font-bold text-base-content">{editor_title(@editor)}</p>
+
+      <%= case @editor.kind do %>
+        <% "text" -> %>
+          <form id="text-editor" phx-submit="save_text" class="flex flex-col gap-4">
+            <label class="flex flex-col gap-1">
+              <span class="text-sm font-bold text-base-content">{gettext("Text to read")}</span>
+              <textarea
+                name="body"
+                rows="10"
+                class="textarea"
+                aria-invalid={@text_error && "true"}
+                autofocus
+              >{@editor.piece && @editor.piece.body}</textarea>
+            </label>
+            <p :if={@text_error} class="text-sm text-error">{@text_error}</p>
+            <button type="submit" class="btn btn-primary w-full">{gettext("Save")}</button>
+          </form>
+        <% "poll" -> %>
+          <.live_component
+            module={ClaperWeb.PollLive.FormComponent}
+            id="piece-poll"
+            poll={@editor.content}
+            live_action={@editor.action}
+            piece_target={target(@editor)}
+            return_to={base_path(assigns)}
+          />
+        <% "quiz" -> %>
+          <.live_component
+            module={ClaperWeb.QuizLive.QuizComponent}
+            id="piece-quiz"
+            quiz={@editor.content}
+            live_action={@editor.action}
+            piece_target={target(@editor)}
+            return_to={base_path(assigns)}
+          />
+        <% "form" -> %>
+          <.live_component
+            module={ClaperWeb.FormLive.FormComponent}
+            id="piece-form"
+            form={@editor.content}
+            live_action={@editor.action}
+            piece_target={target(@editor)}
+            return_to={base_path(assigns)}
+          />
+        <% "word_cloud" -> %>
+          <.live_component
+            module={ClaperWeb.WordCloudLive.FormComponent}
+            id="piece-word-cloud"
+            word_cloud={@editor.content}
+            live_action={@editor.action}
+            piece_target={target(@editor)}
+            return_to={base_path(assigns)}
+          />
+        <% "embed" -> %>
+          <.live_component
+            module={ClaperWeb.EmbedLive.FormComponent}
+            id="piece-embed"
+            embed={@editor.content}
+            live_action={@editor.action}
+            piece_target={target(@editor)}
+            current_user={@current_user}
+            return_to={base_path(assigns)}
+          />
+      <% end %>
+    </div>
+  </div>
+  <.link patch={base_path(assigns)} class="modal-backdrop" aria-label={gettext("Close")}></.link>
+</div>

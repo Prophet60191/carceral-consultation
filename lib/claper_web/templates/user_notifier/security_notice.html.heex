@@ -1,0 +1,45 @@
+<tr>
+  <td>
+    <table
+      width="95%"
+      border="0"
+      align="center"
+      cellpadding="0"
+      cellspacing="0"
+      style={"max-width:670px;background:#{ClaperWeb.Theme.email(:card)}; border-radius:3px; text-align:center;-webkit-box-shadow:0 6px 18px 0 #{ClaperWeb.Theme.email(:shadow)};-moz-box-shadow:0 6px 18px 0 #{ClaperWeb.Theme.email(:shadow)};box-shadow:0 6px 18px 0 #{ClaperWeb.Theme.email(:shadow)};"}
+    >
+      <tr>
+        <td style="height:40px;">&nbsp;</td>
+      </tr>
+      <tr>
+        <td style="padding:0 35px;">
+          <h1 style={"color:#{ClaperWeb.Theme.email(:text)}; font-weight:500; margin:0;font-size:28px;font-family:'Rubik',sans-serif;"}>
+            {@heading}
+          </h1>
+          <span style={"display:inline-block; vertical-align:middle; margin:29px 0 26px; border-bottom:1px solid #{ClaperWeb.Theme.email(:line)}; width:100px;"}>
+          </span>
+          <p
+            :for={line <- @lines}
+            style={"color:#{ClaperWeb.Theme.email(:text)}; font-size:15px;line-height:24px; margin:0 0 14px;"}
+          >
+            {line}
+          </p>
+          <a
+            :if={@button}
+            href={elem(@button, 1)}
+            target="_blank"
+            style={"background:#{ClaperWeb.Theme.email(:button)};text-decoration:none !important; font-weight:500; margin-top:14px; color:#{ClaperWeb.Theme.email(:button_text)};text-transform:uppercase; font-size:14px;padding:10px 24px;display:inline-block;border-radius:50px;"}
+          >
+            {elem(@button, 0)}
+          </a>
+        </td>
+      </tr>
+      <tr>
+        <td style="height:40px;">&nbsp;</td>
+      </tr>
+    </table>
+  </td>
+</tr>
+<tr>
+  <td style="height:20px;">&nbsp;</td>
+</tr>

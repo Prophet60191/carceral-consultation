@@ -1,0 +1,67 @@
+<div>
+  <div class="relative min-h-screen grid bg-stage">
+    <div class="flex min-h-screen flex-col md:flex-row items-stretch">
+      <ClaperWeb.BrandPanel.panel />
+      <div class="flex w-full items-center justify-center p-8 md:w-1/2 md:p-10 lg:p-14 xl:w-2/5">
+        <div class="w-full max-w-xl">
+          <div class="space-y-6">
+            <div class="text-center md:text-left">
+              <p class="text-sm font-semibold uppercase tracking-[0.3em] text-primary">
+                {gettext("Welcome")}
+              </p>
+              <h2 class="mt-4 text-4xl font-bold text-base-content lg:text-5xl">
+                {gettext("Choose your password")}
+              </h2>
+              <p class="mt-4 text-base leading-7 text-muted">
+                {gettext("You'll sign in with %{email} and this password.",
+                  email: @invited_user.email
+                )}
+              </p>
+            </div>
+
+            <.form
+              :let={f}
+              for={@changeset}
+              action={~p"/users/invitation/#{@token}"}
+              method="post"
+              class="space-y-5"
+            >
+              <div class="space-y-2">
+                <ClaperWeb.Component.Input.password
+                  form={f}
+                  key={:password}
+                  labelClass="text-base-content"
+                  name={gettext("Password")}
+                  placeholder={gettext("At least 15 characters")}
+                  required="true"
+                  autofocus="true"
+                />
+
+                <p class="text-sm text-muted">
+                  {gettext(
+                    "Use at least 15 characters. A short sentence or a few words together works well."
+                  )}
+                </p>
+              </div>
+
+              <ClaperWeb.Component.Input.password
+                form={f}
+                key={:password_confirmation}
+                labelClass="text-base-content"
+                name={gettext("Password confirmation")}
+                placeholder={gettext("Type it again")}
+                required="true"
+              />
+
+              <div class="pt-3">
+                <button type="submit" class="btn btn-primary w-full">
+                  {gettext("Set password and sign in")}
+                </button>
+              </div>
+            </.form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

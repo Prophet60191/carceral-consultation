@@ -1,0 +1,73 @@
+<div>
+  <.form
+    :let={f}
+    for={@changeset}
+    id="transcription-config-form"
+    phx-target={@myself}
+    phx-change="validate"
+    phx-submit="save"
+    class="flex flex-col gap-6"
+  >
+    <.select_field form={f} key={:language} label={gettext("Language")} options={@languages} />
+
+    <div class="flex flex-col gap-4">
+      <p class="text-sm font-bold text-base-content">{gettext("Options")}</p>
+
+      <.select_field
+        form={f}
+        key={:visibility}
+        label={gettext("Show subtitles on")}
+        options={[
+          {gettext("Presenter and attendee"), "both"},
+          {gettext("Presenter only"), "presenter"},
+          {gettext("Attendee only"), "attendee"}
+        ]}
+      />
+
+      <div class="flex flex-col gap-1">
+        <label for="mic-select" class="text-sm font-bold text-base-content">
+          {gettext("Microphone")}
+        </label>
+        <select
+          id="mic-select"
+          phx-hook="MicSelector"
+          data-event-uuid={@event_uuid}
+          class="select w-full"
+        >
+          <option>{gettext("Loading microphones...")}</option>
+        </select>
+        <p class="text-xs text-muted">
+          {gettext("Microphone selection is saved locally in your browser.")}
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-col gap-2">
+      <button
+        type="submit"
+        phx-disable-with={gettext("Loading...")}
+        class="btn btn-primary w-full"
+      >
+        {case @live_action do
+          :new -> gettext("Add transcription")
+          :edit -> gettext("Save")
+        end}
+      </button>
+      <%= if @live_action == :edit do %>
+        {link(gettext("Delete"),
+          to: "#",
+          phx_click: "delete",
+          phx_target: @myself,
+          phx_value_id: @transcription_config.id,
+          data: [
+            confirm_title: gettext("Delete the transcription settings?"),
+            confirm: gettext("This cannot be undone."),
+            confirm_action: gettext("Delete"),
+            confirm_variant: "destructive"
+          ],
+          class: "btn btn-outline btn-error w-full"
+        )}
+      <% end %>
+    </div>
+  </.form>
+</div>

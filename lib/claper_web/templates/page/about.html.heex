@@ -1,0 +1,65 @@
+<%!-- About this app (AGPL-3.0 sections 5 and 13; docs/BRAND.md): who runs
+     this copy, that it is free software based on Claper, its license, no
+     warranty, and where to get its source code. --%>
+<main class="min-h-screen bg-base-100 px-4 py-10 sm:py-16">
+  <div class="mx-auto flex max-w-2xl flex-col gap-6">
+    <a href={~p"/"} class="self-start">
+      <ClaperWeb.Wordmark.mark size={:md} class="text-base-content" />
+    </a>
+
+    <section class="panel flex flex-col gap-3 p-6" id="about-app">
+      <h1 class="text-2xl font-bold text-base-content">{gettext("About this app")}</h1>
+      <p class="text-base-content">
+        {gettext(
+          "%{name} uses this app for live presentations and workshops: people join from their phones to follow along, answer polls, quizzes and forms, and send messages.",
+          name: @name
+        )}
+      </p>
+      <p class="text-base-content">
+        <a id="about-privacy" href={ClaperWeb.Privacy.url()} class="link">
+          {gettext("What this app keeps about you, and for how long")}
+        </a>
+      </p>
+    </section>
+
+    <section class="panel flex flex-col gap-3 p-6" id="about-license">
+      <h2 class="text-lg font-bold text-base-content">{gettext("Free software")}</h2>
+      <p class="text-base-content">
+        {gettext("This app is based on")}
+        <a href="https://github.com/ClaperCo/Claper" class="link" rel="noopener noreferrer">
+          Claper
+        </a>
+        {gettext(
+          "(copyright © 2022–2026 Alexandre Lion and the Claper contributors) and has been changed since November 2026."
+        )}
+      </p>
+      <p class="text-base-content">
+        {gettext(
+          "It is free software: you can use, study, share and change it under the terms of the GNU Affero General Public License, version 3 or (at your option) any later version, as published by the Free Software Foundation."
+        )}
+      </p>
+      <p class="text-base-content">
+        {gettext(
+          "It comes with ABSOLUTELY NO WARRANTY, to the extent permitted by law; see the license for details."
+        )}
+      </p>
+      <div class="flex flex-wrap gap-2 pt-1">
+        <a
+          id="about-source"
+          href={@source_url}
+          class="btn btn-primary btn-sm"
+          rel="noopener noreferrer"
+        >
+          {gettext("Get the source code")}
+        </a>
+        <a
+          href="https://www.gnu.org/licenses/agpl-3.0.html"
+          class="btn btn-outline btn-sm"
+          rel="noopener noreferrer"
+        >
+          {gettext("Read the license")}
+        </a>
+      </div>
+    </section>
+  </div>
+</main>

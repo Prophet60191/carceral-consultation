@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang={Gettext.get_locale(ClaperWeb.Gettext)}>
+  <head>
+    <ClaperWeb.ThemeScript.script />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{gettext("Register your platform")}</title>
+    <link phx-track-static rel="stylesheet" href={~p"/assets/app.css"} />
+  </head>
+  <body class="bg-base-100 text-base-content">
+    <main class="min-h-screen flex flex-col items-center justify-center gap-6 p-8 text-center">
+      <ClaperWeb.Wordmark.mark size={:lg} class="text-base-content" />
+      <h1 class="text-3xl font-bold">
+        {gettext("Bring %{name} to your LMS", name: Claper.Branding.name(Claper.Branding.get()))}
+      </h1>
+      <p class="max-w-xl">
+        {gettext(
+          "Continue in a new tab to sign in and securely confirm platform registration. Return to your LMS when registration is complete."
+        )}
+      </p>
+      <a
+        id="open-lti-registration"
+        href={
+          ~p"/lti/register/continue?#{%{openid_configuration: @conf, registration_token: @token}}"
+        }
+        target="_blank"
+        rel="noopener noreferrer"
+        class="btn btn-primary"
+      >
+        {gettext("Continue registration in %{name}",
+          name: Claper.Branding.name(Claper.Branding.get())
+        )}
+      </a>
+    </main>
+  </body>
+</html>

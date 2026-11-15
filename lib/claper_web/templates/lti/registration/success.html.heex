@@ -1,0 +1,42 @@
+<div>
+  <div class="relative h-screen bg-stage flex justify-center items-center">
+    <div class="max-w-xl text-center">
+      <p class="text-4xl font-bold text-base-content flex items-center justify-center gap-x-2">
+        <span>{gettext("Registration completed")}</span>
+        <img src="/images/icons/thumb.svg" class="h-12 -mt-3" />
+      </p>
+      <p :if={!@approved} id="registration-pending" class="mt-6 text-warning">
+        {gettext(
+          "An administrator of %{name} must approve this platform before it can be used. Until then, launches from this platform will be refused.",
+          name: Claper.Branding.name(Claper.Branding.get())
+        )}
+      </p>
+      <div class="my-8">
+        <p class="text-base-content">
+          {gettext("Your next steps")}:
+        </p>
+        <div class="mt-4 bg-base-200 p-6 rounded-lg shadow-lg border border-base-content">
+          <ol class="list-decimal list-inside text-base-content">
+            <li :if={!@approved} class="mb-2">
+              {gettext("Ask a %{name} administrator to approve this platform",
+                name: Claper.Branding.name(Claper.Branding.get())
+              )}
+            </li>
+            <li class="mb-2">{gettext("Activate the tool in your LMS")}</li>
+            <li class="mb-2">{gettext("Configure it to be opened in a new window")}</li>
+            <li class="mb-2">
+              {gettext("Check the permissions to share name and email of users")}
+            </li>
+          </ol>
+        </div>
+      </div>
+      <button
+        class="btn btn-primary mx-auto mt-8"
+        type="button"
+        data-lti-action="finish-registration"
+      >
+        {gettext("Finish")}
+      </button>
+    </div>
+  </div>
+</div>

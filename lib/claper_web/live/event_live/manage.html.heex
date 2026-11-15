@@ -1,0 +1,680 @@
+<div
+  id="manager"
+  phx-hook="Manager"
+  data-max-page={@event.presentation_file.length}
+  data-current-page={@state.position}
+  class="h-screen flex flex-col overflow-hidden bg-base-100"
+>
+  <!-- Settings Modal (Mobile) -->
+  <div
+    id="settings-modal"
+    class={["modal", "manage-modal", if(@settings_modal, do: "modal-open")]}
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="modal-box max-w-xl">
+      <button
+        phx-click="toggle-settings-modal"
+        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+      >
+        &times;
+      </button>
+      <div id="settings-modal-content">
+        <.live_component
+          id="settings-modal-pane"
+          module={ClaperWeb.EventLive.ManagerSettingsComponent}
+          create={@create}
+          state={@state}
+          show_shortcut={false}
+          current_interaction={@current_interaction}
+          word_cloud_words={@word_cloud_words}
+        />
+      </div>
+    </div>
+    <div class="modal-backdrop" phx-click="toggle-settings-modal">
+      <button class="pressable">close</button>
+    </div>
+  </div>
+
+  <%!-- Reorder this slide's interactions (Jose, 2026-11-14) --%>
+  <div
+    :if={@reorder}
+    id="reorder-modal"
+    class="modal manage-modal modal-open"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="reorder-title"
+  >
+    <div class="modal-box max-w-lg">
+      <button
+        type="button"
+        phx-click="reorder-cancel"
+        aria-label={gettext("Close")}
+        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2"
+      >
+        &times;
+      </button>
+      <h2 id="reorder-title" class="text-lg font-bold text-base-content">
+        {gettext("Reorder interactions")}
+      </h2>
+      <p class="mt-1 text-sm text-muted">
+        {gettext("Slide %{n}. Move each one up or down, then save.", n: @state.position + 1)}
+      </p>
+
+      <ol class="mt-4 flex flex-col gap-2">
+        <li
+          :for={{interaction, i} <- Enum.with_index(@reorder)}
+          id={"reorder-#{Claper.Interactions.type_key(interaction)}-#{interaction.id}"}
+          class="panel flex-row items-center gap-3 p-3"
+        >
+          <span class="w-5 shrink-0 text-right text-sm tabular-nums text-muted">{i + 1}</span>
+          <div class="min-w-0 flex-1">
+            <p class="text-xs text-muted">
+              {ClaperWeb.EventLive.ManageInteractionListComponent.type_label(interaction)}
+            </p>
+            <p class="truncate text-sm font-medium text-base-content">{interaction.title}</p>
+          </div>
+          <div class="flex shrink-0 items-center gap-1">
+            <button
+              type="button"
+              class="btn btn-ghost btn-square btn-sm"
+              phx-click="reorder-move"
+              phx-value-index={i}
+              phx-value-dir="up"
+              disabled={i == 0}
+              aria-label={gettext("Move up")}
+            >
+              <ClaperWeb.BreakoutLive.Icons.arrow dir="up" class="size-4" />
+            </button>
+            <button
+              type="button"
+              class="btn btn-ghost btn-square btn-sm"
+              phx-click="reorder-move"
+              phx-value-index={i}
+              phx-value-dir="down"
+              disabled={i == length(@reorder) - 1}
+              aria-label={gettext("Move down")}
+            >
+              <ClaperWeb.BreakoutLive.Icons.arrow dir="down" class="size-4" />
+            </button>
+          </div>
+        </li>
+      </ol>
+
+      <div class="mt-6 flex justify-end gap-2">
+        <button type="button" class="btn btn-outline" phx-click="reorder-cancel">
+          {gettext("Cancel")}
+        </button>
+        <button type="button" id="reorder-save" class="btn btn-primary" phx-click="reorder-save">
+          {gettext("Save order")}
+        </button>
+      </div>
+    </div>
+    <div class="modal-backdrop" phx-click="reorder-cancel">
+      <button class="pressable">close</button>
+    </div>
+  </div>
+  
+<!-- Interaction Modal -->
+  <div
+    :if={@interaction_modal}
+    id="interaction-modal"
+    class="modal manage-modal modal-open"
+    role="dialog"
+    aria-modal="true"
+  >
+    <div class="modal-box max-w-xl p-0">
+      <button
+        phx-click="toggle-interaction-modal"
+        class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-10"
+      >
+        &times;
+      </button>
+      <div id="modal-content">
+        <%= if @create==nil do %>
+          <ul class="scroll-py-3 overflow-y-auto p-3" id="options" role="listbox">
+            <li id="option-1" role="option" tabindex="-1">
+              <a
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                href={~p"/e/#{@event.code}/manage/add/poll"}
+                class="menu-item group select-none items-start p-3"
+              >
+                <div class="flex h-12 w-12 flex-none text-primary-content items-center justify-center rounded-lg bg-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-7 w-7"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                    />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <p class="font-medium text-base-content">{gettext("Poll")}</p>
+                  <p class="text-muted">
+                    {gettext("Add poll to know opinion of your public.")}
+                  </p>
+                </div>
+              </a>
+            </li>
+            <li id="option-2" role="option" tabindex="-1">
+              <a
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                href={~p"/e/#{@event.code}/manage/add/form"}
+                class="menu-item group select-none items-start p-3"
+              >
+                <div class="flex h-12 w-12 flex-none text-primary-content items-center justify-center rounded-lg bg-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="h-7 w-7"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    stroke-width="1.5"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+                    />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <p class="font-medium text-base-content">{gettext("Form")}</p>
+                  <p class="text-muted">
+                    {gettext("Add form to collect data from your public.")}
+                  </p>
+                </div>
+              </a>
+            </li>
+            <li id="option-3" role="option" tabindex="-1">
+              <a
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                href={~p"/e/#{@event.code}/manage/add/embed"}
+                class="menu-item group select-none items-start p-3"
+              >
+                <div class="flex h-12 w-12 flex-none text-primary-content items-center justify-center rounded-lg bg-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-7 h-7"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
+                    />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <p class="font-medium text-base-content">{gettext("Web content")}</p>
+                  <p class="text-muted">
+                    {gettext("Add a Youtube video or any web content.")}
+                  </p>
+                </div>
+              </a>
+            </li>
+            <li id="option-4" role="option" tabindex="-1">
+              <a
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                href={~p"/e/#{@event.code}/manage/add/quiz"}
+                class="menu-item group select-none items-start p-3"
+              >
+                <div class="flex h-12 w-12 flex-none text-primary-content items-center justify-center rounded-lg bg-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-7 h-7"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M9 12.75 11.25 15 15 9.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+                    />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <p class="font-medium text-base-content">{gettext("Quiz")}</p>
+                  <p class="text-muted">{gettext("Add a quiz to test knowledge.")}</p>
+                </div>
+              </a>
+            </li>
+            <li id="option-breakout" role="option" tabindex="-1">
+              <.link
+                navigate={~p"/e/#{@event.code}/breakouts/new"}
+                class="menu-item group select-none items-start p-3"
+              >
+                <div class="flex h-12 w-12 flex-none text-primary-content items-center justify-center rounded-lg bg-primary">
+                  <ClaperWeb.BreakoutLive.Icons.breakout class="w-7 h-7" />
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <p class="font-medium text-base-content">{gettext("Breakout")}</p>
+                  <p class="text-muted">
+                    {gettext(
+                      "Split the room into small groups, each with material and questions."
+                    )}
+                  </p>
+                </div>
+              </.link>
+            </li>
+            <li id="option-6" role="option" tabindex="-1">
+              <a
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                href={~p"/e/#{@event.code}/manage/add/word_cloud"}
+                class="menu-item group select-none items-start p-3"
+              >
+                <div class="flex h-12 w-12 flex-none text-primary-content items-center justify-center rounded-lg bg-primary">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-7 h-7"
+                  >
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
+                    />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <p class="font-medium text-base-content">{gettext("Word Cloud")}</p>
+                  <p class="text-muted">
+                    {gettext("Let your audience answer in their own words.")}
+                  </p>
+                </div>
+              </a>
+            </li>
+            <li :if={@transcription_globally_enabled} id="option-5" role="option" tabindex="-1">
+              <a
+                :if={!(@transcription_config && @transcription_config.id)}
+                data-phx-link="patch"
+                data-phx-link-state="push"
+                href={~p"/e/#{@event.code}/manage/add/transcription"}
+                class="menu-item group select-none items-start p-3"
+              >
+                <div class="flex h-12 w-12 flex-none text-base-content items-center justify-center rounded-lg bg-base-400">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-7 h-7"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 2m0 3a3 3 0 0 1 3 -3h0a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3h0a3 3 0 0 1 -3 -3z" /><path d="M5 10a7 7 0 0 0 14 0" /><path d="M8 21l8 0" /><path d="M12 17l0 4" />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <div class="flex items-center gap-2">
+                    <p class="font-medium text-base-content">{gettext("Transcription")}</p>
+                    <span class="badge badge-sm badge-soft badge-primary">
+                      {gettext("Global")}
+                    </span>
+                  </div>
+                  <p class="text-muted">
+                    {gettext("Add real-time subtitles from your microphone.")}
+                  </p>
+                </div>
+              </a>
+              <div
+                :if={@transcription_config && @transcription_config.id}
+                class="flex select-none rounded-xl p-3 w-full opacity-50 cursor-not-allowed"
+                aria-disabled="true"
+              >
+                <div class="flex h-12 w-12 flex-none text-base-content items-center justify-center rounded-lg bg-base-400">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke-width="1.5"
+                    stroke="currentColor"
+                    class="w-7 h-7"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 2m0 3a3 3 0 0 1 3 -3h0a3 3 0 0 1 3 3v5a3 3 0 0 1 -3 3h0a3 3 0 0 1 -3 -3z" /><path d="M5 10a7 7 0 0 0 14 0" /><path d="M8 21l8 0" /><path d="M12 17l0 4" />
+                  </svg>
+                </div>
+                <div class="ml-4 flex-auto text-left">
+                  <div class="flex items-center gap-2">
+                    <p class="font-medium text-base-content">{gettext("Transcription")}</p>
+                    <span class="badge badge-sm badge-soft badge-primary">
+                      {gettext("Global")}
+                    </span>
+                  </div>
+                  <p class="text-muted">
+                    {gettext("Already added to this presentation.")}
+                  </p>
+                </div>
+              </div>
+            </li>
+          </ul>
+        <% end %>
+        <%= if @create=="poll" do %>
+          <div class="scroll-py-3 overflow-y-auto p-6">
+            <p class="text-base font-bold text-base-content mb-5">
+              {case @create_action do
+                :new -> gettext("New poll")
+                :edit -> gettext("Edit poll")
+              end}
+            </p>
+            <.live_component
+              module={ClaperWeb.PollLive.FormComponent}
+              id="poll-create"
+              event_uuid={@event.uuid}
+              presentation_file={@event.presentation_file}
+              poll={@poll}
+              live_action={@create_action}
+              position={@state.position}
+              return_to={~p"/e/#{@event.code}/manage"}
+            />
+          </div>
+        <% end %>
+        <%= if @create=="form" do %>
+          <div class="scroll-py-3 overflow-y-auto p-6">
+            <p class="text-base font-bold text-base-content mb-5">
+              {case @create_action do
+                :new -> gettext("New form")
+                :edit -> gettext("Edit form")
+              end}
+            </p>
+            <.live_component
+              module={ClaperWeb.FormLive.FormComponent}
+              id="form-create"
+              event_uuid={@event.uuid}
+              presentation_file={@event.presentation_file}
+              form={@form}
+              live_action={@create_action}
+              position={@state.position}
+              return_to={~p"/e/#{@event.code}/manage"}
+            />
+          </div>
+        <% end %>
+        <%= if @create == "embed" do %>
+          <div class="scroll-py-3 overflow-y-auto p-6">
+            <p class="text-base font-bold text-base-content mb-5">
+              {case @create_action do
+                :new -> gettext("New web content")
+                :edit -> gettext("Edit web content")
+              end}
+            </p>
+            <.live_component
+              module={ClaperWeb.EmbedLive.FormComponent}
+              id="embed-create"
+              event_uuid={@event.uuid}
+              current_user={@current_user}
+              security_audit_ip={assigns[:security_audit_ip]}
+              presentation_file={@event.presentation_file}
+              embed={@embed}
+              live_action={@create_action}
+              position={@state.position}
+              return_to={~p"/e/#{@event.code}/manage"}
+            />
+          </div>
+        <% end %>
+        <%= if @create=="quiz" do %>
+          <div class="scroll-py-3 overflow-y-auto p-6">
+            <p class="text-base font-bold text-base-content mb-5">
+              {case @create_action do
+                :new -> gettext("New quiz")
+                :edit -> gettext("Edit quiz")
+              end}
+            </p>
+            <.live_component
+              module={ClaperWeb.QuizLive.QuizComponent}
+              id="quiz-create"
+              event={@event}
+              presentation_file={@event.presentation_file}
+              quiz={@quiz}
+              live_action={@create_action}
+              position={@state.position}
+              return_to={~p"/e/#{@event.code}/manage"}
+            />
+          </div>
+        <% end %>
+        <%= if @create == "word_cloud" do %>
+          <div class="scroll-py-3 overflow-y-auto p-6">
+            <p class="text-base font-bold text-base-content mb-5">
+              {case @create_action do
+                :new -> gettext("New word cloud")
+                :edit -> gettext("Edit word cloud")
+              end}
+            </p>
+            <.live_component
+              module={ClaperWeb.WordCloudLive.FormComponent}
+              id="word-cloud-create"
+              event_uuid={@event.uuid}
+              presentation_file={@event.presentation_file}
+              word_cloud={@word_cloud}
+              live_action={@create_action}
+              position={@state.position}
+              return_to={~p"/e/#{@event.code}/manage"}
+            />
+          </div>
+        <% end %>
+        <%= if @create == "transcription" do %>
+          <div class="scroll-py-3 overflow-y-auto p-6">
+            <p class="text-base font-bold text-base-content mb-5">
+              {case @create_action do
+                :new -> gettext("New transcription")
+                :edit -> gettext("Edit transcription")
+              end}
+            </p>
+            <.live_component
+              module={ClaperWeb.TranscriptionLive.FormComponent}
+              id="transcription-create"
+              event_uuid={@event.uuid}
+              presentation_file={@event.presentation_file}
+              transcription_config={@transcription_config}
+              live_action={@create_action}
+              return_to={~p"/e/#{@event.code}/manage"}
+            />
+          </div>
+        <% end %>
+
+        <%= if @create == "import" do %>
+          <div class="scroll-py-3 overflow-y-auto bg-base-300 p-3">
+            <p class="text-xl font-bold">{gettext("Select presentation")}</p>
+            <ul>
+              <%= for event <- @events do %>
+                <li class="my-3">
+                  <button
+                    phx-click="import"
+                    phx-value-event={event.uuid}
+                    class="btn btn-info btn-sm"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke-width="1.5"
+                      stroke="currentColor"
+                      class="w-5 h-5"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
+                      />
+                    </svg>
+                    <span>{event.name}</span>
+                  </button>
+                </li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+      </div>
+    </div>
+    <div class="modal-backdrop" phx-click="toggle-interaction-modal">
+      <button class="pressable">close</button>
+    </div>
+  </div>
+  
+<!-- Header Bar -->
+  <header class="app-bar justify-between px-4 lg:px-6 xl:px-12">
+    <!-- Left: Back button, Title, link and code (the title shrinks to fit) -->
+    <div class="flex min-w-0 flex-1 items-center gap-x-2">
+      <a
+        data-phx-link="patch"
+        data-phx-link-state="push"
+        href={~p"/events"}
+        class="btn btn-secondary btn-circle btn-lg shrink-0"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          class="w-4 h-4 text-base-content rotate-180"
+          viewBox="0 0 16 16"
+          fill="none"
+        >
+          <path
+            d="M-0.000155798 8.91984L-0.000155623 6.91984L11.9998 6.91984L6.49984 1.41984L7.91985 -0.000157095L15.8398 7.91984L7.91984 15.8398L6.49984 14.4198L11.9998 8.91984L-0.000155798 8.91984Z"
+            fill="currentColor"
+          />
+        </svg>
+      </a>
+      <div class="flex min-w-0 items-center gap-x-2">
+        <h1 class="app-bar-title min-w-0 truncate">
+          {@event.name}
+        </h1>
+        <%!-- The link and the code, each copied with a click (Jose, 2026-11-14) --%>
+        <.copy_link_and_code event={@event} />
+      </div>
+    </div>
+    
+<!-- Right: Present / Join and settings (from 768px wide; below that they
+     have their own row under the bar), account button. Jose 2026-11-13/14 -->
+    <div class="flex shrink-0 items-center gap-2">
+      <%!-- The intro page participants see until the event starts (docs/INTRO.md) --%>
+      <.edit_intro_button event={@event} class="hidden md:inline-flex" />
+      <%!-- Start event / Back to intro (docs/INTRO.md) --%>
+      <.start_button state={@state} class="hidden md:inline-flex" />
+      <%!-- hidden on a wrapper: the group's own inline-flex would override it --%>
+      <div class="hidden md:block">
+        <.present_join_group event={@event} attendees_nb={@attendees_nb} variant={:bar} />
+      </div>
+      <%!-- Settings: in this bar from 768px until the settings sidebar appears at 1280px; below 768px in the row under it --%>
+      <.settings_button class="hidden md:inline-flex xl:hidden" />
+      <span class="hidden lg:block">
+        <ClaperWeb.AppHeader.account_menu user={@current_user} from={@event.uuid} />
+      </span>
+      <span class="lg:hidden">
+        <ClaperWeb.AppHeader.account_menu user={@current_user} from={@event.uuid} compact />
+      </span>
+    </div>
+  </header>
+  <%!-- Below 768px: Present / Join and settings get a row of their own, which
+       keeps the bar above to the title, link, code and account (Jose, 2026-11-14) --%>
+  <div class="md:hidden flex items-center gap-2 bg-base-200 px-4 pb-3">
+    <div class="min-w-0 flex-1">
+      <.present_join_group event={@event} attendees_nb={@attendees_nb} variant={:row} />
+    </div>
+    <.start_button state={@state} class="shrink-0" />
+    <.edit_intro_button event={@event} class="shrink-0" />
+    <.settings_button class="shrink-0" />
+  </div>
+  
+<!-- Main Content Area - Three Column Layout -->
+  <div id="wrapper" class="flex-1 flex overflow-hidden">
+    <!-- Left Sidebar - Slide Thumbnails -->
+    <aside
+      :if={@event.presentation_file.length > 0 and not @missing_slide_thumbnails}
+      class="hidden lg:flex w-56 flex-shrink-0 bg-base-200 overflow-hidden"
+    >
+      <.live_component
+        id="slide-sidebar"
+        module={ClaperWeb.EventLive.ManageSlideSidebarComponent}
+        presentation_file={@event.presentation_file}
+        current_position={@state.position}
+        thumbnail_cache_bust={@thumbnail_cache_bust}
+      />
+    </aside>
+    
+<!-- Center Content -->
+    <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-base-100">
+      <!-- Slide Preview (only if presentation has slides) -->
+      <div :if={@event.presentation_file.length > 0} class="flex-shrink-0 h-2/5 p-4 pb-0">
+        <.live_component
+          id="slide-preview"
+          module={ClaperWeb.EventLive.ManageSlidePreviewComponent}
+          presentation_file={@event.presentation_file}
+          current_position={@state.position}
+          total_slides={@event.presentation_file.length}
+          missing_slide_thumbnails={@missing_slide_thumbnails}
+          thumbnail_regeneration_in_progress={@thumbnail_regeneration_in_progress}
+        />
+      </div>
+      
+<!-- Bottom Section - Interactions & Options -->
+      <div class="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
+        <!-- Interactions Panel -->
+        <div
+          id="interactions-pane"
+          class="lg:w-1/3 flex-shrink-0 p-4 lg:min-h-0 lg:flex lg:flex-col lg:overflow-hidden"
+        >
+          <.live_component
+            id="interaction-list"
+            module={ClaperWeb.EventLive.ManageInteractionListComponent}
+            interactions={@interactions}
+            event_code={@event.code}
+            transcription_config={@transcription_config}
+            transcription_globally_enabled={@transcription_globally_enabled}
+          />
+        </div>
+        
+<!-- Audience Responses Panel -->
+        <div class="min-h-[400px] lg:min-h-0 flex-1 flex flex-col overflow-hidden p-4">
+          <ClaperWeb.EventLive.ManageAudienceResponsesComponent.render
+            list_tab={@list_tab}
+            post_count={@post_count}
+            question_count={@question_count}
+            pinned_post_count={@pinned_post_count}
+            form_submit_count={@form_submit_count}
+            streams={@streams}
+            event={@event}
+          />
+        </div>
+      </div>
+    </main>
+    
+<!-- Right Sidebar - Settings -->
+    <%!-- Wider from 1440px so every settings label fits on one line (Jose, 2026-11-14) --%>
+    <aside class="hidden xl:flex w-80 min-[1440px]:w-96 flex-shrink-0 flex-col overflow-hidden bg-base-200">
+      <div class="flex-1 overflow-y-auto">
+        <.live_component
+          id="settings-pane"
+          module={ClaperWeb.EventLive.ManagerSettingsComponent}
+          create={@create}
+          state={@state}
+          current_interaction={@current_interaction}
+          word_cloud_words={@word_cloud_words}
+        />
+      </div>
+    </aside>
+  </div>
+  <div
+    id="transcription-capture"
+    phx-hook="TranscriptionCapture"
+    class="hidden"
+    data-event-uuid={@event.uuid}
+    data-audio-token={@audio_token}
+  />
+</div>

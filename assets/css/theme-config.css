@@ -1,0 +1,220 @@
+/*
+  Carceral Consultation theme: the ONE place colors are defined (2026-11-13).
+
+  Every color in the app comes from a role below. Pages, components, scripts
+  and stylesheets name the role (bg-base-200, text-muted, border-line, ...)
+  and never a color. To change a color, change it here and rebuild.
+  Rules, roles and contrast figures: docs/THEME.md.
+  Check for strays: scripts/theme/check_theme.sh
+
+  Two themes with the same roles (2026-11-13):
+    carceral        dark: charcoal surfaces, off-white text, white buttons
+    carceral-light  light: white cards on a light-gray page, near-black text,
+                    near-black buttons
+  The <html> element's data-theme picks one (set by the theme switcher in the
+  account menu; see ClaperWeb.ThemeScript). Red, amber, green and blue are
+  reserved for error, warning, success and info in both.
+*/
+
+@plugin "daisyui/theme" {
+  name: "carceral";
+  default: true;
+  prefersdark: false;
+  color-scheme: dark;
+
+  /* Surfaces, darkest to lightest: each step sits "above" the one before */
+  --color-base-100: #121214;          /* page */
+  --color-base-200: #1b1b1e;          /* cards, panels */
+  --color-base-300: #252528;          /* raised: menus, inputs, hover on cards */
+  --color-base-content: #ededef;      /* main text */
+
+  /* Buttons and anything you can press: white */
+  --color-primary: #f2f2f3;
+  --color-primary-content: #121214;
+  /* Quieter buttons */
+  --color-secondary: #303034;
+  --color-secondary-content: #ededef;
+  --color-accent: #d4d4d8;
+  --color-accent-content: #121214;
+  --color-neutral: #252528;
+  --color-neutral-content: #ededef;
+
+  /* Status colors, softened for dark backgrounds; dark text sits on them */
+  --color-info: #8ab4f8;
+  --color-info-content: #0d1b2e;
+  --color-success: #6ccb8f;
+  --color-success-content: #0c2416;
+  --color-warning: #ebc15a;
+  --color-warning-content: #2a1f05;
+  --color-error: #f28b82;
+  --color-error-content: #2c0e0b;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+@plugin "daisyui/theme" {
+  name: "carceral-light";
+  default: false;
+  prefersdark: false;
+  color-scheme: light;
+
+  --color-base-100: #f4f4f5;          /* page */
+  --color-base-200: #ffffff;          /* cards, panels */
+  --color-base-300: #f4f4f5;          /* raised: menus, inputs, hover on cards */
+  --color-base-content: #18181b;      /* main text */
+
+  --color-primary: #18181b;           /* buttons: near-black on light */
+  --color-primary-content: #fafafa;
+  --color-secondary: #e4e4e7;
+  --color-secondary-content: #18181b;
+  --color-accent: #3f3f46;
+  --color-accent-content: #fafafa;
+  --color-neutral: #e4e4e7;
+  --color-neutral-content: #18181b;
+
+  /* Status colors, deeper so they stay readable on white */
+  --color-info: #1d4ed8;
+  --color-info-content: #ffffff;
+  --color-success: #15803d;
+  --color-success-content: #ffffff;
+  --color-warning: #a15c07;
+  --color-warning-content: #ffffff;
+  --color-error: #c62828;
+  --color-error-content: #ffffff;
+
+  --radius-selector: 1rem;
+  --radius-field: 0.25rem;
+  --radius-box: 0.5rem;
+  --border: 1px;
+  --depth: 1;
+  --noise: 0;
+}
+
+
+/* static: always emit these variables, so scripts can read them (assets/js/theme.js) */
+@theme static {
+  /* No built-in Tailwind palette: gray-500, white, indigo-600 and the rest do
+     not exist in this app, so a stray fixed color produces nothing. */
+  --color-*: initial;
+
+  /* Roles beyond daisyUI's set */
+  --color-stage: #0b0b0c;             /* behind slides and full-screen views */
+  --color-base-400: #303034;          /* strongest surface: hover on raised, tracks */
+  --color-selected: #38383d;          /* the chosen tab, row or option */
+  --color-muted: #a1a1aa;             /* secondary text: dates, hints, labels */
+  --color-faint: #7c7c85;             /* disabled text, decorative icons */
+  --color-line: #2e2e33;              /* dividers and card edges */
+  --color-line-strong: #7c7c85;       /* input borders, outline buttons */
+  --color-scrim: #000000;             /* dimming behind dialogs; use with opacity */
+  --color-sheen: #ffffff;             /* light caught by raised surfaces; use with opacity */
+  --color-primary-hover: #d4d4d8;
+  --color-success-hover: #58b97c;
+  --color-error-hover: #e0766d;
+  --color-warning-hover: #d9ad46;
+  --color-info-hover: #739fe6;
+  /* Chart series (data categories, not status) */
+  --color-chart-1: #ededef;
+  --color-chart-2: #8ab4f8;
+  /* Breakout groups (docs/BREAKOUT.md): six distinct colors, clear of the
+     status colors; group 7 starts again. Text on them: group-content. */
+  --color-group-1: #a78bfa;           /* violet */
+  --color-group-2: #f472b6;           /* pink */
+  --color-group-3: #2dd4bf;           /* teal */
+  --color-group-4: #fb923c;           /* orange */
+  --color-group-5: #a3e635;           /* lime */
+  --color-group-6: #818cf8;           /* indigo */
+  --color-group-content: #121214;
+
+  /* Fonts */
+  --font-display: "Montserrat", sans-serif;
+  --font-family-sans: "Roboto", sans-serif;
+  --font-family-serif: "Merriweather", serif;
+
+  /* Shadows, drawn from the scrim color */
+  --shadow-base: 0px 1px 3px 0px color-mix(in srgb, var(--color-scrim) 30%, transparent), 0px 1px 2px 0px color-mix(in srgb, var(--color-scrim) 20%, transparent);
+  --shadow-md: 0px 4px 6px 0px color-mix(in srgb, var(--color-scrim) 30%, transparent), 0px 2px 4px 0px color-mix(in srgb, var(--color-scrim) 20%, transparent);
+  --shadow-lg: 0px 4px 6px 0px color-mix(in srgb, var(--color-scrim) 20%, transparent), 0px 10px 15px 0px color-mix(in srgb, var(--color-scrim) 30%, transparent);
+  --shadow-xl: 0px 10px 10px 0px color-mix(in srgb, var(--color-scrim) 20%, transparent), 0px 20px 25px 0px color-mix(in srgb, var(--color-scrim) 35%, transparent);
+  --shadow-2xl: 0px 25px 50px 0px color-mix(in srgb, var(--color-scrim) 50%, transparent);
+  --shadow-inner: inset 0px 2px 4px 0px color-mix(in srgb, var(--color-scrim) 25%, transparent);
+
+  /* Type scale */
+  --text-h1: 80px;
+  --text-h2: 40px;
+  --text-h3: 32px;
+  --text-h4: 24px;
+  --text-h5: 18px;
+  --text-h6: 16px;
+  --text-body: 16px;
+  --text-small-body: 14px;
+}
+
+/* Light values for the roles beyond daisyUI's set (dark values are in the
+   @theme block above). */
+[data-theme="carceral-light"] {
+  --color-stage: #e4e4e7;
+  --color-base-400: #e4e4e7;
+  --color-selected: #e4e4e7;
+  --color-muted: #52525b;
+  --color-faint: #71717a;
+  --color-line: #e4e4e7;
+  --color-line-strong: #8a8a93;
+  --color-scrim: #000000;
+  --color-sheen: #ffffff;             /* light caught by raised surfaces; use with opacity */
+  --color-primary-hover: #3f3f46;
+  --color-success-hover: #166534;
+  --color-error-hover: #b71c1c;
+  --color-warning-hover: #854d0e;
+  --color-info-hover: #1e40af;
+  --color-chart-1: #18181b;
+  --color-chart-2: #1d4ed8;
+  --color-group-1: #6d28d9;
+  --color-group-2: #be185d;
+  --color-group-3: #0f766e;
+  --color-group-4: #c2410c;
+  --color-group-5: #4d7c0f;
+  --color-group-6: #4338ca;
+  --color-group-content: #ffffff;
+
+  /* Softer shadows on a light page */
+  --shadow-base: 0px 1px 2px 0px color-mix(in srgb, var(--color-scrim) 6%, transparent);
+  --shadow-md: 0px 2px 4px 0px color-mix(in srgb, var(--color-scrim) 6%, transparent), 0px 1px 2px 0px color-mix(in srgb, var(--color-scrim) 4%, transparent);
+  --shadow-lg: 0px 4px 12px 0px color-mix(in srgb, var(--color-scrim) 7%, transparent), 0px 1px 3px 0px color-mix(in srgb, var(--color-scrim) 5%, transparent);
+  --shadow-xl: 0px 8px 24px 0px color-mix(in srgb, var(--color-scrim) 9%, transparent);
+  --shadow-2xl: 0px 16px 40px 0px color-mix(in srgb, var(--color-scrim) 12%, transparent);
+  --shadow-inner: inset 0px 1px 2px 0px color-mix(in srgb, var(--color-scrim) 6%, transparent);
+}
+
+/* A region marked data-theme="carceral" stays dark even in the light theme
+   (text over the sign-in photo). daisyUI re-scopes its own colors; these
+   are the same dark values as the @theme block above, for the other roles. */
+[data-theme="carceral"] {
+  --color-stage: #0b0b0c;
+  --color-base-400: #303034;
+  --color-selected: #38383d;
+  --color-muted: #a1a1aa;
+  --color-faint: #7c7c85;
+  --color-line: #2e2e33;
+  --color-line-strong: #7c7c85;
+  --color-scrim: #000000;
+  --color-sheen: #ffffff;             /* light caught by raised surfaces; use with opacity */
+  --color-primary-hover: #d4d4d8;
+  --color-success-hover: #58b97c;
+  --color-error-hover: #e0766d;
+  --color-warning-hover: #d9ad46;
+  --color-info-hover: #739fe6;
+  --color-chart-1: #ededef;
+  --color-chart-2: #8ab4f8;
+  --color-group-1: #a78bfa;           /* violet */
+  --color-group-2: #f472b6;           /* pink */
+  --color-group-3: #2dd4bf;           /* teal */
+  --color-group-4: #fb923c;           /* orange */
+  --color-group-5: #a3e635;           /* lime */
+  --color-group-6: #818cf8;           /* indigo */
+  --color-group-content: #121214;
+}

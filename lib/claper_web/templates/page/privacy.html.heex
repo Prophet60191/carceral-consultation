@@ -1,0 +1,127 @@
+<%!-- Privacy (2026-11-15, written before the app went public): what this
+     copy keeps, who sees it, which outside services handle it, how long it is
+     kept, cookies, and who to ask. Facts that depend on the setup come from
+     ClaperWeb.Privacy and the Brand page, so the page stays true for any copy. --%>
+<main class="min-h-screen bg-base-100 px-4 py-10 sm:py-16">
+  <div class="mx-auto flex max-w-2xl flex-col gap-6">
+    <a href={~p"/"} class="self-start">
+      <ClaperWeb.Wordmark.mark size={:md} class="text-base-content" />
+    </a>
+
+    <section class="panel flex flex-col gap-3 p-6" id="privacy-intro">
+      <h1 class="text-2xl font-bold text-base-content">{gettext("Privacy")}</h1>
+      <p class="text-base-content">
+        {gettext(
+          "%{name} runs this app for live presentations and workshops. This page explains what it keeps about you, who can see it, and how long it is kept. It has no advertising and no tracking, and nothing is sold.",
+          name: @name
+        )}
+      </p>
+      <p :if={@email} class="text-base-content">
+        {gettext("Questions, or want your information deleted? Write to")}
+        <a id="privacy-contact" href={"mailto:#{@email}"} class="link">{@email}</a>.
+      </p>
+    </section>
+
+    <section class="panel flex flex-col gap-3 p-6" id="privacy-attendees">
+      <h2 class="text-lg font-bold text-base-content">{gettext("If you join an event")}</h2>
+      <p class="text-base-content">
+        {gettext(
+          "You don't need an account. A random code in a cookie connects your answers within the event; it does not say who you are."
+        )}
+      </p>
+      <ul class="list-disc space-y-1 pl-5 text-base-content">
+        <li>
+          {gettext(
+            "What you send is kept with the event: messages and replies, reactions, and your answers to polls, quizzes, word clouds, forms and group activities."
+          )}
+        </li>
+        <li>
+          {gettext(
+            "A name is only kept if you type one. It shows beside your messages, unless the presenter allows anonymous messages and you choose that."
+          )}
+        </li>
+        <li>
+          {gettext(
+            "Some forms ask for contact details. Whatever you enter there is kept and seen by the event's facilitators."
+          )}
+        </li>
+      </ul>
+      <p class="text-base-content">
+        {gettext(
+          "The event's facilitators and the app's administrators can see all of this. Other people in the event see messages, names you chose, and the combined results the presenter shows."
+        )}
+      </p>
+    </section>
+
+    <section class="panel flex flex-col gap-3 p-6" id="privacy-accounts">
+      <h2 class="text-lg font-bold text-base-content">
+        {gettext("If you have an account (facilitators and administrators)")}
+      </h2>
+      <ul class="list-disc space-y-1 pl-5 text-base-content">
+        <li>
+          {gettext(
+            "Your name and email address, and your password, stored only in a scrambled form that can't be read back."
+          )}
+        </li>
+        <li>
+          {gettext("Your two-step sign-in setup, if you turn it on.")}
+        </li>
+        <li>
+          {gettext(
+            "Sign-in records: when you signed in, and the internet address and device used. They protect your account (new-device emails, sign-in limits, the Audit Log) and you can see them under My account › Sessions and activity."
+          )}
+        </li>
+        <li>{gettext("Presentations and other files you upload.")}</li>
+      </ul>
+    </section>
+
+    <section class="panel flex flex-col gap-3 p-6" id="privacy-retention">
+      <h2 class="text-lg font-bold text-base-content">{gettext("How long it is kept")}</h2>
+      <ul class="list-disc space-y-1 pl-5 text-base-content">
+        <li :if={@retention_days > 0}>
+          {gettext(
+            "Sign-in records and the Audit Log are deleted automatically after %{days} days.",
+            days: @retention_days
+          )}
+        </li>
+        <li :if={@retention_days == 0}>
+          {gettext(
+            "Sign-in records and the Audit Log are kept until an administrator deletes them."
+          )}
+        </li>
+        <li>
+          {gettext(
+            "What people send in an event is kept until the event is deleted. Accounts are kept until they are deleted."
+          )}
+        </li>
+      </ul>
+    </section>
+
+    <section :if={@services != []} class="panel flex flex-col gap-3 p-6" id="privacy-services">
+      <h2 class="text-lg font-bold text-base-content">{gettext("Services that help run it")}</h2>
+      <p class="text-base-content">
+        {gettext("These handle information only to do their part:")}
+      </p>
+      <ul class="list-disc space-y-1 pl-5 text-base-content">
+        <li :for={{name, role} <- @services}>
+          <span class="font-semibold">{name}</span> {role}
+        </li>
+      </ul>
+    </section>
+
+    <section class="panel flex flex-col gap-3 p-6" id="privacy-cookies">
+      <h2 class="text-lg font-bold text-base-content">{gettext("Cookies and your browser")}</h2>
+      <p class="text-base-content">
+        {gettext(
+          "Only the cookies the app needs: one that keeps your visit together (your random code, or your sign-in), one that keeps you signed in if you choose, and one that recognizes a device you have signed in from before. Your browser also remembers display choices, like light or dark and panel sizes, and the last event you joined. None of this is used for tracking or shared with anyone."
+        )}
+      </p>
+    </section>
+
+    <p class="text-sm text-muted">
+      <a href={~p"/about"} class="underline-offset-4 hover:text-base-content hover:underline">
+        {gettext("About this app")}
+      </a>
+    </p>
+  </div>
+</main>

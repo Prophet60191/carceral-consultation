@@ -1,0 +1,705 @@
+<ClaperWeb.AppHeader.header user={@current_user} title={gettext("My events")} />
+
+<div class="mx-3 md:max-w-3xl lg:max-w-5xl md:mx-auto">
+  <div class="border-b border-line py-4 flex flex-col sm:flex-row sm:items-center justify-between">
+    <div class="flex-1 min-w-0">
+      <h1 class="text-2xl font-medium leading-6 text-base-content sm:truncate">
+        {@page_title}
+      </h1>
+    </div>
+    <div class="flex mt-4 space-x-5 sm:mt-0 hidden">
+      <!-- future actions -->
+    </div>
+  </div>
+
+  <div class="mt-12 mb-3">
+    <h3 class="text-lg leading-6 font-medium text-base-content">
+      {gettext("Event")}: {@event.name}
+      <ClaperWeb.Component.Badge.event_code code={@event.code} class="ml-1 align-middle" />
+    </h3>
+
+    <dl class="mt-5 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <div class="relative bg-base-200 pt-5 px-4 sm:pt-6 sm:px-6 pb-4 shadow rounded-lg overflow-hidden">
+        <dt>
+          <div class="absolute bg-base-400 rounded-md p-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="h-6 w-6 text-base-content"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.25 18 9 11.25l4.306 4.306a11.95 11.95 0 0 1 5.814-5.518l2.74-1.22m0 0-5.94-2.281m5.94 2.28-2.28 5.941"
+              />
+            </svg>
+          </div>
+          <p class="ml-16 text-sm font-medium text-muted truncate">
+            {gettext("Audience peak")}
+          </p>
+        </dt>
+        <dd class="ml-16 flex items-baseline">
+          <p class="text-2xl font-semibold text-base-content">
+            {@event.audience_peak}
+            <span class="text-xs text-muted font-normal">
+              {ngettext("attendee", "attendees", @event.audience_peak)}
+            </span>
+          </p>
+        </dd>
+      </div>
+
+      <div class="relative bg-base-200 pt-5 px-4 sm:pt-6 sm:px-6 pb-4 shadow rounded-lg overflow-hidden">
+        <dt>
+          <div class="absolute bg-base-400 rounded-md p-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
+              class="h-6 w-6 text-base-content"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+              />
+            </svg>
+          </div>
+          <p class="ml-16 text-sm font-medium text-muted truncate">
+            {gettext("Unique attendees")}
+          </p>
+        </dt>
+        <dd class="ml-16 flex items-baseline">
+          <p class="text-2xl font-semibold text-base-content">
+            {@distinct_attendee_count}
+            <span class="text-xs text-muted font-normal">
+              {ngettext("attendee", "attendees", @distinct_attendee_count)}
+            </span>
+          </p>
+        </dd>
+      </div>
+
+      <div class="relative bg-base-200 pt-5 px-4 sm:pt-6 sm:px-6 pb-4 shadow rounded-lg overflow-hidden">
+        <dt>
+          <div class="absolute bg-base-400 rounded-md p-3">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-6 w-6 text-base-content"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
+              />
+            </svg>
+          </div>
+          <p class="ml-16 text-sm font-medium text-muted truncate">
+            {gettext("Messages")}
+          </p>
+        </dt>
+        <dd class="ml-16 flex items-baseline">
+          <p class="text-2xl font-semibold text-base-content">
+            {length(@posts)}
+            <span class="text-xs text-muted font-normal">
+              {ngettext(
+                "from %{count} people",
+                "from %{count} peoples",
+                @distinct_poster_count
+              )}
+            </span>
+          </p>
+        </dd>
+      </div>
+
+      <div class="relative bg-base-200 pt-5 px-4 sm:pt-6 sm:px-6 pb-4 shadow rounded-lg overflow-hidden">
+        <dt>
+          <div class="absolute bg-base-400 rounded-md p-3">
+            <svg
+              class="h-6 w-6 text-base-content"
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M15 15l-2 5L9 9l11 4-5 2zm0 0l5 5M7.188 2.239l.777 2.897M5.136 7.965l-2.898-.777M13.95 4.05l-2.122 2.122m-5.657 5.656l-2.12 2.122"
+              />
+            </svg>
+          </div>
+          <p class="ml-16 text-sm font-medium truncate text-muted">
+            {gettext("Engagement rate")}
+          </p>
+        </dt>
+        <dd class="ml-16">
+          <p class="text-2xl font-semibold text-base-content">{@engagement_rate}%</p>
+          <%!-- Explained here rather than on Claper's website (Claper.Stats.engagement_rate/3) --%>
+          <p id="engagement-rate-help" class="mt-1 text-xs text-muted">
+            {gettext(
+              "The share of people who joined that took part, averaged over messages, polls, quizzes, forms and word clouds."
+            )}
+          </p>
+        </dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="pt-5 pb-5">
+    <h3 class="text-lg leading-6 font-medium text-base-content mb-4">
+      {gettext("Interactions")}
+    </h3>
+
+    <div class="overflow-x-auto pb-px">
+      <ClaperWeb.Component.Tabs.tabs style={:segmented} aria-label={gettext("Tabs")}>
+        <:tab
+          :if={:messages in @available_tabs}
+          active={@current_tab == :messages}
+          phx-click="change_tab"
+          phx-value-tab="messages"
+        >
+          {gettext("Messages")}
+        </:tab>
+        <:tab
+          :if={:polls in @available_tabs}
+          active={@current_tab == :polls}
+          phx-click="change_tab"
+          phx-value-tab="polls"
+        >
+          {gettext("Polls")}
+        </:tab>
+        <:tab
+          :if={:forms in @available_tabs}
+          active={@current_tab == :forms}
+          phx-click="change_tab"
+          phx-value-tab="forms"
+        >
+          {gettext("Forms")}
+        </:tab>
+        <:tab
+          :if={:web_content in @available_tabs}
+          active={@current_tab == :web_content}
+          phx-click="change_tab"
+          phx-value-tab="web_content"
+        >
+          {gettext("Web Content")}
+        </:tab>
+        <:tab
+          :if={:quizzes in @available_tabs}
+          active={@current_tab == :quizzes}
+          phx-click="change_tab"
+          phx-value-tab="quizzes"
+        >
+          {gettext("Quizzes")}
+        </:tab>
+        <:tab
+          :if={:word_clouds in @available_tabs}
+          active={@current_tab == :word_clouds}
+          phx-click="change_tab"
+          phx-value-tab="word_clouds"
+        >
+          {gettext("Word Clouds")}
+        </:tab>
+        <:tab
+          :if={:breakouts in @available_tabs}
+          active={@current_tab == :breakouts}
+          phx-click="change_tab"
+          phx-value-tab="breakouts"
+        >
+          {gettext("Breakouts")}
+        </:tab>
+        <:tab
+          :if={:transcriptions in @available_tabs}
+          active={@current_tab == :transcriptions}
+          phx-click="change_tab"
+          phx-value-tab="transcriptions"
+        >
+          {gettext("Transcriptions")}
+        </:tab>
+      </ClaperWeb.Component.Tabs.tabs>
+    </div>
+
+    <div class="my-4">
+      <%= case @current_tab do %>
+        <% :polls -> %>
+          <div>
+            <%= if length(@event.presentation_file.polls) > 0 do %>
+              <%= for poll <- @event.presentation_file.polls do %>
+                <% total = Enum.map(poll.poll_opts, fn e -> e.vote_count end) |> Enum.sum() %>
+                <div class="bg-base-100 w-full p-6 my-5 text-base-content shadow-lg rounded-md">
+                  <div class="w-full h-full flex items-center justify-between mb-4">
+                    <p class="text-base-content text-xl font-semibold">{poll.title}</p>
+                    <%= link to: ~p"/export/polls/#{poll.id}", class: "text-sm text-primary-content bg-primary hover:bg-primary-hover rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="w-5 h-5"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                      </svg>
+                      <span>{gettext("Export")} (CSV)</span>
+                    <% end %>
+                  </div>
+                  <div>
+                    <div class="flex flex-col space-y-3">
+                      <%= if (length poll.poll_opts) > 0 do %>
+                        <%= for {opt, idx} <- Enum.with_index(poll.poll_opts) do %>
+                          <% percentage =
+                            if total > 0,
+                              do:
+                                Float.round(opt.vote_count / total * 100)
+                                |> :erlang.float_to_binary(decimals: 0),
+                              else: 0 %>
+                          <div
+                            id={"poll-opt-#{idx}"}
+                            class="bg-base-300 px-3 py-2 rounded-lg flex justify-between items-center relative text-base-content"
+                          >
+                            <div
+                              style={"width: #{percentage}%;"}
+                              class={"bg-base-content/20 h-full absolute left-0 transition-all rounded-l-lg #{if percentage == "100", do: "rounded-r-lg"}"}
+                            >
+                            </div>
+                            <div class="flex space-x-3 items-center z-10 text-left">
+                              <span class="flex-1 pr-2">{opt.content}</span>
+                            </div>
+                            <span class="text-sm z-10">
+                              {percentage}% ({opt.vote_count})
+                            </span>
+                          </div>
+                        <% end %>
+                      <% end %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            <% else %>
+              <p class="italic text-muted">{gettext("No poll has been created")}</p>
+            <% end %>
+          </div>
+        <% :forms -> %>
+          <div>
+            <%= if length(@event.presentation_file.forms) > 0 do %>
+              <%= for form <- @event.presentation_file.forms do %>
+                <div class="flex justify-between items-center mb-5">
+                  <span class="text-xl font-semibold text-base-content">
+                    {form.title}
+                  </span>
+
+                  <%= if length(form.form_submits) > 0 do %>
+                    <%= link to: ~p"/export/forms/#{form.id}", class: "text-sm text-primary-content bg-primary hover:bg-primary-hover rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                      <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        class="w-5 h-5"
+                      >
+                        <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                      </svg>
+                      <span>{gettext("Export")} (CSV)</span>
+                    <% end %>
+                  <% end %>
+                </div>
+
+                <%= if length(form.form_submits) == 0 do %>
+                  <p class="italic text-muted">
+                    {gettext("No form submission has been sent")}
+                  </p>
+                <% end %>
+
+                <div class="mb-10">
+                  <%= for fs <- form.form_submits do %>
+                    <div id={"#{fs.id}-form"}>
+                      <div class="px-4 pb-2 pt-3 rounded-b-lg rounded-tr-lg bg-base-200 relative shadow-md text-base-content break-all mt-4">
+                        <div class="flex space-x-3 items-center">
+                          <div class="avatar avatar-placeholder shrink-0">
+                            <div class={[
+                              "text-base-content w-8 rounded-full",
+                              ClaperWeb.Theme.avatar_class(avatar_identifier(fs))
+                            ]}>
+                              <span class="text-sm">{avatar_emoji(fs)}</span>
+                            </div>
+                          </div>
+
+                          <div>
+                            <%= for res <- fs.response do %>
+                              <p><strong>{elem(res, 0)}:</strong> {elem(res, 1)}</p>
+                            <% end %>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            <% else %>
+              <p class="italic text-muted">{gettext("No form has been created")}</p>
+            <% end %>
+          </div>
+        <% :word_clouds -> %>
+          <div>
+            <%= if length(@word_cloud_reports) > 0 do %>
+              <%= for report <- @word_cloud_reports do %>
+                <div
+                  id={"word-cloud-report-#{report.word_cloud.id}"}
+                  class="bg-base-100 w-full p-6 my-5 text-base-content shadow-lg rounded-md"
+                >
+                  <div class="w-full h-full flex items-center justify-between mb-4">
+                    <div>
+                      <p class="text-base-content text-xl font-semibold">
+                        {report.word_cloud.title}
+                      </p>
+                      <p class="text-sm text-muted">
+                        {ngettext(
+                          "%{count} participant",
+                          "%{count} participants",
+                          report.participants
+                        )}
+                      </p>
+                    </div>
+                    <%= if report.participants > 0 do %>
+                      <%= link to: ~p"/export/word_clouds/#{report.word_cloud.id}", class: "text-sm text-primary-content bg-primary hover:bg-primary-hover rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          stroke-width="2"
+                          stroke-linecap="round"
+                          stroke-linejoin="round"
+                          class="w-5 h-5"
+                        >
+                          <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                        </svg>
+                        <span>{gettext("Export")} (CSV)</span>
+                      <% end %>
+                    <% end %>
+                  </div>
+
+                  <%= if report.words == [] do %>
+                    <p class="italic text-muted">{gettext("No words have been sent")}</p>
+                  <% else %>
+                    <ClaperWeb.Component.WordCloud.cloud
+                      id={"word-cloud-report-#{report.word_cloud.id}-words"}
+                      words={report.words}
+                      text_color="var(--color-base-content)"
+                      class="py-4"
+                    />
+                    <div class="flex flex-col space-y-2 mt-4">
+                      <div
+                        :for={word <- report.words}
+                        class="bg-base-300 px-3 py-2 rounded-lg flex justify-between items-center text-base-content"
+                      >
+                        <span class="flex-1 pr-2">{word.text}</span>
+                        <span class="text-sm">{word.count}</span>
+                      </div>
+                    </div>
+                  <% end %>
+                </div>
+              <% end %>
+            <% else %>
+              <p class="italic text-muted">{gettext("No word cloud has been created")}</p>
+            <% end %>
+          </div>
+        <% :breakouts -> %>
+          <div class="flex flex-col gap-6">
+            <section
+              :for={report <- @breakout_reports}
+              id={"breakout-report-#{report.breakout.id}"}
+              class="panel"
+            >
+              <div class="panel-header gap-3">
+                <ClaperWeb.BreakoutLive.Icons.breakout class="size-5 text-muted" />
+                <h4 class="text-base font-semibold text-base-content">{report.breakout.title}</h4>
+              </div>
+              <p :if={report.runs == []} class="p-3 text-sm italic text-muted">
+                {gettext("This breakout has not been run yet.")}
+              </p>
+              <div
+                :for={room <- report.runs}
+                id={"breakout-run-#{room.run.id}"}
+                class="flex flex-col gap-4 p-3"
+              >
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                  <div>
+                    <p class="font-medium text-base-content">
+                      {gettext("Run started")}
+                      <%!-- Shown in the viewer's local time, like event cards (LocalDate hook) --%>
+                      <time
+                        id={"breakout-run-#{room.run.id}-start"}
+                        phx-hook="LocalDate"
+                        datetime={DateTime.to_iso8601(room.run.started_at)}
+                        data-utc={
+                          DateTime.to_naive(room.run.started_at) |> NaiveDateTime.to_iso8601()
+                        }
+                        data-format="lll"
+                      >
+                        {Calendar.strftime(room.run.started_at, "%b %-d, %H:%M")} UTC
+                      </time>
+                    </p>
+                    <p class="text-sm text-muted">
+                      {ngettext("1 group", "%{count} groups", length(room.groups))} · {ngettext(
+                        "1 person",
+                        "%{count} people",
+                        Enum.sum(Enum.map(room.groups, & &1.size))
+                      )} · {if room.run.stopped_at,
+                        do: gettext("stopped"),
+                        else: gettext("still running")}
+                    </p>
+                  </div>
+                  <.link
+                    href={~p"/export/breakouts/runs/#{room.run.id}"}
+                    method="post"
+                    class="btn btn-primary btn-sm"
+                  >
+                    {gettext("Export")} (CSV)
+                  </.link>
+                </div>
+                <div class="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+                  <div
+                    :for={g <- room.groups}
+                    class="flex flex-col gap-3 rounded-lg border border-line p-3"
+                  >
+                    <ClaperWeb.BreakoutLive.Components.group_heading number={g.group.number} />
+                    <ClaperWeb.BreakoutLive.Components.group_report
+                      result={g.result}
+                      contents={room.contents}
+                    />
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        <% :web_content -> %>
+          <div>
+            <%= if length(@event.presentation_file.embeds) > 0 do %>
+              <%= for embed <- @event.presentation_file.embeds do %>
+                <span class="text-xl font-semibold text-base-content mb-4">
+                  {embed.title}
+                </span>
+                <div class={[
+                  "text-base-content break-all mt-4 mb-10",
+                  embed.provider == "website" && "aspect-video"
+                ]}>
+                  <.live_component
+                    id={"embed-component-#{embed.id}"}
+                    module={ClaperWeb.EventLive.EmbedIframeComponent}
+                    provider={embed.provider}
+                    content={embed.content}
+                    title={embed.title}
+                  />
+                </div>
+              <% end %>
+            <% else %>
+              <p class="italic text-muted">
+                {gettext("No web content has been created")}
+              </p>
+            <% end %>
+          </div>
+        <% :messages -> %>
+          <div>
+            <%= if length(@posts) > 0 do %>
+              <div class="flex justify-start mb-4">
+                <%= link to: ~p"/export/#{@event.uuid}/messages", class: "text-sm text-primary-content bg-primary hover:bg-primary-hover rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                  </svg>
+                  <span>{gettext("Export")} (CSV)</span>
+                <% end %>
+              </div>
+            <% end %>
+
+            <%= if length(@posts) == 0 do %>
+              <p class="italic text-muted">{gettext("No messages has been sent")}</p>
+            <% end %>
+
+            <div>
+              <.live_component
+                :for={post <- @posts}
+                module={ClaperWeb.EventLive.ManageablePostComponent}
+                readonly={true}
+                id={post.uuid}
+                event={@event}
+                post={post}
+              />
+            </div>
+          </div>
+        <% :quizzes -> %>
+          <div>
+            <%= if length(@event.presentation_file.quizzes) > 0 do %>
+              <div>
+                <%= for quiz <- @event.presentation_file.quizzes do %>
+                  <div class="bg-base-100 w-full p-4 text-base-content shadow-lg rounded-md mb-10">
+                    <div class="mb-4">
+                      <div class="w-full flex items-center justify-between">
+                        <p class="text-base-content text-xl font-semibold mb-2">{quiz.title}</p>
+                        <%= link to: ~p"/export/quizzes/#{quiz.id}", class: "text-sm text-primary-content bg-primary hover:bg-primary-hover rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            class="w-5 h-5"
+                          >
+                            <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                          </svg>
+                          <span>{gettext("Export")} (CSV)</span>
+                        <% end %>
+                      </div>
+                      <p class="text-muted text-sm">
+                        {gettext("Average score")}:
+                        <span class="font-semibold">
+                          {Claper.Quizzes.calculate_average_score(quiz.id)}/{length(
+                            quiz.quiz_questions
+                          )}
+                        </span>
+                      </p>
+
+                      <p class="text-muted text-sm">
+                        {gettext("Total submissions")}:
+                        <span class="font-semibold">
+                          {Claper.Quizzes.get_submission_count(quiz.id)}
+                        </span>
+                      </p>
+                    </div>
+
+                    <div class="flex flex-col space-y-3 overflow-y-auto max-h-[500px]">
+                      <%= for {question, _idx} <- Enum.with_index(quiz.quiz_questions) do %>
+                        <div class="border-t border-line pt-4 mt-4 first:border-t-0 first:pt-0 first:mt-0">
+                          <p class="text-base-content text-lg font-medium mb-3">
+                            {question.content}
+                          </p>
+                          <div class="space-y-2">
+                            <%= for opt <- question.quiz_question_opts do %>
+                              <div class={"bg-base-300 px-3 py-2 rounded-lg flex justify-between items-center relative text-base-content #{if opt.is_correct, do: "bg-success !text-success-content"}"}>
+                                <div class="flex justify-between items-center z-10 text-left w-full">
+                                  <div class="flex items-center text-left space-x-3">
+                                    <%= if opt.is_correct do %>
+                                      <div class="h-5 w-5 mt-0.5 rounded-md point-select bg-base-200">
+                                      </div>
+                                    <% else %>
+                                      <div class="h-5 w-5 mt-0.5 rounded-md point-select border-2 border-base-content">
+                                      </div>
+                                    <% end %>
+                                    <span class="flex-1 pr-2">{opt.content}</span>
+                                  </div>
+                                  <span class="text-sm">
+                                    {opt.percentage}% ({opt.response_count})
+                                  </span>
+                                </div>
+                              </div>
+                            <% end %>
+                          </div>
+                        </div>
+                      <% end %>
+                    </div>
+                  </div>
+                <% end %>
+              </div>
+            <% else %>
+              <p class="italic text-muted">{gettext("No quiz has been created")}</p>
+            <% end %>
+          </div>
+        <% :transcriptions -> %>
+          <div>
+            <%= if length(@transcriptions) > 0 do %>
+              <div class="flex justify-start mb-4">
+                <%= link to: ~p"/export/#{@event.uuid}/transcriptions", class: "text-sm text-primary-content bg-primary hover:bg-primary-hover rounded-md px-3 py-1 flex items-center gap-1", method: :post, target: "_blank" do %>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="w-5 h-5"
+                  >
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M17 21h-10a2 2 0 0 1 -2 -2v-14a2 2 0 0 1 2 -2h7l5 5v11a2 2 0 0 1 -2 2z" /><path d="M9 15h6" /><path d="M12.5 17.5l2.5 -2.5l-2.5 -2.5" />
+                  </svg>
+                  <span>{gettext("Export")} (CSV)</span>
+                <% end %>
+              </div>
+
+              <div class="py-2">
+                <div class="relative space-y-4 before:absolute before:left-3 before:top-2 before:h-[calc(100%-1rem)] before:w-px before:bg-base-400 sm:before:left-4">
+                  <%= for transcription <- @transcriptions do %>
+                    <article class="relative pl-10 sm:pl-12">
+                      <div class="absolute left-0 top-1.5 flex h-7 w-7 items-center justify-center rounded-full border border-primary bg-selected text-primary sm:h-8 sm:w-8">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 20 20"
+                          fill="currentColor"
+                          class="h-4 w-4"
+                        >
+                          <path d="M10 3.75a.75.75 0 0 1 .75.75v5.19l3.03 1.75a.75.75 0 1 1-.75 1.3l-3.4-1.96A.75.75 0 0 1 9.25 10V4.5a.75.75 0 0 1 .75-.75Z" />
+                          <path
+                            fill-rule="evenodd"
+                            d="M10 18a8 8 0 1 0 0-16 8 8 0 0 0 0 16Zm0-1.5a6.5 6.5 0 1 0 0-13 6.5 6.5 0 0 0 0 13Z"
+                            clip-rule="evenodd"
+                          />
+                        </svg>
+                      </div>
+                      <div class="border-b border-line pb-4 last:border-b-0 last:pb-0">
+                        <div class="mb-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+                          <time class="text-xs font-medium uppercase tracking-wide text-muted">
+                            {Calendar.strftime(transcription.inserted_at, "%Y-%m-%d %H:%M:%S")}
+                            <span class="normal-case tracking-normal text-muted">UTC</span>
+                          </time>
+                        </div>
+                        <p class="text-sm leading-6 text-base-content">
+                          {transcription.text}
+                        </p>
+                      </div>
+                    </article>
+                  <% end %>
+                </div>
+              </div>
+
+              <div :if={@transcriptions_meta.has_next_page?} class="mt-6 flex justify-center">
+                <button
+                  type="button"
+                  phx-click="load_more_transcriptions"
+                  class="btn btn-outline btn-sm"
+                >
+                  {gettext("Load more")}
+                </button>
+              </div>
+            <% else %>
+              <p class="italic text-muted">{gettext("No transcriptions found")}</p>
+            <% end %>
+          </div>
+      <% end %>
+    </div>
+  </div>
+</div>

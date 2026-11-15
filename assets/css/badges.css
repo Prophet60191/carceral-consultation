@@ -1,0 +1,91 @@
+/*
+  Badges for Carceral Consultation (2026-11-13): small labels such as Live,
+  Upcoming, an event's code, counts. The ONE place badge looks are defined;
+  app.css and admin.css import it. Modeled on shadcn/ui's Badge ("base-nova",
+  registry/base-nova/ui/badge.tsx): a 20px pill, 12px medium text, 12px icons.
+  Colors from the theme. daisyUI's own badge styles are switched off
+  (`exclude: badge`); class names stay daisyUI's (badge, badge-primary, ...).
+
+  Variants: (plain badge = badge-primary, white)  badge-secondary (gray)
+            badge-outline (thin border)  badge-ghost (no fill)
+            badge-error / -success / -warning / -info (soft tint, colored text)
+            badge-neutral, badge-soft (= secondary)
+  Sizes:    badge-sm 16px, badge-lg 24px (default 20px)
+
+  Event codes are always `ClaperWeb.Component.Badge.event_code/1`
+  (outline, "#CODE" in capitals).
+*/
+@layer components {
+  .badge {
+    display: inline-flex;
+    width: fit-content;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 0.25rem;
+    height: 1.25rem;
+    padding: 0.125rem 0.5rem;
+    overflow: hidden;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 500;
+    white-space: nowrap;
+    background-color: var(--color-primary);
+    color: var(--color-primary-content);
+  }
+  .badge svg {
+    pointer-events: none;
+    width: 0.75rem;
+    height: 0.75rem;
+    flex-shrink: 0;
+  }
+
+  .badge-primary {
+    background-color: var(--color-primary);
+    color: var(--color-primary-content);
+  }
+  .badge-secondary,
+  .badge-neutral,
+  .badge-soft {
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-content);
+  }
+  .badge-outline {
+    border-color: var(--color-line-strong);
+    background-color: transparent;
+    color: var(--color-base-content);
+  }
+  .badge-ghost {
+    background-color: transparent;
+    color: var(--color-muted);
+  }
+  .badge-error {
+    background-color: color-mix(in srgb, var(--color-error) 20%, transparent);
+    color: var(--color-error);
+  }
+  .badge-success {
+    background-color: color-mix(in srgb, var(--color-success) 20%, transparent);
+    color: var(--color-success);
+  }
+  .badge-warning {
+    background-color: color-mix(in srgb, var(--color-warning) 20%, transparent);
+    color: var(--color-warning);
+  }
+  .badge-info {
+    background-color: color-mix(in srgb, var(--color-info) 20%, transparent);
+    color: var(--color-info);
+  }
+
+  .badge-sm {
+    height: 1rem;
+    padding-inline: 0.375rem;
+    font-size: 0.6875rem;
+  }
+  .badge-lg {
+    height: 1.5rem;
+    padding-inline: 0.625rem;
+    font-size: 0.8125rem;
+  }
+}

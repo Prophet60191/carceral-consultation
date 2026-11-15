@@ -1,0 +1,494 @@
+/*
+  Buttons for Carceral Consultation (2026-11-13). The ONE place button looks
+  are defined; app.css and admin.css both import it.
+
+  Modeled on the shadcn/ui Button ("base-nova" style, registry/base-nova/ui/
+  button.tsx): slightly rounded corners, compact heights, medium-weight small
+  text, a 1px nudge when pressed, a soft focus glow. Colors come from the
+  theme (theme-config.css), never from here.
+
+  daisyUI's own button styles are switched off (`exclude: button`), so these
+  rules are the only button styles in the app. The class names stay daisyUI's
+  (btn, btn-primary, btn-sm, ...) so existing markup keeps working.
+
+  Variants:  btn-primary (default action, white)  btn-outline  btn-secondary
+             btn-ghost  btn-error (destructive: soft red)  btn-success
+             btn-warning  btn-info  btn-link
+  Sizes:     btn-xs 24px  btn-sm 28px  (default) 32px  btn-lg 36px
+             btn-stacked: icon above a short label (toolbar tiles)
+  Icon only: btn-square, btn-circle (same sizes, square or round)
+  Overlay:   btn-overlay, a translucent button for controls floating over
+             slides and video
+  Touch:     on touch screens (phones, tablets) every button, choice and
+             menu row is at least 44px tall, on every page (extra-small
+             buttons at least 32px). A mouse gets the compact sizes.
+
+  The other clickable patterns, also defined here (2026-11-13), so that
+  every clickable thing in the app is one of these and nothing is one-off:
+    .switch      on/off switch, shadcn base-nova (a <button role="switch"
+                 aria-checked> or a checkbox); .switch-sm is the small size
+    .switch-card a whole row that flips a switch: title, optional
+                 description, the switch (shadcn "choice card"); use the
+                 ClaperWeb.Component.Switch components rather than markup
+    .choice      an answer or option you pick (poll and quiz answers, option
+                 rows, slide thumbnails); chosen = aria-pressed / aria-checked
+                 "true" or .choice-selected
+    .menu-item   a row in a drop-down or side menu (.menu-item-error for
+                 destructive rows); daisyUI .menu rows get the same look
+    .pressable   a click target with no look of its own (tap a collapsed card
+                 to open it, an accordion header, a modal backdrop)
+  Tabs come from the shared tabs component (tabs_component.ex, segmented).
+  scripts/theme/check_controls.py fails if a clickable element uses none of
+  these.
+
+  These live in @layer components, so a Tailwind class on the element itself
+  (w-full, mt-4, h-9) still wins.
+  See docs/THEME.md, "Buttons".
+*/
+
+@layer components {
+  .btn {
+    display: inline-flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    gap: 0.375rem;
+    height: 2rem;
+    padding-inline: 0.625rem;
+    border-radius: var(--radius-lg, 0.5rem);
+    border: 1px solid transparent;
+    background-clip: padding-box;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    white-space: nowrap;
+    user-select: none;
+    cursor: pointer;
+    outline: none;
+    text-decoration: none;
+    transition: background-color 150ms, color 150ms, border-color 150ms, box-shadow 150ms, transform 150ms, opacity 150ms;
+    /* Plain .btn with no variant: the quiet secondary look */
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-content);
+  }
+  .btn:hover {
+    background-color: color-mix(in srgb, var(--color-secondary), var(--color-base-content) 8%);
+  }
+  .btn:focus-visible {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 50%, transparent);
+  }
+  .btn:active:not([aria-haspopup]) {
+    transform: translateY(1px);
+  }
+  .btn:disabled,
+  .btn[disabled],
+  .btn.btn-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+  .btn svg {
+    pointer-events: none;
+    flex-shrink: 0;
+  }
+  .btn svg:not([class*="size-"]):not([class*="w-"]):not([class*="h-"]) {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  /* ---- Variants ---- */
+
+  /* The main action: white button, dark text */
+  .btn-primary,
+  .btn-gradient {
+    background-color: var(--color-primary);
+    color: var(--color-primary-content);
+  }
+  .btn-primary:hover,
+  .btn-gradient:hover {
+    background-color: color-mix(in srgb, var(--color-primary) 80%, transparent);
+  }
+
+  /* Thin border over a faint fill */
+  .btn-outline {
+    border-color: color-mix(in srgb, var(--color-base-content) 15%, transparent);
+    background-color: color-mix(in srgb, var(--color-base-content) 4%, transparent);
+    color: var(--color-base-content);
+  }
+  .btn-outline:hover,
+  .btn-outline[aria-expanded="true"] {
+    background-color: color-mix(in srgb, var(--color-base-content) 9%, transparent);
+    color: var(--color-base-content);
+  }
+
+  /* Quieter solid gray (also daisyUI's "soft" and "neutral") */
+  .btn-secondary,
+  .btn-soft,
+  .btn-neutral,
+  .btn-tertiary {
+    border-color: transparent;
+    background-color: var(--color-secondary);
+    color: var(--color-secondary-content);
+  }
+  .btn-secondary:hover,
+  .btn-soft:hover,
+  .btn-neutral:hover,
+  .btn-tertiary:hover {
+    background-color: color-mix(in srgb, var(--color-secondary), var(--color-base-content) 8%);
+  }
+
+  /* No fill until hovered */
+  .btn-ghost {
+    border-color: transparent;
+    background-color: transparent;
+    color: var(--color-base-content);
+  }
+  .btn-ghost:hover,
+  .btn-ghost[aria-expanded="true"] {
+    background-color: color-mix(in srgb, var(--color-base-content) 8%, transparent);
+  }
+
+  /* Destructive and other status actions: a soft tint with colored text */
+  .btn-error {
+    border-color: transparent;
+    background-color: color-mix(in srgb, var(--color-error) 20%, transparent);
+    color: var(--color-error);
+  }
+  .btn-error:hover {
+    background-color: color-mix(in srgb, var(--color-error) 30%, transparent);
+  }
+  .btn-error:focus-visible {
+    border-color: color-mix(in srgb, var(--color-error) 40%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 40%, transparent);
+  }
+  .btn-success {
+    border-color: transparent;
+    background-color: color-mix(in srgb, var(--color-success) 20%, transparent);
+    color: var(--color-success);
+  }
+  .btn-success:hover {
+    background-color: color-mix(in srgb, var(--color-success) 30%, transparent);
+  }
+  .btn-warning {
+    border-color: transparent;
+    background-color: color-mix(in srgb, var(--color-warning) 20%, transparent);
+    color: var(--color-warning);
+  }
+  .btn-warning:hover {
+    background-color: color-mix(in srgb, var(--color-warning) 30%, transparent);
+  }
+  .btn-info {
+    border-color: transparent;
+    background-color: color-mix(in srgb, var(--color-info) 20%, transparent);
+    color: var(--color-info);
+  }
+  .btn-info:hover {
+    background-color: color-mix(in srgb, var(--color-info) 30%, transparent);
+  }
+
+  /* Looks like a link */
+  .btn-link {
+    border-color: transparent;
+    background-color: transparent;
+    color: var(--color-primary);
+    text-underline-offset: 4px;
+  }
+  .btn-link:hover {
+    background-color: transparent;
+    text-decoration: underline;
+  }
+
+  /* The current page in a pager, a pressed toggle */
+  .btn-active,
+  .btn[aria-pressed="true"] {
+    background-color: var(--color-selected);
+    color: var(--color-base-content);
+  }
+
+  /* ---- Sizes ---- */
+  .btn-xs {
+    height: 1.5rem;
+    gap: 0.25rem;
+    padding-inline: 0.5rem;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    border-radius: min(var(--radius-md, 0.375rem), 10px);
+  }
+  .btn-xs svg:not([class*="size-"]):not([class*="w-"]):not([class*="h-"]) {
+    width: 0.75rem;
+    height: 0.75rem;
+  }
+  .btn-sm {
+    height: 1.75rem;
+    gap: 0.25rem;
+    padding-inline: 0.625rem;
+    font-size: 0.8rem;
+    border-radius: min(var(--radius-md, 0.375rem), 12px);
+  }
+  .btn-sm svg:not([class*="size-"]):not([class*="w-"]):not([class*="h-"]) {
+    width: 0.875rem;
+    height: 0.875rem;
+  }
+  .btn-lg {
+    height: 2.25rem;
+    padding-inline: 0.625rem;
+  }
+
+  /* Icon above a short label (toolbar tiles) */
+  .btn-stacked {
+    height: auto;
+    min-height: 3.25rem;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding: 0.375rem 0.5rem;
+    font-size: 0.75rem;
+  }
+
+  /* Icon-only buttons: square, or round with btn-circle */
+  .btn-square,
+  .btn-circle {
+    width: 2rem;
+    padding-inline: 0;
+  }
+  .btn-circle {
+    border-radius: 9999px;
+  }
+  .btn-xs:is(.btn-square, .btn-circle) { width: 1.5rem; }
+  .btn-sm:is(.btn-square, .btn-circle) { width: 1.75rem; }
+  .btn-lg:is(.btn-square, .btn-circle) { width: 2.25rem; }
+
+  /* Floating over slides and video: translucent, blurred */
+  .btn-overlay {
+    border-color: transparent;
+    background-color: color-mix(in srgb, var(--color-stage) 65%, transparent);
+    color: var(--color-base-content);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+  .btn-overlay:hover {
+    background-color: color-mix(in srgb, var(--color-stage) 85%, transparent);
+  }
+
+
+  /* ---- Switch: shadcn/ui base-nova (registry/base-nova/ui/switch.tsx) ----
+     Track 32 x 18.4px with a 16px knob (small: 24 x 14px, 12px knob).
+     Off: faint track, light knob. On: green track (the theme's success
+     color), so "on" reads at a glance the way phone switches do (Jose,
+     2026-11-14). The label beside a switch never changes: it names what
+     "on" means. The knob is
+     drawn as a background circle, so it works on a <button role="switch">
+     and on a checkbox <input>. On a button, an invisible margin around it
+     makes it easier to hit (shadcn's after:-inset-x-3 after:-inset-y-2). */
+  .switch {
+    --switch-knob: 1rem;
+    appearance: none;
+    -webkit-appearance: none;
+    position: relative;
+    flex-shrink: 0;
+    display: inline-block;
+    width: 2rem;
+    height: 1.15rem;
+    padding: 0;
+    border: 1px solid transparent;
+    border-radius: 9999px;
+    cursor: pointer;
+    outline: none;
+    background-color: color-mix(in srgb, var(--color-base-content) 12%, transparent);
+    background-image: radial-gradient(circle closest-side, var(--color-base-content) calc(100% - 0.5px), transparent 100%);
+    background-size: var(--switch-knob) var(--switch-knob);
+    background-repeat: no-repeat;
+    background-position: 0 50%;
+    transition: background-color 150ms, background-position 150ms, box-shadow 150ms, border-color 150ms;
+  }
+  .switch::after {
+    content: "";
+    position: absolute;
+    inset: -0.5rem -0.75rem;
+  }
+  .switch-sm {
+    --switch-knob: 0.75rem;
+    width: 1.5rem;
+    height: 0.875rem;
+  }
+  .switch[aria-checked="true"],
+  .switch:checked {
+    background-color: var(--color-success);
+    background-image: radial-gradient(circle closest-side, var(--color-success-content) calc(100% - 0.5px), transparent 100%);
+    background-position: 100% 50%;
+  }
+  .switch:focus-visible {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 50%, transparent);
+  }
+  .switch[aria-invalid="true"] {
+    border-color: color-mix(in srgb, var(--color-error) 50%, transparent);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-error) 40%, transparent);
+  }
+  .switch:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* ---- Switch card: shadcn "choice card" (Field inside FieldLabel) ----
+     The whole row is a <label>, so tapping anywhere flips the switch. */
+  .switch-card {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.625rem;
+    /* A clearly visible edge on every row (Jose, 2026-11-13) */
+    border: 1px solid var(--color-line-strong);
+    border-radius: var(--radius-lg, 0.5rem);
+    cursor: pointer;
+    transition: background-color 150ms, border-color 150ms, box-shadow 150ms;
+  }
+  .switch-card:not(:has(:disabled)):hover {
+    background-color: color-mix(in srgb, var(--color-base-content) 4%, transparent);
+  }
+  .switch-card:has(.switch[aria-checked="true"], .switch:checked) {
+    background-color: color-mix(in srgb, var(--color-success) 10%, transparent);
+  }
+  .switch-card:has(:focus-visible) {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 50%, transparent);
+  }
+  .switch-card:has(:focus-visible) .switch:focus-visible {
+    box-shadow: none;
+  }
+  .switch-card:has(:disabled) {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  /* ---- Choice: an answer or option you pick ---- */
+  .choice {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    min-height: 2.25rem;
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--color-line);
+    border-radius: var(--radius-lg, 0.5rem);
+    background-color: var(--color-base-200);
+    color: var(--color-base-content);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: left;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 150ms, border-color 150ms, box-shadow 150ms;
+  }
+  .choice:hover {
+    border-color: var(--color-line-strong);
+    background-color: var(--color-base-300);
+  }
+  .choice:focus-visible {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 50%, transparent);
+  }
+  .choice[aria-pressed="true"],
+  .choice[aria-checked="true"],
+  .choice.choice-selected {
+    border-color: var(--color-primary);
+    background-color: var(--color-selected);
+  }
+  .choice:disabled,
+  .choice[aria-disabled="true"] {
+    cursor: not-allowed;
+  }
+
+  /* ---- Menu item: a row in a drop-down or side menu ---- */
+  .menu-item,
+  .menu :where(li > a, li > button) {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    gap: 0.75rem;
+    min-height: 2.25rem;
+    padding: 0.375rem 0.75rem;
+    border: 0;
+    border-radius: var(--radius-md, 0.375rem);
+    background-color: transparent;
+    color: var(--color-base-content);
+    font-size: 0.875rem;
+    font-weight: 500;
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 150ms;
+  }
+  .menu-item:hover,
+  .menu :where(li > a, li > button):hover,
+  .menu-item:focus-visible {
+    background-color: color-mix(in srgb, var(--color-base-content) 8%, transparent);
+  }
+  .menu-item:disabled,
+  .menu-item[aria-disabled="true"] {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+  .menu-item-error {
+    color: var(--color-error);
+  }
+  .menu-item-error:hover {
+    background-color: color-mix(in srgb, var(--color-error) 15%, transparent);
+  }
+  .menu-item-warning {
+    color: var(--color-warning);
+  }
+  .menu-item-warning:hover {
+    background-color: color-mix(in srgb, var(--color-warning) 15%, transparent);
+  }
+
+  /* ---- Pressable: a click target with no look of its own ---- */
+  .pressable {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    margin: 0;
+    color: inherit;
+    font: inherit;
+    text-align: inherit;
+    cursor: pointer;
+    outline: none;
+  }
+  .pressable:focus-visible {
+    border-radius: var(--radius-md, 0.375rem);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-primary) 50%, transparent);
+  }
+
+  /* ---- Touch screens (phones, tablets): thumb-sized targets everywhere ---- */
+  @media (pointer: coarse) {
+    .btn {
+      height: auto;
+      min-height: 2.75rem;
+      padding-inline: 1rem;
+      font-size: 0.9375rem;
+    }
+    .btn:is(.btn-square, .btn-circle) {
+      width: 2.75rem;
+      padding-inline: 0;
+    }
+    .btn.btn-xs {
+      min-height: 2rem;
+      padding-inline: 0.625rem;
+      font-size: 0.75rem;
+    }
+    .btn.btn-xs:is(.btn-square, .btn-circle) {
+      width: 2rem;
+      padding-inline: 0;
+    }
+    .choice {
+      min-height: 2.75rem;
+    }
+    .menu-item,
+    .menu :where(li > a, li > button) {
+      min-height: 2.75rem;
+    }
+  }
+}

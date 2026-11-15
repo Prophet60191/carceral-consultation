@@ -1,0 +1,68 @@
+<div>
+  <div class="relative min-h-screen grid bg-stage">
+    <div class="flex min-h-screen flex-col md:flex-row items-stretch">
+      <ClaperWeb.BrandPanel.panel />
+      <div class="flex w-full items-center justify-center p-8 md:w-1/2 md:p-10 lg:p-14 xl:w-2/5">
+        <div class="w-full max-w-xl">
+          <div class="space-y-6">
+            <div class="text-center md:text-left">
+              <a href="/" class="inline-flex items-center">
+                <ClaperWeb.Wordmark.mark short size={:lg} class="text-base-content" />
+              </a>
+
+              <p class="mt-8 text-sm font-semibold uppercase tracking-[0.3em] text-primary">
+                {gettext("Confirm account")}
+              </p>
+              <h2 class="mt-4 text-4xl font-bold text-base-content lg:text-5xl">
+                {gettext("Confirm your account")}
+              </h2>
+              <p class="mt-4 text-base leading-7 text-muted">
+                {gettext("Enter your email address and we'll send you a new confirmation link.")}
+              </p>
+            </div>
+
+            <.form :let={f} for={@conn} action={~p"/users/confirm"} as={:user} class="space-y-5">
+              <ClaperWeb.Component.Input.email
+                form={f}
+                key={:email}
+                labelClass="text-base-content"
+                name={gettext("Email")}
+                placeholder={gettext("you@example.com")}
+                autofocus="true"
+                required="true"
+              />
+
+              <div class="pt-3">
+                <button type="submit" class="btn btn-primary w-full">
+                  {gettext("Resend confirmation instructions")}
+                </button>
+              </div>
+            </.form>
+
+            <div class="space-y-4 border-t border-line pt-6 text-center md:text-left">
+              <p class="text-sm text-muted">
+                {gettext("Already confirmed?")}
+                {" "}
+                {link(gettext("Back to log in"),
+                  to: ~p"/users/log_in",
+                  class: "font-semibold text-primary transition hover:text-primary"
+                )}
+              </p>
+
+              <%= if Application.get_env(:claper, :enable_account_creation) do %>
+                <p class="text-sm text-muted">
+                  {gettext("Still new here?")}
+                  {" "}
+                  {link(gettext("Create account"),
+                    to: ~p"/users/register",
+                    class: "font-semibold text-primary transition hover:text-primary"
+                  )}
+                </p>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

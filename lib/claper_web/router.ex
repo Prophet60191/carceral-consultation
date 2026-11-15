@@ -1,0 +1,285 @@
+defmodule ClaperWeb.Router do
+  use ClaperWeb, :router
+
+  import ClaperWeb.{UserAuth, EventController}
+
+  pipeline :browser do
+    plug(:accepts, ["html"])
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:put_root_layout, html: {ClaperWeb.LayoutView, :root})
+    plug(:protect_from_forgery)
+    plug(:put_secure_browser_headers)
+    plug(:fetch_current_user)
+    plug(ClaperWeb.Plugs.Locale)
+    # Remembers the event you left for Admin / My account (breadcrumbs)
+    plug(ClaperWeb.Plugs.ReturnContext)
+  end
+
+  pipeline :admin_required do
+    plug(ClaperWeb.Plugs.AdminRequiredPlug)
+  end
+
+  pipeline :lti_enabled do
+    plug(ClaperWeb.Plugs.LtiEnabled)
+  end
+
+  pipeline :lti do
+    plug(:accepts, ["html", "json"])
+    plug(:put_root_layout, html: {ClaperWeb.LayoutView, :root})
+    plug(:fetch_session)
+    plug(:fetch_live_flash)
+    plug(:fetch_current_user)
+    plug(ClaperWeb.Plugs.Locale)
+  end
+
+  pipeline :protect_mailbox do
+    plug ClaperWeb.MailboxGuard
+  end
+
+  pipeline :api do
+    plug(:accepts, ["json"])
+  end
+
+  pipeline :rate_limit_auth do
+    plug ClaperWeb.Plugs.RateLimitPlug,
+      max_requests: 10,
+      interval_ms: 60_000,
+      prefix: "auth"
+  end
+
+  # Manage attendee_identifier in requests
+  pipeline :attendee_registration do
+    plug(:attendee_identifier)
+  end
+
+  # Saving the app to a phone's home screen: icon and manifest. No session
+  # or CSRF: phones fetch these on their own (ClaperWeb.HomeScreen).
+  scope "/", ClaperWeb do
+    get("/apple-touch-icon.png", HomeScreenController, :apple_touch_icon)
+    get("/apple-touch-icon-precomposed.png", HomeScreenController, :apple_touch_icon)
+    get("/home-icon/:file", HomeScreenController, :icon)
+    get("/manifest.webmanifest", HomeScreenController, :manifest)
+  end
+
+  live_session :attendee, session: {ClaperWeb.ClientIp, :live_session, []} do
+    scope "/", ClaperWeb do
+      pipe_through([:browser, :attendee_registration])
+
+      live("/", EventLive.Join, :index)
+      live("/join", EventLive.Join, :join)
+    end
+
+    scope "/", ClaperWeb do
+      pipe_through([:browser, :attendee_registration, ClaperWeb.Plugs.Iframe])
+
+      live("/e/:code", EventLive.Show, :show)
+    end
+  end
+
+  live_session :user,
+    root_layout: {ClaperWeb.LayoutView, :user},
+    on_mount: [ClaperWeb.TwoFactorHook, ClaperWeb.AuditContext],
+    session: {ClaperWeb.AuditContext, :user_live_session, []} do
+    scope "/", ClaperWeb do
+      pipe_through([:browser, :require_authenticated_user])
+
+      post "/export/forms/:form_id", StatController, :export_form
+      post "/export/polls/:poll_id", StatController, :export_poll
+      post "/export/quizzes/:quiz_id", StatController, :export_quiz
+      post "/export/quizzes/:quiz_id/qti", StatController, :export_quiz_qti
+      post "/export/word_clouds/:word_cloud_id", StatController, :export_word_cloud
+      post "/export/breakouts/runs/:run_id", StatController, :export_breakout_run
+      post "/export/:event_id/messages", StatController, :export_all_messages
+      post "/export/:event_id/transcriptions", StatController, :export_transcriptions
+
+      live("/events", EventLive.Index, :index)
+      live("/events/new", EventLive.Index, :new)
+      live("/events/:id/edit", EventLive.Index, :edit)
+      live("/events/:id/stats", StatLive.Index, :index)
+
+      # Breakout groups (docs/BREAKOUT.md): the library and the builder.
+      live("/breakouts", BreakoutLive.Library, :index)
+      live("/breakouts/new", BreakoutLive.Builder, :library_new)
+      live("/breakouts/:id", BreakoutLive.Builder, :library_edit)
+      live("/e/:code/breakouts/new", BreakoutLive.Builder, :event_new)
+      live("/e/:code/breakouts/:id", BreakoutLive.Builder, :event_edit)
+      live("/e/:code/breakouts/:id/live", BreakoutLive.Control, :show)
+
+      # The intro page participants see until the event starts (docs/INTRO.md).
+      live("/e/:code/intro", IntroLive.Builder, :edit)
+      live("/e/:code/intro/preview", IntroLive.Preview, :event)
+      live("/intros", IntroLive.Library, :index)
+      live("/intros/:id", IntroLive.Builder, :library_edit)
+      live("/intros/:id/preview", IntroLive.Preview, :library)
+
+      live("/users/settings", UserSettingsLive.Show, :show)
+      live("/users/settings/edit/profile", UserSettingsLive.Show, :edit_profile)
+      live("/users/settings/edit/password", UserSettingsLive.Show, :edit_password)
+      live("/users/settings/edit/email", UserSettingsLive.Show, :edit_email)
+      live("/users/settings/set/password", UserSettingsLive.Show, :set_password)
+      live("/users/settings/two_factor", UserSettingsLive.TwoFactor, :show)
+      live("/users/settings/security", UserSettingsLive.Security, :show)
+    end
+  end
+
+  live_session :presenter,
+    on_mount: [ClaperWeb.UserLiveAuth, ClaperWeb.TwoFactorHook],
+    session: {ClaperWeb.ClientIp, :live_session, []} do
+    scope "/", ClaperWeb do
+      pipe_through([:browser, :require_authenticated_user])
+
+      live("/e/:code/presenter", EventLive.Presenter, :show)
+      live("/e/:code/manage", EventLive.Manage, :show)
+      live("/e/:code/manage/add/poll", EventLive.Manage, :add_poll)
+      live("/e/:code/manage/edit/poll/:id", EventLive.Manage, :edit_poll)
+      live("/e/:code/manage/add/form", EventLive.Manage, :add_form)
+      live("/e/:code/manage/import", EventLive.Manage, :import)
+      live("/e/:code/manage/edit/form/:id", EventLive.Manage, :edit_form)
+      live("/e/:code/manage/add/embed", EventLive.Manage, :add_embed)
+      live("/e/:code/manage/edit/embed/:id", EventLive.Manage, :edit_embed)
+      live("/e/:code/manage/add/quiz", EventLive.Manage, :add_quiz)
+      live("/e/:code/manage/edit/quiz/:id", EventLive.Manage, :edit_quiz)
+      live("/e/:code/manage/add/word_cloud", EventLive.Manage, :add_word_cloud)
+      live("/e/:code/manage/edit/word_cloud/:id", EventLive.Manage, :edit_word_cloud)
+      live("/e/:code/manage/add/transcription", EventLive.Manage, :add_transcription)
+      live("/e/:code/manage/edit/transcription/:id", EventLive.Manage, :edit_transcription)
+    end
+  end
+
+  # Enables LiveDashboard only for development
+  #
+  # If you want to use the LiveDashboard in production, you should put
+  # it behind authentication and allow only admins to access it.
+  # If your application does not have an admins-only section yet,
+  # you can use Plug.BasicAuth to set up some basic authentication
+  # as long as you are also using SSL (which you should anyway).
+  if Mix.env() in [:dev, :test] do
+    import Phoenix.LiveDashboard.Router
+
+    scope "/" do
+      pipe_through(:browser)
+      live_dashboard("/dashboard", metrics: ClaperWeb.Telemetry)
+    end
+  end
+
+  # Enables the Swoosh mailbox preview in development.
+  #
+  # Note that preview only shows emails that were sent by the same
+  # node running the Phoenix server.
+  if Mix.env() == :dev do
+    scope "/dev" do
+      pipe_through [:browser, :protect_mailbox]
+      forward("/mailbox", Plug.Swoosh.MailboxPreview)
+    end
+  end
+
+  ## Authentication routes
+  scope "/", ClaperWeb do
+    pipe_through([:browser, :redirect_if_user_is_authenticated, :rate_limit_auth])
+
+    get("/users/register", UserRegistrationController, :new)
+    post("/users/register", UserRegistrationController, :create)
+
+    get("/users/register/confirm", UserRegistrationController, :confirm)
+    get("/users/log_in", UserSessionController, :new)
+    post("/users/log_in", UserSessionController, :create)
+    get("/users/two_factor", UserTwoFactorController, :new)
+    # Accepting an administrator's invitation (docs/SECURITY.md)
+    get("/users/invitation/:token", UserInvitationController, :edit)
+    post("/users/invitation/:token", UserInvitationController, :update)
+    post("/users/two_factor", UserTwoFactorController, :create)
+    get("/users/magic/:token", UserConfirmationController, :confirm_magic)
+    get("/users/reset_password", UserResetPasswordController, :new)
+    post("/users/reset_password", UserResetPasswordController, :create)
+    get("/users/reset_password/:token", UserResetPasswordController, :edit)
+    post("/users/reset_password/:token", UserResetPasswordController, :update)
+
+    get("/users/confirm", UserConfirmationController, :new)
+    post("/users/confirm", UserConfirmationController, :create)
+    get("/users/confirm/:token", UserConfirmationController, :update)
+
+    get("/users/oidc", UserOidcAuth, :new)
+    get("/users/oidc/callback", UserOidcAuth, :callback)
+    get("/users/oidc/confirm", UserOidcAuth, :check_email)
+    get("/users/oidc/confirm/:token", UserOidcAuth, :show_confirm)
+    post("/users/oidc/confirm/:token", UserOidcAuth, :confirm)
+  end
+
+  # Registration changes the signed-in user's trusted platforms. Unlike LTI
+  # launch callbacks, it is a same-site browser action and requires CSRF.
+  scope "/", ClaperWeb do
+    pipe_through([:lti_enabled, :browser])
+
+    get("/lti/register", Lti.RegistrationController, :new)
+    get("/lti/register/continue", Lti.RegistrationController, :continue)
+    post("/lti/register", Lti.RegistrationController, :create)
+    # Switching accounts after an LTI launch is an explicit, CSRF-protected choice.
+    get("/lti/launch/confirm", Lti.LaunchController, :show_confirm)
+    post("/lti/launch/confirm", Lti.LaunchController, :confirm)
+    post("/lti/launch/cancel", Lti.LaunchController, :cancel)
+  end
+
+  scope "/", ClaperWeb do
+    pipe_through([:lti_enabled, :lti])
+
+    get("/.well-known/jwks.json", Lti.RegistrationController, :jwks)
+    post("/lti/login", Lti.LaunchController, :login)
+    get("/lti/login", Lti.LaunchController, :login)
+    post("/lti/launch", Lti.LaunchController, :launch)
+  end
+
+  scope "/", ClaperWeb do
+    pipe_through([:browser, :require_authenticated_user])
+
+    get("/users/settings/confirm_email/:token", UserSettingsController, :confirm_email)
+    # Confirm the password again before a sensitive action (docs/SECURITY.md)
+    get("/users/confirm_password", UserReauthController, :new)
+    post("/users/confirm_password", UserReauthController, :create)
+    delete("/users/register/delete", UserRegistrationController, :delete)
+  end
+
+  scope "/", ClaperWeb do
+    pipe_through([:browser])
+
+    delete("/users/log_out", UserSessionController, :delete)
+    # The license notices and the source code link, open to everyone
+    get("/about", PageController, :about)
+    get("/privacy", PageController, :privacy)
+  end
+
+  # Admin panel routes - LiveView implementation
+  live_session :admin,
+    root_layout: {ClaperWeb.LayoutView, :admin},
+    on_mount: [ClaperWeb.TwoFactorHook, ClaperWeb.AuditContext],
+    session: {ClaperWeb.AuditContext, :live_session, []} do
+    scope "/admin", ClaperWeb.AdminLive do
+      pipe_through [:browser, :require_authenticated_user, :admin_required]
+
+      live "/", DashboardLive, :index
+
+      live "/users", UserLive, :index
+      live "/users/new", UserLive, :new
+      live "/users/:id/edit", UserLive, :edit
+      live "/users/:id", UserLive, :show
+
+      live "/events", EventLive, :index
+      live "/events/new", EventLive, :new
+      live "/events/:id/edit", EventLive, :edit
+      live "/events/:id", EventLive, :show
+
+      live "/oidc_providers", OidcProviderLive, :index
+      live "/oidc_providers/new", OidcProviderLive, :new
+      live "/oidc_providers/:id/edit", OidcProviderLive, :edit
+      live "/oidc_providers/:id", OidcProviderLive, :show
+
+      live "/lti_platforms", LtiPlatformLive, :index
+
+      live "/audit_logs", AuditLogLive, :index
+      live "/audit_logs/:id", AuditLogLive, :show
+
+      live "/brand", BrandLive, :index
+      live "/settings", SettingsLive, :index
+    end
+  end
+end

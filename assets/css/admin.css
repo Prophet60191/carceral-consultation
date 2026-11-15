@@ -1,0 +1,20 @@
+@import "tailwindcss";
+@import './theme-config.css';
+@import './buttons.css';
+@import './panels.css';
+@import './badges.css';
+@import './fields.css';
+@plugin "daisyui" {
+  themes: carceral --default, carceral-light;
+  /* Buttons, switches, badges, cards and form fields are ours (buttons.css, badges.css, panels.css, fields.css), not daisyUI's */
+  exclude: button, toggle, badge, card, input, select, textarea, checkbox, radio;
+}
+
+
+@utility label {
+  @apply ml-2;
+}
+
+@utility fieldset-legend {
+  @apply ml-3;
+}

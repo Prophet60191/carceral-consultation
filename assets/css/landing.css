@@ -1,0 +1,206 @@
+/*
+ * The landing page (ClaperWeb.Landing, Jose 2026-11-15): the brand photo
+ * fills the screen; "Join event" and "Log in" (top right) open a panel on
+ * the right, and the photo narrows to make room (on phones it shrinks to a
+ * banner and the panel comes up below it).
+ *
+ * Which panel is open lives on <html data-landing="none|join|login">
+ * (assets/js/landing.js), outside anything LiveView redraws. Before the
+ * script runs, the page's own data-landing-initial decides, so a direct
+ * visit to /join or /users/log_in shows its panel without a flash.
+ */
+
+.landing {
+  --landing-panel-w: 50%;
+  --landing-speed: 320ms;
+  --landing-ease: cubic-bezier(0.22, 1, 0.36, 1);
+  position: relative;
+  min-height: 100svh;
+  background: var(--color-base-100);
+}
+
+@media (min-width: 80rem) {
+  .landing {
+    --landing-panel-w: 40%;
+  }
+}
+
+/* The two buttons, top right, above everything */
+.landing-bar {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 30;
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 1rem 1.25rem;
+  pointer-events: none;
+}
+
+.landing-bar > * {
+  pointer-events: auto;
+}
+
+/* The photo (or a plain panel without one) */
+.landing-photo {
+  position: relative;
+  overflow: hidden;
+  height: 100svh;
+  background-size: cover;
+  transition: height var(--landing-speed) var(--landing-ease);
+}
+
+.landing-photo-text {
+  position: absolute;
+  inset: auto auto 0 0;
+  z-index: 10;
+  width: min(36rem, calc(100% - 2.5rem));
+  padding: 0 1.25rem 2rem;
+}
+
+/* The panel with the form */
+.landing-panel {
+  position: relative;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(1.5rem);
+  transition:
+    opacity var(--landing-speed) var(--landing-ease),
+    transform var(--landing-speed) var(--landing-ease),
+    visibility 0s linear var(--landing-speed);
+}
+
+.landing-panel-body {
+  padding: 1.5rem 1.25rem 2.5rem;
+}
+
+.landing-form {
+  display: none;
+}
+
+/* Open: which panel */
+html[data-landing="join"] .landing-form[data-landing-panel="join"],
+html[data-landing="login"] .landing-form[data-landing-panel="login"],
+html:not([data-landing]) .landing[data-landing-initial="join"] .landing-form[data-landing-panel="join"],
+html:not([data-landing]) .landing[data-landing-initial="login"] .landing-form[data-landing-panel="login"] {
+  display: block;
+}
+
+/* Open, on phones: the photo becomes a banner and the panel comes up */
+html[data-landing="join"] .landing-photo,
+html[data-landing="login"] .landing-photo,
+html:not([data-landing]) .landing:is([data-landing-initial="join"], [data-landing-initial="login"]) .landing-photo {
+  height: 16rem;
+}
+
+html[data-landing="join"] .landing-panel,
+html[data-landing="login"] .landing-panel,
+html:not([data-landing]) .landing:is([data-landing-initial="join"], [data-landing-initial="login"]) .landing-panel {
+  visibility: visible;
+  opacity: 1;
+  transform: none;
+  transition:
+    opacity var(--landing-speed) var(--landing-ease),
+    transform var(--landing-speed) var(--landing-ease),
+    visibility 0s;
+}
+
+/* On phones the banner is short: just the name, the form is the focus */
+@media (max-width: 47.99rem) {
+  html[data-landing="join"] .landing-photo-extra,
+  html[data-landing="login"] .landing-photo-extra,
+  html:not([data-landing]) .landing:is([data-landing-initial="join"], [data-landing-initial="login"]) .landing-photo-extra {
+    display: none;
+  }
+}
+
+/* Tablets and computers: side by side, the photo narrows */
+@media (min-width: 48rem) {
+  .landing {
+    display: flex;
+    height: 100svh;
+    overflow: hidden;
+  }
+
+  .landing-photo {
+    flex: 1 1 auto;
+    height: 100%;
+    transition: none;
+  }
+
+  .landing-photo-text {
+    padding: 0 2.5rem 2.5rem;
+  }
+
+  .landing-panel {
+    flex: 0 0 auto;
+    width: 0;
+    height: 100%;
+    overflow: hidden;
+    transform: none;
+    border-left: 1px solid var(--color-line);
+    transition:
+      width var(--landing-speed) var(--landing-ease),
+      opacity var(--landing-speed) var(--landing-ease),
+      visibility 0s linear var(--landing-speed);
+  }
+
+  /* The form keeps its width while the panel opens, so it doesn't reflow */
+  .landing-panel-body {
+    width: calc(100vw * 0.5);
+    height: 100%;
+    overflow-y: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 5.5rem 2.5rem 2.5rem;
+  }
+
+  html[data-landing="join"] .landing-photo,
+  html[data-landing="login"] .landing-photo,
+  html:not([data-landing]) .landing:is([data-landing-initial="join"], [data-landing-initial="login"]) .landing-photo {
+    height: 100%;
+  }
+
+  html[data-landing="join"] .landing-panel,
+  html[data-landing="login"] .landing-panel,
+  html:not([data-landing]) .landing:is([data-landing-initial="join"], [data-landing-initial="login"]) .landing-panel {
+    width: var(--landing-panel-w);
+    transition:
+      width var(--landing-speed) var(--landing-ease),
+      opacity var(--landing-speed) var(--landing-ease),
+      visibility 0s;
+  }
+}
+
+@media (min-width: 80rem) {
+  .landing-panel-body {
+    width: calc(100vw * 0.4);
+  }
+}
+
+/* People who asked their device for less motion get an instant switch */
+@media (prefers-reduced-motion: reduce) {
+  .landing-photo,
+  .landing-panel {
+    transition: none !important;
+  }
+}
+
+/* The event code: one large line, underlined */
+.join-code-input {
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--color-line-strong);
+  box-shadow: none;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+
+.join-code-input::placeholder {
+  color: var(--color-faint);
+}
+
+.join-code-input:focus {
+  border-color: var(--color-base-content);
+  outline: none;
+}

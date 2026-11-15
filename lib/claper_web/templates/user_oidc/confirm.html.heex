@@ -1,0 +1,21 @@
+<div>
+  <div class="relative h-screen bg-stage flex justify-center items-center">
+    <div class="max-w-xl text-center p-8">
+      <p class="text-3xl font-bold text-base-content">
+        {gettext("Finish signing in with %{provider}", provider: @provider_name)}
+      </p>
+      <p class="my-8 text-base-content">
+        {gettext("This links your %{provider} sign-in to your %{name} account.",
+          provider: @provider_name,
+          name: Claper.Branding.name(Claper.Branding.get())
+        )}
+      </p>
+      <form id="oidc-confirm" action={~p"/users/oidc/confirm/#{@token}"} method="post">
+        <input type="hidden" name="_csrf_token" value={Plug.CSRFProtection.get_csrf_token()} />
+        <button type="submit" class="btn btn-primary">
+          {gettext("Confirm and sign in")}
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

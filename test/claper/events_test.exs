@@ -554,9 +554,15 @@ defmodule Claper.EventsTest do
       assert event.expired_at == nil
 
       Phoenix.PubSub.subscribe(Claper.PubSub, "event:#{event.uuid}")
+      # The end time is stored to the second: it must fall within the second
+      # the call started in and the moment it returned (a fixed "< 1 s" check
+      # failed on slower machines when the clock crossed a second boundary).
+      before = NaiveDateTime.utc_now() |> NaiveDateTime.truncate(:second)
       {:ok, event} = Events.terminate_event(event)
+      after_call = NaiveDateTime.utc_now()
 
-      assert NaiveDateTime.diff(NaiveDateTime.utc_now(), event.expired_at) |> abs() < 1
+      assert NaiveDateTime.compare(event.expired_at, before) in [:gt, :eq]
+      assert NaiveDateTime.compare(event.expired_at, after_call) in [:lt, :eq]
       assert_received {:event_terminated, uuid}
       assert uuid == event.uuid
     end

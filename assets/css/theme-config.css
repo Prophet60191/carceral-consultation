@@ -9,8 +9,8 @@
 
   Two themes with the same roles (2026-11-13):
     carceral        dark: charcoal surfaces, off-white text, white buttons
-    carceral-light  light: white cards on a light-gray page, near-black text,
-                    near-black buttons
+    carceral-light  light, warm (2026-11-15): cream cards on a stone page,
+                    espresso text and espresso buttons
   The <html> element's data-theme picks one (set by the theme switcher in the
   account menu; see ClaperWeb.ThemeScript). Red, amber, green and blue are
   reserved for error, warning, success and info in both.
@@ -63,28 +63,29 @@
   prefersdark: false;
   color-scheme: light;
 
-  --color-base-100: #f4f4f5;          /* page */
-  --color-base-200: #ffffff;          /* cards, panels */
-  --color-base-300: #f4f4f5;          /* raised: menus, inputs, hover on cards */
-  --color-base-content: #18181b;      /* main text */
+  /* Warm (Jose, 2026-11-15): stone, cream and espresso */
+  --color-base-100: #e9e2da;          /* page: warm stone */
+  --color-base-200: #f7f3ee;          /* cards, panels: cream */
+  --color-base-300: #efe9e2;          /* raised: menus, inputs, hover on cards */
+  --color-base-content: #2a211d;      /* main text: espresso */
 
-  --color-primary: #18181b;           /* buttons: near-black on light */
-  --color-primary-content: #fafafa;
-  --color-secondary: #e4e4e7;
-  --color-secondary-content: #18181b;
-  --color-accent: #3f3f46;
-  --color-accent-content: #fafafa;
-  --color-neutral: #e4e4e7;
-  --color-neutral-content: #18181b;
+  --color-primary: #3a2e29;           /* buttons: espresso on light */
+  --color-primary-content: #f7f3ee;
+  --color-secondary: #e2d9cf;
+  --color-secondary-content: #2a211d;
+  --color-accent: #5a4a42;
+  --color-accent-content: #f7f3ee;
+  --color-neutral: #e2d9cf;
+  --color-neutral-content: #2a211d;
 
-  /* Status colors, deeper so they stay readable on white */
+  /* Status colors, deep enough to stay readable on stone and cream */
   --color-info: #1d4ed8;
   --color-info-content: #ffffff;
-  --color-success: #15803d;
+  --color-success: #126b33;
   --color-success-content: #ffffff;
-  --color-warning: #a15c07;
+  --color-warning: #854b05;
   --color-warning-content: #ffffff;
-  --color-error: #c62828;
+  --color-error: #c02626;
   --color-error-content: #ffffff;
 
   --radius-selector: 1rem;
@@ -157,22 +158,22 @@
 /* Light values for the roles beyond daisyUI's set (dark values are in the
    @theme block above). */
 [data-theme="carceral-light"] {
-  --color-stage: #e4e4e7;
-  --color-base-400: #e4e4e7;
-  --color-selected: #e4e4e7;
-  --color-muted: #52525b;
-  --color-faint: #71717a;
-  --color-line: #e4e4e7;
-  --color-line-strong: #8a8a93;
-  --color-scrim: #000000;
+  --color-stage: #e2d9cf;
+  --color-base-400: #e2d9cf;
+  --color-selected: #e2d9cf;
+  --color-muted: #62554c;
+  --color-faint: #83766b;
+  --color-line: #dcd2c7;
+  --color-line-strong: #8c7f73;
+  --color-scrim: #1e1714;             /* warm: shadows and dimming in espresso */
   --color-sheen: #ffffff;             /* light caught by raised surfaces; use with opacity */
-  --color-primary-hover: #3f3f46;
-  --color-success-hover: #166534;
-  --color-error-hover: #b71c1c;
-  --color-warning-hover: #854d0e;
+  --color-primary-hover: #4d3f38;
+  --color-success-hover: #0e5528;
+  --color-error-hover: #a11f1f;
+  --color-warning-hover: #6e3e04;
   --color-info-hover: #1e40af;
-  --color-chart-1: #18181b;
-  --color-chart-2: #1d4ed8;
+  --color-chart-1: #3a2e29;
+  --color-chart-2: #b4462c;
   --color-group-1: #6d28d9;
   --color-group-2: #be185d;
   --color-group-3: #0f766e;
@@ -181,12 +182,12 @@
   --color-group-6: #4338ca;
   --color-group-content: #ffffff;
 
-  /* Softer shadows on a light page */
-  --shadow-base: 0px 1px 2px 0px color-mix(in srgb, var(--color-scrim) 6%, transparent);
-  --shadow-md: 0px 2px 4px 0px color-mix(in srgb, var(--color-scrim) 6%, transparent), 0px 1px 2px 0px color-mix(in srgb, var(--color-scrim) 4%, transparent);
-  --shadow-lg: 0px 4px 12px 0px color-mix(in srgb, var(--color-scrim) 7%, transparent), 0px 1px 3px 0px color-mix(in srgb, var(--color-scrim) 5%, transparent);
-  --shadow-xl: 0px 8px 24px 0px color-mix(in srgb, var(--color-scrim) 9%, transparent);
-  --shadow-2xl: 0px 16px 40px 0px color-mix(in srgb, var(--color-scrim) 12%, transparent);
+  /* Soft warm shadows: on a page close in tone to the cards, they carry the depth */
+  --shadow-base: 0px 1px 2px 0px color-mix(in srgb, var(--color-scrim) 8%, transparent);
+  --shadow-md: 0px 2px 6px 0px color-mix(in srgb, var(--color-scrim) 8%, transparent), 0px 1px 2px 0px color-mix(in srgb, var(--color-scrim) 5%, transparent);
+  --shadow-lg: 0px 6px 16px 0px color-mix(in srgb, var(--color-scrim) 9%, transparent), 0px 1px 3px 0px color-mix(in srgb, var(--color-scrim) 6%, transparent);
+  --shadow-xl: 0px 10px 28px 0px color-mix(in srgb, var(--color-scrim) 11%, transparent);
+  --shadow-2xl: 0px 18px 44px 0px color-mix(in srgb, var(--color-scrim) 14%, transparent);
   --shadow-inner: inset 0px 1px 2px 0px color-mix(in srgb, var(--color-scrim) 6%, transparent);
 }
 

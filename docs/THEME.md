@@ -233,11 +233,20 @@ produces the same classes.
 
 ## Light theme
 
-A second theme, `carceral-light`, uses the same roles with light values:
-white cards on a light-gray page (`base-100` #f4f4f5, `base-200` #ffffff),
-near-black text (#18181b), near-black buttons with light text, deeper status
-colors (error #c62828, success #15803d, warning #a15c07, info #1d4ed8), softer
-shadows. Both live in `theme-config.css`.
+A second theme, `carceral-light`, uses the same roles with light values. Since
+2026-11-15 it is **warm** (Jose's choice, from a reference he liked):
+- cream cards (`base-200` #f7f3ee) on a warm stone page (`base-100` #e9e2da)
+- espresso text (#2a211d) and espresso buttons (#3a2e29) with cream text. The
+  espresso ties the light theme to the dark one.
+- warm-grey secondary text (muted #62554c), deliberately darker than the
+  reference, so it stays readable on projectors and phones
+- status colors deepened for stone (error #c02626, success #126b33, warning
+  #854b05, info #1d4ed8)
+- shadows tinted espresso (`scrim` #1e1714). Page and cards are close in tone,
+  so the shadows carry the depth.
+
+The previous neutral light theme (white on #f4f4f5, near-black #18181b) is in
+git history. Both themes live in `theme-config.css`.
 
 - **Switching:** Dark | Light | System in the account menu, above Logout
   (`ClaperWeb.ThemeScript.switcher`). The choice is saved in this browser and
@@ -252,8 +261,15 @@ shadows. Both live in `theme-config.css`.
 - Charts read their colors when they draw, so they follow a theme change on
   the next page load.
 
-Light contrast: main text 14.0–17.7 : 1, muted 6.1–7.7, status colors on
-white 5.0–6.7, light text on near-black buttons 17.0, input borders on cards 3.4.
+Light contrast (warm, checked 2026-11-15):
+- main text 12.3–14.3 : 1
+- muted 5.2–6.5, including on selected rows
+- faint 4.0 (decorative only)
+- status colors 5.2–6.3 on both stone and cream, and white on each 5.4–6.3
+- cream text on espresso buttons 11.9 (9.1 on hover)
+- input borders 3.2–3.5
+- breakout group colors with white text 4.5–7.2
+- chart series 4.9 and 11.9 on cards
 
 ## Readability
 

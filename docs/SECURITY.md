@@ -214,7 +214,14 @@ Admin › Users (`Claper.Accounts.Administration`):
 
 - **Two roles:** Administrator (stored as `admin`) and Facilitator
   (stored as `user`). Facilitators run their own events and the ones
-  they're added to. Administrators also manage the app.
+  they're added to. Administrators also manage the app, and **see and run
+  every event** (Jose, 2026-11-15).
+- **Who may do what with an event:**
+  - `Claper.Events.can_manage?/2` (owner, facilitator or administrator) is the one rule for every event screen: manage, presenter, the attendee view's host controls, the intro and breakout builders, the breakout control room, statistics and exports, and host replies.
+  - `Events.get_owned_event!/3` (owner or administrator) guards editing, ending and deleting.
+  - Duplicating and importing stay owner-only, since they copy into your own account.
+  - An administrator's edit never changes the owner, and a replaced slide deck's progress shows on the owner's My events.
+  - Admin › Events has an **Open** button for each event, and Open event on its details page.
 - **Invitations, not passwords.** "Invite someone" takes a name, an email
   and a role. The person gets an email link (7 days, sealed in the mail
   queue) and chooses their own password, under the usual rules. Until then

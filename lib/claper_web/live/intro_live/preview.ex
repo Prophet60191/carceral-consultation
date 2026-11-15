@@ -40,7 +40,7 @@ defmodule ClaperWeb.IntroLive.Preview do
     user = socket.assigns.current_user
     event = Claper.Events.get_event_with_code(code, [:user])
 
-    if event && (event.user_id == user.id || Claper.Events.led_by?(user.email, event)),
+    if event && Claper.Events.can_manage?(user, event),
       do: {:ok, event, Intro.ensure_event_page(event)},
       else: :error
   end

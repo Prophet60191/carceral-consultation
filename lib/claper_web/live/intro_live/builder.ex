@@ -63,8 +63,7 @@ defmodule ClaperWeb.IntroLive.Builder do
     end
   end
 
-  defp leader?(user, event),
-    do: event.user_id == user.id || Claper.Events.led_by?(user.email, event)
+  defp leader?(user, event), do: Claper.Events.can_manage?(user, event)
 
   defp load_page(%{assigns: %{event: nil, library_id: id}} = socket),
     do: assign_page(socket, Intro.get_library_page(id, socket.assigns.current_user.id))

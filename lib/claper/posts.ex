@@ -454,7 +454,8 @@ defmodule Claper.Posts do
 
   defp reply_author_attrs(event, post, {:user, user, name}) do
     cond do
-      Claper.Events.led_by?(user.email, event) ->
+      # Facilitators and administrators reply as hosts (Events.can_manage?/2)
+      Claper.Events.can_manage?(user, event) ->
         {:ok, %{author_role: :host, user_id: user.id}}
 
       post.user_id == user.id ->
@@ -480,8 +481,7 @@ defmodule Claper.Posts do
   end
 
   defp can_delete_reply?(event, reply, {:user, user, _name}) do
-    event.user_id == user.id || Claper.Events.led_by?(user.email, event) ||
-      reply.user_id == user.id
+    Claper.Events.can_manage?(user, event) || reply.user_id == user.id
   end
 
   defp can_delete_reply?(_event, reply, {:attendee, attendee_identifier, _name}) do

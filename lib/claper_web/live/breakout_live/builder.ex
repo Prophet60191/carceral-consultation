@@ -73,8 +73,7 @@ defmodule ClaperWeb.BreakoutLive.Builder do
     end
   end
 
-  defp leader?(user, event),
-    do: Claper.Events.led_by?(user.email, event) || event.user.id == user.id
+  defp leader?(user, event), do: Claper.Events.can_manage?(user, event)
 
   defp assign_new_form(socket) do
     library =

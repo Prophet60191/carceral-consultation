@@ -31,7 +31,7 @@ defmodule ClaperWeb.BreakoutLive.Control do
       Claper.Events.get_event_with_code(code, [:user, presentation_file: :presentation_state])
 
     with %{} <- event,
-         true <- Claper.Events.led_by?(user.email, event) || event.user.id == user.id,
+         true <- Claper.Events.can_manage?(user, event),
          %{} = breakout <- Breakouts.get_breakout_for_presentation(id, event.presentation_file.id) do
       if connected?(socket), do: Claper.Events.Event.subscribe(event.uuid)
 

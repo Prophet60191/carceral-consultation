@@ -298,9 +298,11 @@ defmodule ClaperWeb.EventLive.EventFormComponent do
     else
       files = Claper.Presentations.get_presentation_files_by_hash(event.presentation_file.hash)
 
+      # The owner's My events follows the conversion, also when an
+      # administrator replaced the slides (Events.get_owned_event!/3)
       Task.Supervisor.async_nolink(Claper.TaskSupervisor, fn ->
         Claper.Tasks.Converter.convert(
-          socket.assigns.current_user.id,
+          socket.assigns.event.user_id,
           "original.#{ext}",
           hash,
           ext,

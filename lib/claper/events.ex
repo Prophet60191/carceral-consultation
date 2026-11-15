@@ -286,18 +286,12 @@ defmodule Claper.Events do
 
   """
   def get_managed_event!(user, uuid, preload \\ []) do
-    from(
-      e in Event,
-      join: u in Accounts.User,
-      on: e.user_id == u.id,
-      left_join: a in ActivityLeader,
-      on: e.id == a.event_id,
-      where: e.uuid == ^uuid and (u.id == ^user.id or a.email == ^user.email),
-      distinct: true,
-      select: e
-    )
-    |> Repo.one!()
-    |> Repo.preload(preload)
+    event = Repo.get_by!(Event, uuid: uuid)
+
+    # Owner, facilitator or administrator (can_manage?/2)
+    if can_manage?(user, event),
+      do: Repo.preload(event, preload),
+      else: raise(Ecto.NoResultsError, queryable: Event)
   end
 
   @doc """
@@ -403,6 +397,33 @@ defmodule Claper.Events do
       :error ->
         nil
     end
+  end
+
+  @doc """
+  Who may run and change an event (Jose, 2026-11-15): its owner, its
+  facilitators (`led_by?/2`) and every administrator. Every event screen
+  (manage, presenter, the attendee view's host controls, intro and breakout
+  builders, the breakout control room, statistics and exports, host replies)
+  asks this one question.
+  """
+  def can_manage?(nil, _event), do: false
+
+  def can_manage?(%Accounts.User{} = user, %Event{} = event) do
+    event.user_id == user.id or led_by?(user.email, event) or
+      Accounts.user_has_role?(user, "admin")
+  end
+
+  @doc """
+  An event its owner, or any administrator, may edit, end or delete (My
+  events and the event form). Facilitators run an event but don't change
+  these. Raises `Ecto.NoResultsError` otherwise.
+  """
+  def get_owned_event!(%Accounts.User{} = user, uuid, preload \\ []) do
+    event = Repo.get_by!(Event, uuid: uuid)
+
+    if event.user_id == user.id or Accounts.user_has_role?(user, "admin"),
+      do: Repo.preload(event, preload),
+      else: raise(Ecto.NoResultsError, queryable: Event)
   end
 
   @doc """

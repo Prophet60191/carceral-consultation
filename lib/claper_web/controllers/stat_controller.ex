@@ -281,7 +281,7 @@ defmodule ClaperWeb.StatController do
   # Private functions
 
   defp authorize_event_access(user, event) do
-    if Events.led_by?(user.email, event) || event.user_id == user.id do
+    if Events.can_manage?(user, event) do
       :ok
     else
       :unauthorized

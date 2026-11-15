@@ -62,7 +62,7 @@ defmodule ClaperWeb.EventLive.Index do
 
   @impl true
   def handle_event("delete", %{"id" => id}, %{assigns: %{current_user: current_user}} = socket) do
-    event = Events.get_user_event!(current_user.id, id)
+    event = Events.get_owned_event!(current_user, id)
     {:ok, _} = Events.delete_event(event)
 
     {:noreply,
@@ -82,7 +82,7 @@ defmodule ClaperWeb.EventLive.Index do
 
   @impl true
   def handle_event("terminate", %{"id" => id}, %{assigns: %{current_user: current_user}} = socket) do
-    event = Events.get_user_event!(current_user.id, id)
+    event = Events.get_owned_event!(current_user, id)
     {:ok, _} = Events.terminate_event(event)
 
     {:noreply,
@@ -160,7 +160,7 @@ defmodule ClaperWeb.EventLive.Index do
 
   defp apply_action(socket, :edit, %{"id" => id}) do
     event =
-      Events.get_user_event!(socket.assigns.current_user.id, id, [
+      Events.get_owned_event!(socket.assigns.current_user, id, [
         :presentation_file,
         :leaders,
         :lti_resource

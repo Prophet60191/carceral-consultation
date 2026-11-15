@@ -69,6 +69,16 @@
         <:col :let={event} label={gettext("Audience Peak")} field={:audience_peak}>
           <div class="badge badge-outline">{event.audience_peak || 0}</div>
         </:col>
+        <%!-- Administrators run any event (Events.can_manage?/2, 2026-11-15) --%>
+        <:col :let={event} label={gettext("Open")}>
+          <.link
+            navigate={~p"/e/#{event.code}/manage"}
+            class="btn btn-outline btn-sm"
+            id={"open-event-#{event.id}"}
+          >
+            {gettext("Open")}
+          </.link>
+        </:col>
       </Flop.Phoenix.table>
 
       <div>
@@ -88,7 +98,10 @@
             <.link navigate={~p"/admin/events"} class="btn btn-outline btn-lg">
               {gettext("Back to events")}
             </.link>
-            <.link navigate={~p"/admin/events/#{@event}/edit"} class="btn btn-primary btn-lg">
+            <.link navigate={~p"/e/#{@event.code}/manage"} class="btn btn-primary btn-lg">
+              {gettext("Open event")}
+            </.link>
+            <.link navigate={~p"/admin/events/#{@event}/edit"} class="btn btn-outline btn-lg">
               {gettext("Edit")}
             </.link>
             <button

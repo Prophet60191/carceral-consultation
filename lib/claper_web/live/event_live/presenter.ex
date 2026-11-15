@@ -174,9 +174,8 @@ defmodule ClaperWeb.EventLive.Presenter do
     """
   end
 
-  defp leader?(%{assigns: %{current_user: current_user}} = _socket, event) do
-    Claper.Events.led_by?(current_user.email, event) || event.user.id == current_user.id
-  end
+  defp leader?(%{assigns: %{current_user: current_user}} = _socket, event),
+    do: Claper.Events.can_manage?(current_user, event)
 
   defp leader?(_socket, _event), do: false
 

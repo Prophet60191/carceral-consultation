@@ -31,7 +31,13 @@ defmodule ClaperWeb.IntroLive.Components do
   attr :show_brand, :boolean, default: true, doc: "the brand at the top (the page's setting)"
   attr :close, :string, default: nil, doc: "an event that closes this view (About this event)"
 
+  attr :preview, :boolean,
+    default: false,
+    doc: "the builder's preview: headings show even with nothing under them yet"
+
   def intro_screen(assigns) do
+    assigns = assign(assigns, :has_cards, groups(assigns.blocks, assigns.preview) != [])
+
     ~H"""
     <div id={@id} class="ticket-stage intro-stage">
       <button :if={@close} type="button" phx-click={@close} class="btn btn-secondary self-end">
@@ -41,49 +47,62 @@ defmodule ClaperWeb.IntroLive.Components do
       <%!-- The brand on top (Jose, 2026-11-14); each page can hide it (2026-11-15) --%>
       <ClaperWeb.Wordmark.lockup :if={@show_brand} class="intro-brand" />
 
-      <div class="ticket" id={"#{@id}-ticket"} phx-hook="TicketTilt">
-        <div class="texture"></div>
-        <div class="glare"></div>
+      <%!-- Wide windows: the ticket on the left (staying in view) and the cards
+           on the right; narrower ones: one column (assets/css/ticket.css,
+           "Intro layout", Jose 2026-11-15). Alone when there are no cards. --%>
+      <div class={["intro-layout", !@has_cards && "intro-layout-single"]}>
+        <div class="intro-aside">
+          <div class="ticket" id={"#{@id}-ticket"} phx-hook="TicketTilt">
+            <div class="texture"></div>
+            <div class="glare"></div>
 
-        <img :if={@banner_src} src={@banner_src} alt={@banner_alt || ""} class="intro-banner" />
+            <img :if={@banner_src} src={@banner_src} alt={@banner_alt || ""} class="intro-banner" />
 
-        <div class="ticket-body">
-          <span class="eyebrow">
-            <span class="dot"></span>{gettext("Live interactive event")}
-          </span>
+            <div class="ticket-body">
+              <span class="eyebrow">
+                <span class="dot"></span>{gettext("Live interactive event")}
+              </span>
 
-          <h1 class="event-title">{@event.name}</h1>
+              <h1 class="event-title">{@event.name}</h1>
 
-          <p
-            id={"#{@id}-date"}
-            class="event-date"
-            phx-hook="LocalDate"
-            data-utc={NaiveDateTime.to_iso8601(@event.started_at)}
-            data-format="LLLL"
-            data-capitalize="true"
-          >
-            {Calendar.strftime(@event.started_at, "%B %d, %Y %H:%M")}
-          </p>
+              <p
+                id={"#{@id}-date"}
+                class="event-date"
+                phx-hook="LocalDate"
+                data-utc={NaiveDateTime.to_iso8601(@event.started_at)}
+                data-format="LLLL"
+                data-capitalize="true"
+              >
+                {Calendar.strftime(@event.started_at, "%B %d, %Y %H:%M")}
+              </p>
 
-          <%!-- The countdown exactly as the waiting ticket had it (Jose) --%>
-          <div :if={@countdown} class="cd-row">
-            <%= for {{value, label}, i} <- Enum.with_index(countdown_cells(@countdown)) do %>
-              <div :if={i > 0} class="cd-sep">:</div>
-              <div class="cd-cell">
-                <div class="cd-num">{if value < 10, do: "0"}{value}</div>
-                <div class="cd-label">{label}</div>
+              <%!-- The countdown exactly as the waiting ticket had it (Jose) --%>
+              <div :if={@countdown} class="cd-row">
+                <%= for {{value, label}, i} <- Enum.with_index(countdown_cells(@countdown)) do %>
+                  <div :if={i > 0} class="cd-sep">:</div>
+                  <div class="cd-cell">
+                    <div class="cd-num">{if value < 10, do: "0"}{value}</div>
+                    <div class="cd-label">{label}</div>
+                  </div>
+                <% end %>
               </div>
-            <% end %>
+              <p :if={!@close and is_nil(@countdown)} class="intro-soon">
+                {gettext("Starting soon")}
+              </p>
+            </div>
           </div>
-          <p :if={!@close and is_nil(@countdown)} class="intro-soon">
-            {gettext("Starting soon")}
-          </p>
         </div>
-      </div>
 
-      <section class="intro-blocks">
-        <.page blocks={@blocks} contents={@contents} answers={@answers} interactive={@interactive} />
-      </section>
+        <section :if={@has_cards} class="intro-blocks">
+          <.page
+            blocks={@blocks}
+            contents={@contents}
+            answers={@answers}
+            interactive={@interactive}
+            preview={@preview}
+          />
+        </section>
+      </div>
 
       <a href="https://claper.co" target="_blank" class="powered-by">
         <span>{gettext("Powered by")}</span>
@@ -110,6 +129,7 @@ defmodule ClaperWeb.IntroLive.Components do
   attr :contents, :map, default: %{}
   attr :answers, :map, default: %{}
   attr :interactive, :boolean, default: false
+  attr :preview, :boolean, default: false
 
   @doc """
   The intro page's blocks (Jose, 2026-11-15): every block is its own card,
@@ -119,7 +139,7 @@ defmodule ClaperWeb.IntroLive.Components do
   reduced motion). Styles: `assets/css/ticket.css`, "Intro cards".
   """
   def page(assigns) do
-    assigns = assign(assigns, :groups, groups(assigns.blocks))
+    assigns = assign(assigns, :groups, groups(assigns.blocks, assigns.preview))
 
     ~H"""
     <div class="intro-page text-base-content">
@@ -147,7 +167,7 @@ defmodule ClaperWeb.IntroLive.Components do
 
   # Groups: a heading starts one; inside, stats next to each other share a
   # row, and a divider stays where it is.
-  defp groups(blocks) do
+  defp groups(blocks, preview?) do
     blocks
     |> Enum.reduce([], fn
       %{kind: "heading"} = b, acc -> [%{heading: b, items: []} | acc]
@@ -155,6 +175,10 @@ defmodule ClaperWeb.IntroLive.Components do
       b, [group | rest] -> [%{group | items: add_item(group.items, b)} | rest]
     end)
     |> Enum.map(&%{&1 | items: Enum.reverse(&1.items)})
+    # A heading with nothing under it shows nothing to participants (Jose,
+    # 2026-11-15: a new event's page starts as a lone "Welcome"); the
+    # builder's preview keeps it, so a heading just added stays visible
+    |> Enum.reject(&(&1.items == [] and not preview?))
     |> Enum.reverse()
   end
 

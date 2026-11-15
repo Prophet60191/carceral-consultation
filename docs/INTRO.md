@@ -152,6 +152,14 @@ removed in the builder's Banner section (drop zone, description for screen
 readers, Save banner); copied with the page into the library, from it, and
 when an event is duplicated.
 
+## Layout (2026-11-15, Jose)
+
+- **1180 px and wider:** the brand pill is centered at the top, with the ticket on the left (520 px) and the cards on the right (600 px). The ticket stays in view (sticky) while the cards scroll, so the name and countdown are always visible.
+- **Narrower:** one centered column, ticket above cards, both the same width (up to 560 px). Phones keep 16 px side margins.
+- **No cards** (or only headings with nothing under them): the ticket stands alone, centered.
+- **Headings with nothing under them** are hidden from participants. A new event's page starts as a lone "Welcome". The builder's preview still shows them, so a heading just added stays visible while you build.
+- Styles: `assets/css/ticket.css`, "Intro layout". Checked from 1440 px down to a phone, with no sideways scrolling.
+
 ## Messages before the start (2026-11-15, Jose)
 
 On computers (any device with a mouse or trackpad, at any window width; a narrowed browser window still gets it, Jose 2026-11-15), when **Allow messages** is on, a chat bubble sits in the bottom-left corner of the intro page.

@@ -220,7 +220,13 @@ defmodule ClaperWeb.IntroStartTest do
     a = phone(event, "phone-a")
     {:ok, builder, _} = live(conn, ~p"/e/#{event.code}/intro?add=heading")
     builder |> form("#block-form", block: %{text: "Doors open at six"}) |> render_submit()
+    # A heading shows to participants once something is under it
+    refute has_element?(a, "#intro h2", "Doors open at six")
+
+    {:ok, builder, _} = live(conn, ~p"/e/#{event.code}/intro?add=text")
+    builder |> form("#block-form", block: %{body: "Coffee in the lobby."}) |> render_submit()
     assert has_element?(a, "#intro h2", "Doors open at six")
+    assert has_element?(a, "#intro .intro-blocks", "Coffee in the lobby.")
   end
 
   test "the countdown runs to the scheduled start, then reads Starting soon", %{user: user} do
@@ -240,5 +246,24 @@ defmodule ClaperWeb.IntroStartTest do
     b = phone(past, "phone-b")
     refute has_element?(b, "#intro .cd-row")
     assert has_element?(b, "#intro .intro-soon", "Starting soon")
+  end
+
+  test "a heading with nothing under it shows nothing; the ticket then stands alone", %{
+    event: event
+  } do
+    page = Intro.get_event_page(event) |> Claper.Repo.preload(:blocks)
+    for b <- page.blocks, do: Claper.Repo.delete!(b)
+    {:ok, _} = Intro.add_block(page, "heading", %{"text" => "Welcome"})
+
+    a = phone(event, "phone-heading")
+    refute has_element?(a, "#intro .intro-heading", "Welcome")
+    refute has_element?(a, "#intro .intro-blocks")
+    assert has_element?(a, "#intro .intro-layout.intro-layout-single")
+
+    {:ok, _} = Intro.add_block(page, "text", %{"body" => "Glad you are here."})
+    b = phone(event, "phone-heading-2")
+    assert has_element?(b, "#intro .intro-heading", "Welcome")
+    assert has_element?(b, "#intro .intro-blocks", "Glad you are here.")
+    refute has_element?(b, "#intro .intro-layout-single")
   end
 end

@@ -152,6 +152,21 @@ removed in the builder's Banner section (drop zone, description for screen
 readers, Save banner); copied with the page into the library, from it, and
 when an event is duplicated.
 
+## Cards (2026-11-15, Jose)
+
+Below the ticket, every block is its own card, shaped for its kind (`IntroLive.Components.page/1`; styles in `assets/css/ticket.css`, "Intro cards"). Before this, all the blocks between two headings shared one card.
+
+- **Heading:** a section title above its cards, not a card.
+- **Text:** a card.
+- **Image:** edge to edge across the top of its card, with the caption under it.
+- **Stats:** stats next to each other share a row, three across (two on a phone, where a leftover one takes the full row).
+- **Agenda:** an "Agenda" label, with times in their own column.
+- **Link:** the whole card opens it, showing the site's name and an arrow, and it lifts under the mouse.
+- **Divider:** a quiet line between cards.
+- **Interactions** (poll, quiz, form, word cloud, web content): a label saying which kind, then the question.
+
+Groups fade up one after another when the page opens, with no motion when the device asks for less. The builder's preview uses the same component. All text on the ticket and intro page is at least 12 px; the countdown labels, ticket details, code label and footer were raised from 10–11 px.
+
 ## Hiding the brand (2026-11-15, Jose)
 
 The builder's first setting, **Show the brand at the top**, is a switch row that is on by default (`intro_pages.show_brand`). Off removes the brand pill (the mark and name from Admin › Brand) above the ticket card, on participants' phones and in the preview at once. It is copied with the page into and out of the library, and when an event is duplicated. The footer's "Powered by Claper" and "About this app" stay: they are the license notices (AGPL-3.0), not branding. The big screen's join page before the start keeps its own brand.

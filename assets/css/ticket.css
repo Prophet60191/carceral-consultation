@@ -241,7 +241,7 @@
 }
 .ticket-stage .cd-label {
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
     margin-top: 8px;
@@ -270,7 +270,7 @@
     gap: 5px;
 }
 .ticket-stage .meta-k {
-    font-size: 10px;
+    font-size: 12px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: color-mix(in srgb, var(--paper-ink) 50%, transparent);
@@ -305,7 +305,7 @@
 }
 .ticket-stage .code-label {
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     color: color-mix(in srgb, var(--paper-ink) 60%, transparent);
@@ -328,7 +328,7 @@
     align-items: center;
     gap: 10px;
     font-family: var(--mono);
-    font-size: 11px;
+    font-size: 12px;
     letter-spacing: 0.2em;
     text-transform: uppercase;
     text-decoration: none;
@@ -445,4 +445,211 @@
     aspect-ratio: 2 / 1;
     object-fit: cover;
     border-radius: 18px 18px 0 0;
+}
+
+/* ============================================================
+   Intro cards (Jose, 2026-11-15): every block below the ticket
+   is its own card, shaped for its kind (ClaperWeb.IntroLive.
+   Components.page/1). Theme roles only, so both themes work.
+   ============================================================ */
+.ticket-stage .intro-page {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+.ticket-stage .intro-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+.ticket-stage .intro-heading {
+    margin: 4px 4px 2px;
+    font-size: 1.5rem;
+    font-weight: 800;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    color: var(--color-base-content);
+}
+.ticket-stage .intro-card {
+    position: relative;
+    display: block;
+    margin: 0;
+    padding: 20px 22px;
+    border: 1px solid var(--color-line);
+    border-radius: 16px;
+    background:
+        linear-gradient(
+            180deg,
+            color-mix(in srgb, var(--color-sheen) 3%, transparent),
+            transparent 40%
+        ),
+        var(--color-base-200);
+    box-shadow: var(--shadow-md);
+    color: var(--color-base-content);
+}
+
+/* What an interaction or agenda card is, above its content */
+.ticket-stage .intro-kind {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 14px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--color-muted);
+}
+
+/* Image: edge to edge across the top, caption under it */
+.ticket-stage .intro-image {
+    padding: 0;
+    overflow: hidden;
+}
+.ticket-stage .intro-image img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+}
+.ticket-stage .intro-image figcaption {
+    padding: 12px 22px 14px;
+    font-size: 0.875rem;
+    line-height: 1.4;
+    color: var(--color-muted);
+}
+
+/* Stats next to each other share a row */
+.ticket-stage .intro-stats {
+    display: grid;
+    gap: 12px;
+}
+.ticket-stage .intro-stats-2,
+.ticket-stage .intro-stats-3 {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+@media (min-width: 480px) {
+    .ticket-stage .intro-stats-3 {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+}
+/* On a phone (two across), a stat left alone on its row takes the whole row */
+@media (max-width: 479px) {
+    .ticket-stage .intro-stats > .intro-stat:last-child:nth-child(odd) {
+        grid-column: 1 / -1;
+    }
+}
+.ticket-stage .intro-stat {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 18px 20px;
+}
+.ticket-stage .intro-stat-value {
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+}
+.ticket-stage .intro-stat-label {
+    font-size: 0.875rem;
+    line-height: 1.35;
+    color: var(--color-muted);
+}
+
+/* Agenda: times in their own column */
+.ticket-stage .intro-agenda ol {
+    display: flex;
+    flex-direction: column;
+    margin: 0 -22px -20px;
+}
+.ticket-stage .intro-agenda li {
+    display: flex;
+    align-items: baseline;
+    gap: 16px;
+    padding: 12px 22px;
+    border-top: 1px solid var(--color-line);
+}
+.ticket-stage .intro-agenda-time {
+    flex: 0 0 5.5rem;
+    font-family: var(--mono);
+    font-size: 0.8125rem;
+    font-variant-numeric: tabular-nums;
+    color: var(--color-muted);
+}
+.ticket-stage .intro-agenda-title {
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+/* Link: the whole card opens it; it lifts a little under the mouse */
+.ticket-stage .intro-link {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    text-decoration: none;
+    transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.ticket-stage .intro-link:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+    border-color: var(--color-line-strong);
+}
+.ticket-stage .intro-link:focus-visible {
+    outline: 2px solid var(--color-base-content);
+    outline-offset: 2px;
+}
+.ticket-stage .intro-link-label {
+    font-size: 1rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+.ticket-stage .intro-link-host {
+    margin-top: 2px;
+    font-size: 0.875rem;
+    color: var(--color-muted);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* A divider: a quiet break between cards */
+.ticket-stage .intro-divider {
+    margin: 6px 24px;
+    border: 0;
+    border-top: 1px solid var(--color-line);
+}
+
+/* Cards fade up one after another when the page opens */
+@keyframes intro-rise {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+.ticket-stage .intro-group {
+    animation: intro-rise 0.45s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.ticket-stage .intro-group:nth-child(2) { animation-delay: 0.07s; }
+.ticket-stage .intro-group:nth-child(3) { animation-delay: 0.14s; }
+.ticket-stage .intro-group:nth-child(4) { animation-delay: 0.21s; }
+.ticket-stage .intro-group:nth-child(5) { animation-delay: 0.28s; }
+.ticket-stage .intro-group:nth-child(n + 6) { animation-delay: 0.35s; }
+
+@media (prefers-reduced-motion: reduce) {
+    .ticket-stage .intro-group {
+        animation: none;
+    }
+    .ticket-stage .intro-link {
+        transition: none;
+    }
+    .ticket-stage .intro-link:hover {
+        transform: none;
+    }
 }

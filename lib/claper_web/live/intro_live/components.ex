@@ -111,23 +111,32 @@ defmodule ClaperWeb.IntroLive.Components do
   attr :answers, :map, default: %{}
   attr :interactive, :boolean, default: false
 
+  @doc """
+  The intro page's blocks (Jose, 2026-11-15): every block is its own card,
+  shaped for its kind. A heading is a section title above its cards (not a
+  card); stats next to each other share a row; a divider is a break between
+  groups. Cards fade up one after another when the page opens (not with
+  reduced motion). Styles: `assets/css/ticket.css`, "Intro cards".
+  """
   def page(assigns) do
-    assigns = assign(assigns, :sections, sections(assigns.blocks))
+    assigns = assign(assigns, :groups, groups(assigns.blocks))
 
     ~H"""
-    <%!-- Depth (docs/THEME.md, panels): each heading starts a card one step
-         above the page; stats rise one more step, agendas sit inset. --%>
-    <div class="flex flex-col gap-4 text-base-content">
-      <section :for={section <- @sections} class="intro-section panel">
-        <div class="flex flex-col gap-4 p-3">
-          <.block
-            :for={block <- section}
-            block={block}
-            contents={@contents}
-            answers={@answers}
-            interactive={@interactive}
-          />
-        </div>
+    <div class="intro-page text-base-content">
+      <section :for={group <- @groups} class="intro-group">
+        <h2 :if={group.heading} class="intro-heading">{group.heading.data["text"]}</h2>
+        <%= for item <- group.items do %>
+          <%= case item do %>
+            <% {:stats, stats} -> %>
+              <div class={["intro-stats", "intro-stats-#{min(length(stats), 3)}"]}>
+                <.block :for={b <- stats} block={b} />
+              </div>
+            <% {:divider, _} -> %>
+              <hr class="intro-divider" />
+            <% {:block, b} -> %>
+              <.block block={b} contents={@contents} answers={@answers} interactive={@interactive} />
+          <% end %>
+        <% end %>
       </section>
       <p :if={@blocks == []} class="text-center text-sm text-muted">
         {gettext("Nothing here yet.")}
@@ -136,22 +145,27 @@ defmodule ClaperWeb.IntroLive.Components do
     """
   end
 
-  # Blocks grouped into sections: a heading starts a new one.
-  defp sections(blocks) do
+  # Groups: a heading starts one; inside, stats next to each other share a
+  # row, and a divider stays where it is.
+  defp groups(blocks) do
     blocks
-    |> Enum.chunk_while(
-      [],
-      fn
-        %{kind: "heading"} = block, [] -> {:cont, [block]}
-        %{kind: "heading"} = block, acc -> {:cont, Enum.reverse(acc), [block]}
-        block, acc -> {:cont, [block | acc]}
-      end,
-      fn
-        [] -> {:cont, []}
-        acc -> {:cont, Enum.reverse(acc), []}
-      end
-    )
+    |> Enum.reduce([], fn
+      %{kind: "heading"} = b, acc -> [%{heading: b, items: []} | acc]
+      b, [] -> [%{heading: nil, items: [item(b)]}]
+      b, [group | rest] -> [%{group | items: add_item(group.items, b)} | rest]
+    end)
+    |> Enum.map(&%{&1 | items: Enum.reverse(&1.items)})
+    |> Enum.reverse()
   end
+
+  defp item(%{kind: "stat"} = b), do: {:stats, [b]}
+  defp item(%{kind: "divider"} = b), do: {:divider, b}
+  defp item(b), do: {:block, b}
+
+  defp add_item([{:stats, stats} | rest], %{kind: "stat"} = b),
+    do: [{:stats, stats ++ [b]} | rest]
+
+  defp add_item(items, b), do: [item(b) | items]
 
   attr :block, :map, required: true
   attr :contents, :map, default: %{}
@@ -159,13 +173,18 @@ defmodule ClaperWeb.IntroLive.Components do
   attr :interactive, :boolean, default: false
 
   # Interactions (decision 11) are drawn by the same component as on breakout
-  # phones; their taps send intro_* events (IntroLive.Answering).
+  # phones; their taps send intro_* events (IntroLive.Answering). The card
+  # says what kind it is above the question.
   def block(%{block: %{kind: kind}} = assigns)
       when kind in ["poll", "quiz", "form", "word_cloud", "embed"] do
     assigns = assign(assigns, :content, assigns.contents[assigns.block.id])
 
     ~H"""
-    <div :if={@content} id={"intro-block-#{@block.id}"}>
+    <article :if={@content} id={"intro-block-#{@block.id}"} class="intro-card intro-interaction">
+      <p class="intro-kind">
+        <.icon kind={@block.kind} class="size-4" />
+        <span>{kind_label(@block.kind)}</span>
+      </p>
       <ClaperWeb.BreakoutLive.Components.piece_input
         piece={@block}
         content={@content}
@@ -173,32 +192,29 @@ defmodule ClaperWeb.IntroLive.Components do
         editable={@interactive}
         events="intro"
       />
-    </div>
+    </article>
     """
   end
 
   def block(%{block: %{kind: "heading"}} = assigns) do
     ~H"""
-    <h2 class="text-2xl font-bold leading-tight">{@block.data["text"]}</h2>
+    <h2 class="intro-heading">{@block.data["text"]}</h2>
     """
   end
 
   def block(%{block: %{kind: "text"}} = assigns) do
     ~H"""
-    <p class="whitespace-pre-line text-base leading-relaxed" phx-no-format>{@block.data["body"]}</p>
+    <article class="intro-card">
+      <p class="whitespace-pre-line text-base leading-relaxed" phx-no-format>{@block.data["body"]}</p>
+    </article>
     """
   end
 
   def block(%{block: %{kind: "image"}} = assigns) do
     ~H"""
-    <figure class="flex flex-col gap-2">
-      <img
-        src={@block.data["src"]}
-        alt={@block.data["alt"] || ""}
-        class="w-full rounded-xl border border-line object-cover"
-        loading="lazy"
-      />
-      <figcaption :if={@block.data["caption"] not in [nil, ""]} class="text-sm text-muted">
+    <figure class="intro-card intro-image">
+      <img src={@block.data["src"]} alt={@block.data["alt"] || ""} loading="lazy" />
+      <figcaption :if={@block.data["caption"] not in [nil, ""]}>
         {@block.data["caption"]}
       </figcaption>
     </figure>
@@ -207,44 +223,76 @@ defmodule ClaperWeb.IntroLive.Components do
 
   def block(%{block: %{kind: "stat"}} = assigns) do
     ~H"""
-    <div class="flex flex-col gap-1 rounded-xl border border-line bg-base-300 p-4 shadow-md">
-      <p class="text-4xl font-extrabold leading-none tabular-nums">{@block.data["value"]}</p>
-      <p class="text-sm text-muted">{@block.data["label"]}</p>
+    <div class="intro-card intro-stat">
+      <p class="intro-stat-value">{@block.data["value"]}</p>
+      <p class="intro-stat-label">{@block.data["label"]}</p>
     </div>
     """
   end
 
   def block(%{block: %{kind: "agenda"}} = assigns) do
     ~H"""
-    <ol class="panel-inset flex flex-col divide-y divide-line">
-      <li :for={item <- @block.data["items"] || []} class="flex gap-4 px-4 py-3">
-        <span :if={item["time"] != ""} class="w-20 shrink-0 text-sm tabular-nums text-muted">
-          {item["time"]}
-        </span>
-        <span class="text-base">{item["title"]}</span>
-      </li>
-    </ol>
+    <article class="intro-card intro-agenda">
+      <p class="intro-kind">
+        <.icon kind="agenda" class="size-4" />
+        <span>{kind_label("agenda")}</span>
+      </p>
+      <ol>
+        <li :for={item <- @block.data["items"] || []}>
+          <span :if={item["time"] != ""} class="intro-agenda-time">{item["time"]}</span>
+          <span class="intro-agenda-title">{item["title"]}</span>
+        </li>
+      </ol>
+    </article>
     """
   end
 
   def block(%{block: %{kind: "link"}} = assigns) do
+    assigns = assign(assigns, :host, link_host(assigns.block.data["url"]))
+
     ~H"""
     <a
       href={@block.data["url"]}
       target="_blank"
       rel="noopener noreferrer"
-      class="btn btn-outline w-full"
+      class="pressable intro-card intro-link"
     >
-      {@block.data["label"]}
+      <span class="flex min-w-0 flex-col">
+        <span class="intro-link-label">{@block.data["label"]}</span>
+        <span :if={@host} class="intro-link-host">{@host}</span>
+      </span>
+      <svg
+        class="size-5 shrink-0"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="2"
+        stroke="currentColor"
+        aria-hidden="true"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" d="M7 17 17 7M8 7h9v9" />
+      </svg>
     </a>
     """
   end
 
   def block(%{block: %{kind: "divider"}} = assigns) do
     ~H"""
-    <hr class="border-line" />
+    <hr class="intro-divider" />
     """
   end
+
+  # The site's name under a link's label ("nyc.gov"), so people know where it goes
+  defp link_host(url) when is_binary(url) do
+    case URI.parse(url) do
+      %URI{host: host} when is_binary(host) and host != "" ->
+        String.replace_prefix(host, "www.", "")
+
+      _ ->
+        nil
+    end
+  end
+
+  defp link_host(_), do: nil
 
   @doc "A block kind in words."
   def kind_label("heading"), do: gettext("Heading")

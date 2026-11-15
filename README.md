@@ -10,18 +10,19 @@ It was built for workshops on incarceration, parole and clemency led by formerly
 - Join with a short code or a QR code, on any phone.
 - Follow the slides, send messages and replies, react, and answer polls, quizzes, forms and word clouds.
 - Work in breakout groups: tasks one at a time, a shared group answer, a timer.
-- See an intro page before the event starts, with its own questions.
+- See an intro page before the event starts: the event's ticket with a countdown, then cards with the welcome, images, key numbers, the agenda, links and questions to answer.
 
 **For facilitators**
 - Upload slides (PDF or PowerPoint) or show videos, Google Slides, Canva or any website.
 - A manager view with the slides, the interactions on each slide, and live results. A presenter view for the big screen.
 - **Breakout groups:** a builder and a library for breakout material, a control room while groups work, and results with a CSV export.
-- **Intro page:** a page builder for before the start, with Start Event when you're ready.
+- **Intro page:** a page builder for before the start, with a live phone preview, a library of reusable pages, an optional banner, and a switch to hide the brand. Start Event when you're ready.
 - Statistics and exports after the event.
 
 **For administrators**
 - **Brand page:** name, short mark, description, logo, mark, browser icon, landing photo, home-screen name, privacy contact and source code link.
 - Users invited by email (no admin-set passwords), with roles, sign-out-everywhere and two-step reset.
+- See and run every event (Admin › Events › Open): manage, present, edit, end or delete any event, while the owner stays the owner.
 - An Audit Log of sign-ins, account changes and admin actions.
 
 **Security and privacy**
@@ -30,6 +31,11 @@ It was built for workshops on incarceration, parole and clemency led by formerly
 - Strict security headers, real visitor addresses behind a trusted proxy, and HTTPS settings.
 - A privacy page that describes what the copy keeps. Sign-in records are deleted automatically after a year (adjustable).
 - Saving to a phone's home screen gives a proper icon and name.
+
+**Design**
+- Dark and warm light themes (Dark | Light | System), every color a checked, readable theme role.
+- One look for every control, from shadcn/ui's base-nova style: buttons, switches, form fields, toasts and tooltips (on hover and keyboard focus). A check enforces it (`scripts/theme/check_theme.sh`).
+- Show/hide buttons on every password field, and browsers suggest strong passwords when choosing one.
 
 The design and the reasons behind it are in [`docs/`](docs/):
 - [THEME.md](docs/THEME.md): colors and controls

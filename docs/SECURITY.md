@@ -345,3 +345,12 @@ Added 2026-11-15, before the app went public.
   - remembered devices not seen in that time
   
   Event content is kept until the event is deleted, and accounts until they are deleted. The privacy page states the number of days in use.
+
+## Password fields
+
+Added 2026-11-15 (`ClaperWeb.Component.PasswordReveal`, `assets/js/password_reveal.js`).
+
+- **Show/hide:** every password field has an eye button. It covers sign-in, the invitation, the password reset, sign-up, confirm-it's-you, My account (change and set password, the LMS local password) and the admin's secret fields.
+  - On live pages it uses LiveView JS commands, so a shown password stays shown through the page's redraws while typing.
+  - Sending a form hides its passwords again, so browsers still offer to save them.
+- **Browser suggestions:** fields where someone chooses a password carry `autocomplete="new-password"`, `minlength="15"` and Safari's `passwordrules="minlength: 15;"`, matching the password rules. A hidden `autocomplete="username"` field with the account's email tells the browser which account the password belongs to. Together these let Safari, Chrome and password managers suggest a strong password and save it under the right account. Sign-in fields use `autocomplete="current-password"`.

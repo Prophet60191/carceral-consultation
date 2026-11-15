@@ -25,7 +25,8 @@
                 <label for="reauth_password" class="block text-sm font-medium text-base-content">
                   {gettext("Password")}
                 </label>
-                <div class="mt-1">
+                <ClaperWeb.Component.PasswordReveal.account_hint email={@current_user.email} />
+                <div class="relative mt-1">
                   <input
                     id="reauth_password"
                     name="reauth[password]"
@@ -33,8 +34,9 @@
                     autocomplete="current-password"
                     required
                     autofocus
-                    class="input"
+                    class="input pr-11"
                   />
+                  <ClaperWeb.Component.PasswordReveal.button for="reauth_password" />
                 </div>
               </div>
 

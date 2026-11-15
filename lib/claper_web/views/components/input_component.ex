@@ -284,17 +284,34 @@ defmodule ClaperWeb.Component.Input do
       |> assign_new(:placeholder, fn -> false end)
       |> assign_new(:labelClass, fn -> "text-base-content" end)
       |> assign_new(:fieldClass, fn -> "" end)
+      # :new for "choose a password" (browsers suggest a strong one),
+      # :current for signing in (saved passwords fill in)
+      |> assign_new(:purpose, fn -> :current end)
+
+    assigns =
+      assign(assigns,
+        field_attrs:
+          if(assigns.purpose == :new,
+            do: ClaperWeb.Component.PasswordReveal.new_password_attrs(),
+            else: [autocomplete: "current-password"]
+          )
+      )
 
     ~H"""
     <div class="relative">
       {label(@form, @key, @name, class: "block text-sm font-medium #{@labelClass}")}
-      <div class="mt-1">
-        {password_input(@form, @key,
-          required: @required,
-          autofocus: @autofocus,
-          placeholder: @placeholder,
-          class: "input #{@fieldClass}"
+      <div class="relative mt-1">
+        {password_input(
+          @form,
+          @key,
+          [
+            required: @required,
+            autofocus: @autofocus,
+            placeholder: @placeholder,
+            class: "input pr-11 #{@fieldClass}"
+          ] ++ @field_attrs
         )}
+        <ClaperWeb.Component.PasswordReveal.button for={input_id(@form, @key)} />
       </div>
       <%= if Keyword.has_key?(@form.errors, @key) do %>
         <p class="text-error text-sm">{error_tag(@form, @key)}</p>

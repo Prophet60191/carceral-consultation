@@ -261,14 +261,17 @@ defmodule ClaperWeb.Landing do
           <label for="user_password" class="block text-sm font-medium text-base-content">
             {gettext("Password")}
           </label>
-          <input
-            id="user_password"
-            name="user[password]"
-            type="password"
-            autocomplete="current-password"
-            required
-            class="input mt-1"
-          />
+          <div class="relative mt-1">
+            <input
+              id="user_password"
+              name="user[password]"
+              type="password"
+              autocomplete="current-password"
+              required
+              class="input pr-11"
+            />
+            <ClaperWeb.Component.PasswordReveal.button for="user_password" />
+          </div>
         </div>
         <button type="submit" class="btn btn-primary w-full">{gettext("Log in")}</button>
       </.form>

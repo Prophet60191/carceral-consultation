@@ -45,7 +45,7 @@ defmodule ClaperWeb.Component.TextInput do
   attr :class, :string, default: nil
 
   attr :rest, :global,
-    include: ~w(phx-debounce phx-blur inputmode pattern step min max readonly disabled)
+    include: ~w(phx-debounce phx-blur inputmode pattern step min max readonly disabled passwordrules)
 
   slot :trailing, doc: "content rendered to the right of the input, e.g. a remove button"
 
@@ -57,7 +57,7 @@ defmodule ClaperWeb.Component.TextInput do
       <label :if={@label} for={input_id(@form, @key)} class="text-sm font-bold text-base-content">
         {@label}
       </label>
-      <div class="flex items-center gap-2">
+      <div class={["flex items-center gap-2", @type == "password" && "relative"]}>
         <input
           type={@type}
           name={input_name(@form, @key)}
@@ -73,9 +73,14 @@ defmodule ClaperWeb.Component.TextInput do
             "input w-full",
             size_class(@size),
             @errors != [] && "input-error",
+            @type == "password" && "pr-11",
             @class
           ]}
           {@rest}
+        />
+        <ClaperWeb.Component.PasswordReveal.button
+          :if={@type == "password"}
+          for={input_id(@form, @key)}
         />
         {render_slot(@trailing)}
       </div>

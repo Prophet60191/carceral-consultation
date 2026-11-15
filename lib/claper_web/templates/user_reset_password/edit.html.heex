@@ -34,8 +34,10 @@
                 } />
               <% end %>
 
+              <ClaperWeb.Component.PasswordReveal.account_hint email={@reset_user.email} />
               <div class="space-y-2">
                 <ClaperWeb.Component.Input.password
+                  purpose={:new}
                   form={f}
                   key={:password}
                   labelClass="text-base-content"
@@ -52,6 +54,7 @@
               </div>
 
               <ClaperWeb.Component.Input.password
+                purpose={:new}
                 form={f}
                 key={:password_confirmation}
                 labelClass="text-base-content"

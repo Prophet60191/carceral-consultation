@@ -106,6 +106,7 @@
             id="update_password"
             class="mt-5 space-y-4"
           >
+            <ClaperWeb.Component.PasswordReveal.account_hint email={@current_user.email} />
             {hidden_input(f, :action, name: "action", value: "update_password")}
 
             <div class="md:flex md:items-end gap-x-2">
@@ -124,6 +125,8 @@
                 label={gettext("New password")}
                 required
                 autocomplete="new-password"
+                minlength="15"
+                passwordrules="minlength: 15;"
               />
             </div>
 
@@ -153,6 +156,7 @@
             id="set_password"
             class="mt-5 space-y-4"
           >
+            <ClaperWeb.Component.PasswordReveal.account_hint email={@current_user.email} />
             {hidden_input(f, :action, name: "action", value: "set_password")}
 
             <div class="md:flex md:items-end gap-x-2">
@@ -163,6 +167,8 @@
                 label={gettext("New password")}
                 required
                 autocomplete="new-password"
+                minlength="15"
+                passwordrules="minlength: 15;"
               />
 
               <.text_field
@@ -172,6 +178,8 @@
                 label={gettext("Confirm password")}
                 required
                 autocomplete="new-password"
+                minlength="15"
+                passwordrules="minlength: 15;"
               />
             </div>
 
@@ -533,14 +541,18 @@
                         )}
                       </p>
                       <input type="hidden" name="mapping_id" value={account.id} />
-                      <input
-                        type="password"
-                        name="password"
-                        autocomplete="current-password"
-                        aria-label={gettext("Local password")}
-                        class="input input-bordered input-sm"
-                        required
-                      />
+                      <div class="relative">
+                        <input
+                          id={"lms-password-#{account.id}"}
+                          type="password"
+                          name="password"
+                          autocomplete="current-password"
+                          aria-label={gettext("Local password")}
+                          class="input input-bordered input-sm pr-11"
+                          required
+                        />
+                        <ClaperWeb.Component.PasswordReveal.button for={"lms-password-#{account.id}"} />
+                      </div>
                       <button type="submit" class="btn btn-primary btn-sm">
                         {gettext("Approve LMS sign-in")}
                       </button>

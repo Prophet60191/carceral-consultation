@@ -120,6 +120,15 @@ defmodule ClaperWeb.AdminLive.AccountManagementTest do
       assert page =~ "Choose your password"
       assert page =~ user.email
 
+      # Browsers can suggest a strong password and save it for this account
+      assert page =~ ~s(autocomplete="new-password")
+      assert page =~ ~s(minlength="15")
+      assert page =~ ~s(passwordrules="minlength: 15;")
+      assert page =~ ~s(value="#{user.email}" autocomplete="username")
+      # Each password field has its show/hide button
+      assert page =~ ~s(aria-controls="user_password")
+      assert page =~ ~s(aria-controls="user_password_confirmation")
+
       short =
         post(fresh_conn(), ~p"/users/invitation/#{token}", %{
           "user" => %{"password" => "too short", "password_confirmation" => "too short"}

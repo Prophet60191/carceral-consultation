@@ -25,6 +25,7 @@ import CustomHooks from "./hooks";
 import { installAlertDialog } from "./alert_dialog";
 import { installToaster } from "./toaster";
 import { installLanding } from "./landing";
+import { installPasswordReveal } from "./password_reveal";
 import "./admin-charts.js";
 
 // Get supported locales from backend configuration or fallback to default list
@@ -1304,3 +1305,6 @@ document.addEventListener("click", (e) => {
 
 // The landing page's Join / Log in panels (assets/js/landing.js)
 installLanding();
+
+// Show / hide buttons on password fields (assets/js/password_reveal.js)
+installPasswordReveal(liveSocket);

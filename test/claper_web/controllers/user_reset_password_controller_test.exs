@@ -58,6 +58,9 @@ defmodule ClaperWeb.UserResetPasswordControllerTest do
       assert response =~ "action=\"/users/reset_password/#{token}\""
       assert response =~ "name=\"user[password]\""
       assert response =~ "name=\"user[password_confirmation]\""
+      assert response =~ ~s(autocomplete="new-password")
+      assert response =~ ~s(value="#{user.email}" autocomplete="username")
+      assert response =~ ~s(data-password-reveal)
     end
   end
 

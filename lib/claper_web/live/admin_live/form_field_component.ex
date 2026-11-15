@@ -36,19 +36,13 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
                 @form,
                 @field,
                 [
-                  class: "input w-full pr-10",
+                  class: "input w-full pr-11",
                   placeholder: @placeholder,
                   required: @required,
                   id: "password-field-#{@field}"
                 ] ++ @extra_attrs
               )}
-              <button
-                type="button"
-                class="btn btn-ghost btn-square btn-xs absolute right-2 top-1/2 -translate-y-1/2 text-muted"
-                phx-click={toggle_password_visibility("password-field-#{@field}")}
-              >
-                <i class="fas fa-eye"></i>
-              </button>
+              <ClaperWeb.Component.PasswordReveal.button for={"password-field-#{@field}"} />
             </div>
           <% "textarea" -> %>
             {textarea(
@@ -175,10 +169,5 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
   @impl true
   def handle_event("file_selected", %{"_target" => [_field_name]}, socket) do
     {:noreply, assign(socket, selected_file: gettext("File selected"))}
-  end
-
-  defp toggle_password_visibility(field_id) do
-    %Phoenix.LiveView.JS{}
-    |> Phoenix.LiveView.JS.dispatch("toggle-password", to: "##{field_id}")
   end
 end

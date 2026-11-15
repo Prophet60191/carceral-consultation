@@ -46,17 +46,21 @@
           <span class="label-text font-medium">{gettext("Mistral API Key")}</span>
         </label>
         <div class="flex min-w-0 flex-col gap-2 sm:flex-row">
-          <input
-            type="password"
-            name="transcription_api_key"
-            placeholder={
-              if @api_key_configured,
-                do: gettext("Leave blank to keep current key"),
-                else: gettext("Enter your Mistral API key")
-            }
-            class="input w-full min-w-0 sm:flex-1"
-            autocomplete="off"
-          />
+          <div class="relative min-w-0 sm:flex-1">
+            <input
+              id="transcription-api-key"
+              type="password"
+              name="transcription_api_key"
+              placeholder={
+                if @api_key_configured,
+                  do: gettext("Leave blank to keep current key"),
+                  else: gettext("Enter your Mistral API key")
+              }
+              class="input w-full min-w-0 pr-11"
+              autocomplete="off"
+            />
+            <ClaperWeb.Component.PasswordReveal.button for="transcription-api-key" />
+          </div>
           <button
             :if={@api_key_configured}
             type="button"

@@ -45,7 +45,8 @@ defmodule ClaperWeb.Component.TextInput do
   attr :class, :string, default: nil
 
   attr :rest, :global,
-    include: ~w(phx-debounce phx-blur inputmode pattern step min max readonly disabled passwordrules)
+    include:
+      ~w(phx-debounce phx-blur inputmode pattern step min max readonly disabled passwordrules)
 
   slot :trailing, doc: "content rendered to the right of the input, e.g. a remove button"
 

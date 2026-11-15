@@ -231,6 +231,26 @@ dimming layers, and clickable table rows.
 In Elixir, `ClaperWeb.Component.Button` (`<.button style={:outline} size={:sm}>`)
 produces the same classes.
 
+## Tooltips
+
+These follow shadcn/ui's Tooltip in the base-nova style (2026-11-15). There is one look for every hover and focus hint.
+- **The look:** a small label with an arrow, in the theme's colors inverted. The main text color is the background and the page color is the text, so it stands out in both themes. It fades and scales in, without motion if the device asks for less motion.
+- **Adding one:** put attributes on the element, with no component to wrap:
+  ```heex
+  <button class="btn btn-ghost btn-square" aria-label={gettext("Pin")} data-tooltip={gettext("Pin")}>
+  <button ... data-tooltip={gettext("Start event")} data-tooltip-side="bottom">
+  <button ... data-tooltip={gettext("Show messages")} data-tooltip-shortcut="W">
+  ```
+  The side is `top` by default, or `bottom`, `left` or `right`. It flips to the other side when there's no room, and it slides to stay inside the window. A shortcut shows as a key beside the text.
+- **Behavior** (`assets/js/tooltip.js`):
+  - It opens on mouse hover and on keyboard focus. A tap on a touch screen doesn't open it, because there the tap is the action.
+  - Escape, clicking, scrolling or the page changing closes it.
+  - While open, screen readers read it with the control (`aria-describedby`).
+  - Icon-only buttons still need their own `aria-label`: the tooltip is extra, not the name.
+- **Disabled controls** don't receive the mouse, so put `data-tooltip` on a wrapping `<span>`, as shadcn does.
+- **Never clipped:** the bubble is one shared element (`#cc-tooltip`) in the browser's top layer, above every panel and dialog. Styles live in `assets/css/tooltip.css`.
+- **The check enforces it:** daisyUI's `tooltip` class, `data-tip`, and `title=` hints on buttons and links fail `scripts/theme/check_theme.sh`.
+
 ## Light theme
 
 A second theme, `carceral-light`, uses the same roles with light values. Since

@@ -48,7 +48,7 @@ defmodule ClaperWeb.Component.PasswordReveal do
       aria-controls={@for}
       aria-pressed="false"
       aria-label={@show_label}
-      title={@show_label}
+      data-tooltip={@show_label}
       data-label-show={@show_label}
       data-label-hide={@hide_label}
       data-show-js={@show_js}
@@ -122,6 +122,6 @@ defmodule ClaperWeb.Component.PasswordReveal do
     JS.set_attribute({"type", if(show?, do: "text", else: "password")}, to: "##{id}")
     |> JS.set_attribute({"aria-pressed", to_string(show?)})
     |> JS.set_attribute({"aria-label", label})
-    |> JS.set_attribute({"title", label})
+    |> JS.set_attribute({"data-tooltip", label})
   end
 end

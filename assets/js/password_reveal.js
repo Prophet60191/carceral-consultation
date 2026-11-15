@@ -25,7 +25,7 @@ function set(liveSocket, button, show) {
     input.type = show ? "text" : "password";
     button.setAttribute("aria-pressed", String(show));
     button.setAttribute("aria-label", label);
-    button.setAttribute("title", label);
+    button.setAttribute("data-tooltip", label);
   }
 }
 

@@ -11,7 +11,7 @@ defmodule ClaperWeb.AdminLive.TableActionsComponent do
           phx-click="view_item"
           phx-target={@myself}
           class="btn btn-ghost btn-square btn-sm text-primary"
-          title="View"
+          data-tooltip="View"
         >
           <i class="fas fa-eye"></i>
           <span class="sr-only">View</span>
@@ -24,7 +24,7 @@ defmodule ClaperWeb.AdminLive.TableActionsComponent do
           phx-click="edit_item"
           phx-target={@myself}
           class="btn btn-ghost btn-square btn-sm text-primary"
-          title="Edit"
+          data-tooltip="Edit"
         >
           <i class="fas fa-edit"></i>
           <span class="sr-only">Edit</span>
@@ -37,7 +37,7 @@ defmodule ClaperWeb.AdminLive.TableActionsComponent do
           phx-click="delete_item"
           phx-target={@myself}
           class="btn btn-ghost btn-square btn-sm text-error"
-          title="Delete"
+          data-tooltip="Delete"
           data-confirm-title={gettext("Delete this item?")}
           data-confirm={@delete_confirm_message || gettext("This cannot be undone.")}
           data-confirm-action={gettext("Delete")}
@@ -54,7 +54,7 @@ defmodule ClaperWeb.AdminLive.TableActionsComponent do
           phx-click="duplicate_item"
           phx-target={@myself}
           class="btn btn-ghost btn-square btn-sm text-success"
-          title="Duplicate"
+          data-tooltip="Duplicate"
         >
           <i class="fas fa-copy"></i>
           <span class="sr-only">Duplicate</span>
@@ -73,7 +73,7 @@ defmodule ClaperWeb.AdminLive.TableActionsComponent do
               else: "text-muted hover:text-base-content"
             )
           ]}
-          title={if @item_archived, do: "Unarchive", else: "Archive"}
+          data-tooltip={if @item_archived, do: "Unarchive", else: "Archive"}
         >
           <i class={if @item_archived, do: "fas fa-box-open", else: "fas fa-archive"}></i>
           <span class="sr-only">{if @item_archived, do: "Unarchive", else: "Archive"}</span>
@@ -92,7 +92,7 @@ defmodule ClaperWeb.AdminLive.TableActionsComponent do
               else: "text-muted hover:text-base-content"
             )
           ]}
-          title={
+          data-tooltip={
             if @item_active,
               do: @toggle_active_title || "Deactivate",
               else: @toggle_inactive_title || "Activate"
@@ -114,7 +114,7 @@ defmodule ClaperWeb.AdminLive.TableActionsComponent do
             phx-click="toggle_dropdown"
             phx-target={@myself}
             class="btn btn-ghost btn-square btn-sm text-muted"
-            title="More actions"
+            data-tooltip="More actions"
           >
             <i class="fas fa-ellipsis-v"></i>
             <span class="sr-only">More actions</span>

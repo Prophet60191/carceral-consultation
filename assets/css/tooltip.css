@@ -1,0 +1,94 @@
+/*
+  Tooltips (2026-11-15): shadcn/ui's Tooltip, "base-nova" style. One look for
+  every hover and focus hint in the app. Behavior: assets/js/tooltip.js; how
+  to add one: docs/THEME.md, "Tooltips".
+
+  The bubble is one shared element (#cc-tooltip) shown in the browser's top
+  layer (popover), so panels with hidden overflow never cut it off. Colors
+  are theme roles, inverted: the main text color as the background, the page
+  color as the text, so it reads as "above" the page in both themes.
+*/
+
+.cc-tooltip {
+  /* The popover's own defaults (centered, bordered) are replaced */
+  inset: auto;
+  margin: 0;
+  border: 0;
+  padding: 0.375rem 0.75rem;
+  position: fixed;
+  max-width: 20rem;
+  width: max-content;
+  overflow: visible;
+  border-radius: var(--radius-field, 0.375rem);
+  background-color: var(--color-base-content);
+  color: var(--color-base-100);
+  font-size: 0.75rem;
+  line-height: 1rem;
+  font-weight: 500;
+  text-wrap: balance;
+  box-shadow: var(--shadow-md);
+  pointer-events: none;
+  display: none;
+  align-items: center;
+  gap: 0.5rem;
+
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.cc-tooltip[data-state="open"] {
+  display: inline-flex;
+}
+
+.cc-tooltip[data-state="open"][data-visible="true"] {
+  opacity: 1;
+  transform: scale(1);
+}
+
+/* Grow from the side facing the trigger */
+.cc-tooltip[data-side="top"] { transform-origin: bottom center; }
+.cc-tooltip[data-side="bottom"] { transform-origin: top center; }
+.cc-tooltip[data-side="left"] { transform-origin: center right; }
+.cc-tooltip[data-side="right"] { transform-origin: center left; }
+
+/* The arrow: a small square turned 45°, in the bubble's color */
+.cc-tooltip-arrow {
+  position: absolute;
+  width: 0.5rem;
+  height: 0.5rem;
+  background-color: inherit;
+  transform: rotate(45deg);
+  border-radius: 1px;
+}
+
+.cc-tooltip[data-side="top"] .cc-tooltip-arrow { bottom: -0.25rem; }
+.cc-tooltip[data-side="bottom"] .cc-tooltip-arrow { top: -0.25rem; }
+.cc-tooltip[data-side="left"] .cc-tooltip-arrow { right: -0.25rem; }
+.cc-tooltip[data-side="right"] .cc-tooltip-arrow { left: -0.25rem; }
+
+/* A keyboard shortcut beside the text (shadcn's "With Keyboard Shortcut") */
+.cc-tooltip-kbd {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.25rem;
+  height: 1.25rem;
+  padding: 0 0.25rem;
+  border-radius: 0.25rem;
+  background-color: color-mix(in srgb, var(--color-base-100) 18%, transparent);
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.cc-tooltip-kbd:empty {
+  display: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cc-tooltip {
+    transition: none;
+    transform: none;
+  }
+}

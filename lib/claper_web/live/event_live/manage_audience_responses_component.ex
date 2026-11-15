@@ -106,7 +106,7 @@ defmodule ClaperWeb.EventLive.ManageAudienceResponsesComponent do
           <div :if={@question_count > 0} class="flex flex-col h-full">
             <div class="px-2 py-2 flex items-center gap-x-2">
               <span class="text-xs text-muted">{gettext("Sort by:")}</span>
-              <div class="tooltip tooltip-bottom" data-tip={gettext("Show newest questions first")}>
+              <div data-tooltip-side="bottom" data-tooltip={gettext("Show newest questions first")}>
                 <button
                   class="btn btn-secondary btn-xs"
                   phx-click="sort-questions"
@@ -116,8 +116,8 @@ defmodule ClaperWeb.EventLive.ManageAudienceResponsesComponent do
                 </button>
               </div>
               <div
-                class="tooltip tooltip-bottom"
-                data-tip={gettext("Show most voted questions first")}
+                data-tooltip-side="bottom"
+                data-tooltip={gettext("Show most voted questions first")}
               >
                 <button
                   class="btn btn-secondary btn-xs"
@@ -236,7 +236,7 @@ defmodule ClaperWeb.EventLive.ManageAudienceResponsesComponent do
                     {submission.form.title}
                   </span>
                   <div class="ml-auto flex shrink-0 items-center divide-x divide-line rounded-lg border border-line opacity-0 transition-opacity group-hover:opacity-100">
-                    <div class="tooltip tooltip-bottom" data-tip={gettext("Delete")}>
+                    <div data-tooltip-side="bottom" data-tooltip={gettext("Delete")}>
                       <button
                         type="button"
                         phx-click="delete-form-submit"

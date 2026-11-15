@@ -1699,7 +1699,8 @@ defmodule ClaperWeb.EventLive.Manage do
       id={"start-event-#{if @class =~ "md:", do: "bar", else: "row"}"}
       class={["btn btn-primary btn-lg", @class]}
       phx-click="start-event"
-      title={gettext("Start event")}
+      data-tooltip-side="bottom"
+      data-tooltip={gettext("Start event")}
       aria-label={gettext("Start event")}
       data-confirm-title={gettext("Start the event?")}
       data-confirm={gettext("Everyone's phone moves from the intro page to your slides.")}
@@ -1731,7 +1732,8 @@ defmodule ClaperWeb.EventLive.Manage do
       id={"back-to-intro-#{if @class =~ "md:", do: "bar", else: "row"}"}
       class={["btn btn-secondary btn-lg", @class]}
       phx-click="back-to-intro"
-      title={gettext("Back to intro")}
+      data-tooltip-side="bottom"
+      data-tooltip={gettext("Back to intro")}
       aria-label={gettext("Back to intro")}
       data-confirm-title={gettext("Go back to the intro page?")}
       data-confirm={gettext("Everyone's phone shows the intro page again until you start the event.")}
@@ -1768,7 +1770,8 @@ defmodule ClaperWeb.EventLive.Manage do
       id={"edit-intro-#{if @class =~ "md:", do: "bar", else: "row"}"}
       class={["btn btn-secondary btn-lg", @class]}
       aria-label={gettext("Edit intro")}
-      title={gettext("Edit intro")}
+      data-tooltip-side="bottom"
+      data-tooltip={gettext("Edit intro")}
     >
       <ClaperWeb.IntroLive.Components.icon kind="text" class="size-4" />
       <span class="hidden xl:inline">{gettext("Edit intro")}</span>

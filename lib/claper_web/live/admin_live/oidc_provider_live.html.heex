@@ -152,7 +152,7 @@
                               <.link
                                 navigate={~p"/admin/oidc_providers/#{provider}/edit"}
                                 class="btn btn-link btn-sm text-primary"
-                                title={gettext("Edit provider")}
+                                data-tooltip={gettext("Edit provider")}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"
@@ -178,7 +178,7 @@
                                 data-confirm-action={gettext("Delete")}
                                 data-confirm-variant="destructive"
                                 class="btn btn-link btn-sm text-error"
-                                title={gettext("Delete provider")}
+                                data-tooltip={gettext("Delete provider")}
                               >
                                 <svg
                                   xmlns="http://www.w3.org/2000/svg"

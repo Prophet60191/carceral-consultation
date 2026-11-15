@@ -8,6 +8,7 @@
 @import './landing.css';
 @import './badges.css';
 @import './fields.css';
+@import './tooltip.css';
 
 @plugin "daisyui" {
   themes: carceral --default, carceral-light;

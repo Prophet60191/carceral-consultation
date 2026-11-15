@@ -170,7 +170,7 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
           phx-click="hide-word"
           phx-value-id={@word_cloud.id}
           phx-value-key={word.key}
-          title={gettext("Hide this word")}
+          data-tooltip={gettext("Hide this word")}
           class="btn btn-link btn-xs hover:line-through"
         >
           {word.text}<sup class="ml-0.5 text-xs font-normal text-muted">{word.count}</sup>
@@ -186,7 +186,7 @@ defmodule ClaperWeb.EventLive.ManageInteractionOptionsComponent do
             phx-click="unhide-word"
             phx-value-id={@word_cloud.id}
             phx-value-key={key}
-            title={gettext("Show this word again")}
+            data-tooltip={gettext("Show this word again")}
             class="btn btn-outline btn-xs text-muted line-through hover:no-underline"
           >
             {key}

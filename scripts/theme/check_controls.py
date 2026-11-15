@@ -16,6 +16,9 @@ This fails (exit 1) if it finds:
   - a link (<a>, <.link>, link(...)) styled to look like a button (fill,
     rounded corners, border, padding) without one of those patterns
   - daisyUI's "toggle" class (switches use .switch)
+  - daisyUI's "tooltip" class or data-tip, or a hover hint in a title=""
+    attribute on a button or link: tooltips use data-tooltip
+    (assets/js/tooltip.js, docs/THEME.md "Tooltips")
   - a non-button element (div, span, ...) with a click handler that is not a
     known pattern (dialog backdrop, full-screen scrim, clickable table row)
   - an element with role="button" that is not a standard control
@@ -127,6 +130,18 @@ def main():
             cls = c.group(1) if c else ""
             if cls and BUTTONISH.search(cls) and not APPROVED.search(cls):
                 problems.append(f"{rel}:{line_of(text, m.start())}: link(...) styled as a button without a standard class: {cls[:90]}")
+
+        # Tooltips: one look (data-tooltip), never daisyUI's or the browser's
+        for m in re.finditer(r"(?<![\w-])tooltip(?:-(?:top|bottom|left|right|open|primary|secondary|accent|info|success|warning|error))?(?=[\s\"])", text):
+            before = text[max(0, m.start() - 200):m.start()]
+            if re.search(r'class[=:]\s*["{][^"}]*$', before):
+                problems.append(f"{rel}:{line_of(text, m.start())}: daisyUI tooltip; use data-tooltip=\"...\"")
+        for m in re.finditer(r"(?<![\w-])data-tip=", text):
+            problems.append(f"{rel}:{line_of(text, m.start())}: daisyUI data-tip; use data-tooltip=\"...\"")
+        for name_re in (r"button", r"a", r"\.link"):
+            for start, _name, attrs in tags(text, name_re):
+                if re.search(r'(?<![\w-])title=(?:"|\{)', attrs):
+                    problems.append(f"{rel}:{line_of(text, start)}: hover hint in title=; use data-tooltip=\"...\"")
 
         for m in re.finditer(r"(?<![\w-])toggle(?:-(?:sm|xs|md|lg|primary|secondary|accent|success|warning|error|info))?(?=[\s\"])", text):
             before = text[max(0, m.start() - 200):m.start()]

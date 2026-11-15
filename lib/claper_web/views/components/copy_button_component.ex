@@ -11,7 +11,11 @@ defmodule ClaperWeb.Component.CopyButton do
   attr :id, :string, required: true
   attr :value, :string, required: true, doc: "what is copied"
   attr :label, :string, required: true, doc: "what the button shows"
-  attr :description, :string, required: true, doc: "for screen readers and the tooltip"
+
+  attr :description, :string,
+    required: true,
+    doc: "for screen readers and the tooltip (data-tooltip)"
+
   attr :class, :any, default: nil
 
   def copy_button(assigns) do
@@ -25,7 +29,7 @@ defmodule ClaperWeb.Component.CopyButton do
       data-copied={gettext("Copied")}
       data-prompt={gettext("Copy this:")}
       aria-label={@description}
-      title={@description}
+      data-tooltip={@description}
       class={["btn btn-secondary btn-sm shrink-0", @class]}
     >
       <svg

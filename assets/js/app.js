@@ -26,6 +26,7 @@ import { installAlertDialog } from "./alert_dialog";
 import { installToaster } from "./toaster";
 import { installLanding } from "./landing";
 import { installPasswordReveal } from "./password_reveal";
+import { installTooltips } from "./tooltip";
 import "./admin-charts.js";
 
 // Get supported locales from backend configuration or fallback to default list
@@ -1308,3 +1309,6 @@ installLanding();
 
 // Show / hide buttons on password fields (assets/js/password_reveal.js)
 installPasswordReveal(liveSocket);
+
+// Tooltips on any element with data-tooltip (assets/js/tooltip.js)
+installTooltips();

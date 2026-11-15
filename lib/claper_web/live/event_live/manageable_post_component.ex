@@ -40,7 +40,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
             :if={!@readonly}
             class="relative z-20 ml-auto flex items-center divide-x divide-line border border-line rounded-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity shrink-0"
           >
-            <div class="tooltip tooltip-bottom" data-tip={gettext("Reply")}>
+            <div data-tooltip-side="bottom" data-tooltip={gettext("Reply")}>
               <button
                 type="button"
                 class="btn btn-ghost btn-square btn-xs"
@@ -70,8 +70,8 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
               </button>
             </div>
             <div
-              class="tooltip tooltip-bottom"
-              data-tip={if @post.pinned, do: gettext("Unpin"), else: gettext("Pin")}
+              data-tooltip-side="bottom"
+              data-tooltip={if @post.pinned, do: gettext("Unpin"), else: gettext("Pin")}
             >
               <button
                 class="btn btn-ghost btn-square btn-xs"
@@ -99,7 +99,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
               </button>
             </div>
             <%= if @post.attendee_identifier do %>
-              <div class="tooltip tooltip-bottom" data-tip={gettext("Ban")}>
+              <div data-tooltip-side="bottom" data-tooltip={gettext("Ban")}>
                 <button
                   class="btn btn-ghost btn-square btn-xs"
                   phx-click="ban"
@@ -129,7 +129,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
                 </button>
               </div>
             <% else %>
-              <div class="tooltip tooltip-bottom" data-tip={gettext("Ban")}>
+              <div data-tooltip-side="bottom" data-tooltip={gettext("Ban")}>
                 <button
                   class="btn btn-ghost btn-square btn-xs"
                   phx-click="ban"
@@ -159,7 +159,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
                 </button>
               </div>
             <% end %>
-            <div class="tooltip tooltip-bottom" data-tip={gettext("Delete")}>
+            <div data-tooltip-side="bottom" data-tooltip={gettext("Delete")}>
               <button
                 class="btn btn-ghost btn-square btn-xs"
                 phx-click="delete"

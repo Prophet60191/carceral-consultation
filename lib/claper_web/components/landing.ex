@@ -127,6 +127,7 @@ defmodule ClaperWeb.Landing do
               data-landing-close
               class="btn btn-ghost btn-sm mb-6 -ml-3"
               aria-label={gettext("Close")}
+              data-overflow-ok="nudged left so its arrow lines up with the text; stays in the panel"
             >
               <svg
                 class="size-4"

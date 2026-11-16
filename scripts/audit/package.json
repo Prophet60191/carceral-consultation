@@ -1,0 +1,9 @@
+{
+  "name": "carceral-consultation-overflow-audit",
+  "private": true,
+  "description": "Finds anything wider than its box or the screen, page by page and device by device (scripts/audit/README.md)",
+  "type": "module",
+  "devDependencies": {
+    "playwright-core": "1.47.2"
+  }
+}

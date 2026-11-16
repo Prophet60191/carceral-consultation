@@ -1690,13 +1690,14 @@ defmodule ClaperWeb.EventLive.Manage do
       value={url(~p"/e/#{@event.code}")}
       label={gettext("URL")}
       description={gettext("Copy the link to this event")}
+      class="manage-copy"
     />
     <ClaperWeb.Component.CopyButton.copy_button
       id="copy-event-code"
       value={String.upcase(@event.code)}
       label={"#" <> String.upcase(@event.code)}
       description={gettext("Copy this event's code")}
-      class="font-mono tracking-wide"
+      class="manage-copy font-mono tracking-wide"
     />
     """
   end
@@ -1843,7 +1844,10 @@ defmodule ClaperWeb.EventLive.Manage do
 
     ~H"""
     <div
-      class={[ClaperWeb.Component.Tabs.segmented_group_class(), @variant == :row && "w-full"]}
+      class={[
+        ClaperWeb.Component.Tabs.segmented_group_class(),
+        @variant == :row && "pj-row w-full"
+      ]}
       role="group"
     >
       <button
@@ -1851,6 +1855,7 @@ defmodule ClaperWeb.EventLive.Manage do
         id={"openPresenter-#{@sfx}#{@event.uuid}"}
         data-url={~p"/e/#{@event.code}/presenter"}
         type="button"
+        aria-label={gettext("Open presentation")}
         class={[@item, ClaperWeb.Component.Tabs.segmented_item_class(false)]}
       >
         <svg
@@ -1867,7 +1872,9 @@ defmodule ClaperWeb.EventLive.Manage do
           />
         </svg>
         <span :if={@variant == :bar} class="hidden lg:inline">{gettext("Open presentation")}</span>
-        <span class={@variant == :bar && "lg:hidden"}>{gettext("Present")}</span>
+        <span class={[@variant == :bar && "lg:hidden", @variant == :row && "pj-present-label"]}>
+          {gettext("Present")}
+        </span>
       </button>
       <a
         href={~p"/e/#{@event.code}"}
@@ -1889,7 +1896,8 @@ defmodule ClaperWeb.EventLive.Manage do
           <path d="M5.082 14.254a8.287 8.287 0 0 0-1.308 5.135 9.687 9.687 0 0 1-1.764-.44l-.115-.04a.563.563 0 0 1-.373-.487l-.01-.121a3.75 3.75 0 0 1 3.57-4.047ZM20.226 19.389a8.287 8.287 0 0 0-1.308-5.135 3.75 3.75 0 0 1 3.57 4.047l-.01.121a.563.563 0 0 1-.373.486l-.115.04c-.567.2-1.156.349-1.764.441Z" />
         </svg>
         <span>{gettext("Join")}</span>
-        <span aria-hidden="true" class={["text-muted", @variant == :bar && "lg:hidden"]}>·</span>
+        <%!-- Phones: "Join 0", no separator or arrow, so it fits its half --%>
+        <span :if={@variant == :bar} aria-hidden="true" class="text-muted lg:hidden">·</span>
         <span
           id={"attendees-count-#{@sfx}#{@event.uuid}"}
           phx-update="ignore"
@@ -1907,6 +1915,7 @@ defmodule ClaperWeb.EventLive.Manage do
           {if @attendees_nb == 1, do: gettext("attendee"), else: gettext("attendees")}
         </span>
         <svg
+          :if={@variant == :bar}
           xmlns="http://www.w3.org/2000/svg"
           viewBox="0 0 24 24"
           fill="currentColor"

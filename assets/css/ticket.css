@@ -402,6 +402,28 @@
     }
 }
 
+/* The narrowest phones (under 400px; found by the overflow audit,
+   scripts/audit): the countdown's labels (MINUTES, SECONDS) were wider than
+   their numbers and pushed the row past the screen; tighter there */
+@media (max-width: 399.98px) {
+    .ticket-stage .cd-row {
+        gap: 6px;
+    }
+    .ticket-stage .cd-cell {
+        min-width: 0;
+    }
+    .ticket-stage .cd-num {
+        font-size: 30px;
+    }
+    .ticket-stage .cd-sep {
+        font-size: 24px;
+    }
+    .ticket-stage .cd-label {
+        font-size: 10px;
+        letter-spacing: 0.06em;
+    }
+}
+
 /* ---- The intro page (docs/INTRO.md): the ticket without its QR stub, the
    presenter's blocks below it; the page scrolls when they are long ---- */
 .ticket-stage.intro-stage {

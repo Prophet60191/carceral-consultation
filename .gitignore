@@ -50,3 +50,7 @@ priv/static/loaderio-eb3b956a176cdd4f54eb8570ce8bbb06.txt
 tailwind.config.js
 
 .omp
+
+# The overflow audit (scripts/audit/README.md)
+/scripts/audit/node_modules/
+/scripts/audit/overflow_report.json

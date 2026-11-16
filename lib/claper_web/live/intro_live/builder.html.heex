@@ -187,7 +187,7 @@
             <li
               :for={{block, i} <- Enum.with_index(@page.blocks)}
               id={"block-#{block.id}"}
-              class="flex items-center gap-3 rounded-lg border border-line bg-base-100 p-3"
+              class="flex flex-wrap items-center gap-3 rounded-lg border border-line bg-base-100 p-3"
             >
               <div class="flex size-9 shrink-0 items-center justify-center rounded-md bg-base-300 text-base-content">
                 <ClaperWeb.IntroLive.Components.icon kind={block.kind} />
@@ -202,7 +202,9 @@
                     else: ClaperWeb.IntroLive.Components.summary(block)}
                 </p>
               </div>
-              <div class="flex shrink-0 items-center gap-1">
+              <%!-- Phones: the buttons on their own line under the text (the
+                   overflow audit found them pushing the row out, 2026-11-16) --%>
+              <div class="flex shrink-0 items-center gap-1 max-sm:w-full max-sm:justify-end">
                 <button
                   type="button"
                   class="btn btn-ghost btn-square btn-sm"

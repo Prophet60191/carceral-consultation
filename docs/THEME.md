@@ -354,3 +354,15 @@ every commit that touches the interface.
 
 `scripts/theme/convert_colors.py` is the one-time converter that moved
 Claper's colors onto these roles (its rulebook is kept for the record).
+
+## Nothing wider than its box (2026-11-16)
+
+Nothing may reach past its card, field or box, or make a page wider than the
+screen: on a phone the page then slides sideways under your thumb (Jose).
+`scripts/audit/overflow_audit.mjs` checks every page at phone, tablet and
+laptop sizes and lists anything that doesn't fit; run it after layout
+changes (scripts/audit/README.md). Its first run (2026-11-16) found and
+fixed the manage header on phones (Join cut off, the code button pushed
+out), the intro countdown on the smallest phones, and the intro builder's
+block rows; it now reports nothing.
+

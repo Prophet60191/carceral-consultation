@@ -1013,9 +1013,9 @@ defmodule ClaperWeb.EventLive.Show do
   defp reply_actor(%{assigns: %{attendee_identifier: attendee_identifier, nickname: nickname}}),
     do: {:attendee, attendee_identifier, nickname}
 
-  # The red dot on the intro messenger's bubble: someone else's message
-  # arrived while it was closed, before the event started
-  defp mark_messenger_unread(%{assigns: %{started: false, messenger_open: false}} = socket, post) do
+  # The red dot on the messenger's bubble (the intro page's, and the live
+  # room's on computers): someone else's message arrived while it was closed
+  defp mark_messenger_unread(%{assigns: %{messenger_open: false}} = socket, post) do
     if own_post?(socket, post), do: socket, else: assign(socket, :messenger_unread, true)
   end
 

@@ -51,7 +51,10 @@ html[data-theme="carceral-light"] .theme-icon-moon {
   box-shadow: 0 0 0 2px var(--color-base-100);
 }
 
-.intro-messenger-panel {
+/* The glass panel: the intro page's messenger, and the live room's on
+   computers (assets/css/room_desktop.css places that one) */
+.intro-messenger-panel,
+.room-messenger-panel {
   position: fixed;
   z-index: 60;
   display: flex;
@@ -83,7 +86,8 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     visibility 0s linear 0.22s;
 }
 
-.intro-messenger[data-open="true"] .intro-messenger-panel {
+.intro-messenger[data-open="true"] .intro-messenger-panel,
+.room-messenger[data-open="true"] .room-messenger-panel {
   opacity: 1;
   visibility: visible;
   transform: none;
@@ -93,7 +97,8 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     visibility 0s;
 }
 
-.intro-messenger-head {
+.intro-messenger-head,
+.room-messenger-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -103,7 +108,9 @@ html[data-theme="carceral-light"] .theme-icon-moon {
 }
 
 /* The feed sits on the glass, not on the room's stage color */
-.intro-messenger-panel #chat-feed {
+.intro-messenger-panel #chat-feed,
+.room-messenger-panel #chat-feed,
+.room-messenger-panel #chat-panel {
   background: transparent;
 }
 
@@ -243,7 +250,8 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     background: color-mix(in srgb, var(--color-base-content) 30%, transparent);
   }
 
-  .intro-messenger-head {
+  .intro-messenger-head,
+.room-messenger-head {
     padding-top: 10px;
     touch-action: none;
   }

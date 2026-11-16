@@ -1,4 +1,6 @@
-// The intro page's messenger (Jose, 2026-11-15; ClaperWeb.EventLive.Show).
+// The messenger (Jose, 2026-11-15; ClaperWeb.EventLive.Show): the intro
+// page's and, on computers, the live room's. Its panel and bubble are found by
+// [data-messenger-panel] and [data-messenger-toggle].
 // The page decides open or closed (data-open, from the server); this hook
 // closes it on a click outside it or Escape, and, when it opens, shows the
 // newest messages (and, on computers, puts the cursor in the message box).
@@ -25,14 +27,14 @@ export const IntroMessenger = {
       if (e.key !== "Escape" || !this.isOpen()) return;
       if (document.querySelector("dialog[open]")) return;
       this.pushEvent("close-messenger", {});
-      this.el.querySelector("#intro-messenger-toggle")?.focus();
+      this.el.querySelector("[data-messenger-toggle]")?.focus();
     };
 
     document.addEventListener("pointerdown", this.onPointerDown, true);
     document.addEventListener("keydown", this.onKeyDown);
 
     // Phones: swipe the sheet down (from its handle or header) to close it
-    const panel = this.el.querySelector("#intro-messenger-panel");
+    const panel = this.el.querySelector("[data-messenger-panel]");
     this.onTouchStart = (e) => {
       if (!e.target.closest(".intro-messenger-grab, .intro-messenger-head"))
         return;

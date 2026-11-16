@@ -251,6 +251,10 @@ These follow shadcn/ui's Tooltip in the base-nova style (2026-11-15). There is o
 - **Never clipped:** the bubble is one shared element (`#cc-tooltip`) in the browser's top layer, above every panel and dialog. Styles live in `assets/css/tooltip.css`.
 - **The check enforces it:** daisyUI's `tooltip` class, `data-tip`, and `title=` hints on buttons and links fail `scripts/theme/check_theme.sh`.
 
+## Frosted glass
+
+Write only `backdrop-filter`. The build adds `-webkit-backdrop-filter` for Safari itself, and a hand-written `-webkit-` line makes it drop the standard one, which left Chrome without any blur until 2026-11-15. Glass that sits over a lot of content needs to be mostly solid (88% on computers, 96% for the phone sheet), so the content behind never competes with the text on it.
+
 ## Light theme
 
 A second theme, `carceral-light`, uses the same roles with light values. Since

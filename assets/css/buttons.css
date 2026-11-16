@@ -263,7 +263,6 @@
     background-color: color-mix(in srgb, var(--color-stage) 65%, transparent);
     color: var(--color-base-content);
     backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
   }
   .btn-overlay:hover {
     background-color: color-mix(in srgb, var(--color-stage) 85%, transparent);

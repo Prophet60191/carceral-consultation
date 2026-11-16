@@ -170,6 +170,15 @@ On computers (any device with a mouse or trackpad, at any window width; a narrow
 - **Unchanged:** the big screen before the start (the join page and QR code), phones and tablets (to be discussed), and the "About this event" view over the slides.
 - **Files:** server state (open, red dot) in `EventLive.Show`, closing behavior in `assets/js/intro_messenger.js`, the look in `assets/css/intro_messenger.css`.
 
+### Phones: the bottom bar (2026-11-15, Jose)
+
+On phones (a touch screen under 768 px), the chat bubble and theme button live in a slim bar fixed at the bottom, just above the browser's own bar (and the iPhone's home indicator).
+- **The bar:** the chat bubble on the left (with its red dot), "Powered by Claper · About this app" in the middle, and the theme button on the right. The page's own footer moves into the bar, and the page leaves room so the last card clears it.
+- **The messenger:** it slides up from the bar as a sheet the full width of the screen, nearly solid frosted glass with a grab handle. A swipe down on the handle or header closes it, as do ✕, a tap on the bubble or a tap outside. While the keyboard is open, the sheet sits on top of the keyboard (`--cc-kb` from the visual viewport).
+- **With messages off,** the bar keeps the theme button.
+- **Same buttons as on computers:** one set, placed per device in `assets/css/intro_messenger.css`. Tablets get nothing yet (to be designed).
+- **Frosted glass was never blurring outside Safari.** The build kept only the hand-written `-webkit-backdrop-filter`, so Chrome got no blur for this or for the live room's message box. Only the standard `backdrop-filter` is written now, and the build adds Safari's prefix itself. Never write `-webkit-backdrop-filter` by hand.
+
 ### Theme button (2026-11-15, Jose)
 
 The bottom-left corner holds, from the bottom up: a **light/dark button**, then the chat bubble (when messages are on), then the messenger when it's open. One click switches between the light and dark themes, starting from what's on screen, including when the device's theme was being followed. The icon and label say where the next click goes: a sun ("Switch to light theme") while dark, a moon while light. It uses the account menu's own setting (`cc:set-theme` in `assets/js/theme.js`), so the choice is remembered on that device and carries into the live room. It shows whether or not messages are on, on computers only for now.

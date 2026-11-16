@@ -455,6 +455,20 @@
     countdown={@countdown}
   />
 
+  <%!-- Phones (Jose, 2026-11-15): a slim bar fixed at the bottom, just above
+       the browser's own bar: the chat bubble on the left, the license links
+       in the middle, the theme button on the right (the two buttons below are
+       placed over it on phones; on computers they stack in the corner). --%>
+  <nav id="intro-phone-bar" class="intro-phone-bar" aria-label={gettext("About this app")}>
+    <a href="https://claper.co" target="_blank" rel="noopener" class="intro-phone-bar-link">
+      {gettext("Powered by Claper")}
+    </a>
+    <span aria-hidden="true">·</span>
+    <a href="/about" target="_blank" rel="noopener" class="intro-phone-bar-link">
+      {gettext("About this app")}
+    </a>
+  </nav>
+
   <%!-- Light or dark for participants (Jose, 2026-11-15): the bottom-left
        corner, under the chat bubble. Same setting as the account menu's
        switcher (assets/js/theme.js); the page never redraws it, so the
@@ -519,6 +533,8 @@
       aria-labelledby="intro-messenger-title"
       inert={!@messenger_open}
     >
+      <%!-- Phones: a handle to swipe the sheet down by --%>
+      <div class="intro-messenger-grab" aria-hidden="true"></div>
       <header class="intro-messenger-head">
         <div class="min-w-0">
           <h2 id="intro-messenger-title" class="text-base font-bold leading-tight">

@@ -1,38 +1,30 @@
 /*
-  The intro page's messenger (Jose, 2026-11-15): a chat bubble in the
-  bottom-left corner that opens a frosted-glass messenger over the intro
-  page, before the event starts. Computers only for now: any device with a
-  mouse or trackpad, at any window width (Jose, 2026-11-15: a narrowed
-  browser is still a computer); phones and tablets come later. The messages inside
-  are the live room's (ClaperWeb.EventLive.MessagesComponents).
+  The intro page's messenger and theme button (Jose, 2026-11-15), before the
+  event starts. The messages inside are the live room's
+  (ClaperWeb.EventLive.MessagesComponents). One set of buttons, placed per
+  device:
+
+  - Computers (a mouse or trackpad, any window width): a stack in the
+    bottom-left corner, from the bottom up: the theme button, the chat
+    bubble, and the messenger as a floating glass panel when open.
+  - Phones (a touch screen under 768px): a slim glass bar fixed at the
+    bottom, just above the browser's own bar: the chat bubble on the left,
+    the license links in the middle, the theme button on the right; the
+    messenger slides up from the bar as a sheet.
+  - Tablets: nothing yet (to be designed).
 */
 
-/* The bottom-left corner holds, from the bottom up: the theme button,
-   the chat bubble, then the messenger when it is open. */
-.intro-corner {
+.intro-corner,
+.intro-phone-bar {
   display: none;
 }
 
-@media (hover: hover) and (pointer: fine) {
-  .intro-corner {
-    display: block;
-  }
-}
+/* ---- Shared: the buttons, the icons, the red dot, the glass ---- */
 
 .intro-theme-toggle,
 .intro-messenger-toggle {
   position: fixed;
-  left: 24px;
   z-index: 60;
-  box-shadow: var(--shadow-xl);
-}
-
-/* The theme button at the bottom; the chat bubble one step above it */
-.intro-theme-toggle {
-  bottom: 24px;
-}
-.intro-messenger-toggle {
-  bottom: 84px;
 }
 
 /* The theme button shows where it will take you: a sun while dark, a moon
@@ -61,16 +53,10 @@ html[data-theme="carceral-light"] .theme-icon-moon {
 
 .intro-messenger-panel {
   position: fixed;
-  left: 24px;
-  bottom: 144px;
   z-index: 60;
   display: flex;
   flex-direction: column;
-  /* Shrinks to fit a narrow window, keeping the 24px margins */
-  width: min(400px, calc(100vw - 48px));
-  height: min(640px, calc(100vh - 176px));
   overflow: hidden;
-  border-radius: 24px;
   border: 1px solid color-mix(in srgb, var(--color-sheen) 14%, var(--color-line));
   /* Frosted glass: the intro page shows through, blurred */
   background:
@@ -79,19 +65,18 @@ html[data-theme="carceral-light"] .theme-icon-moon {
       color-mix(in srgb, var(--color-sheen) 8%, transparent),
       transparent 45%
     ),
-    color-mix(in srgb, var(--color-base-200) 72%, transparent);
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
+    color-mix(in srgb, var(--color-base-200) var(--glass-solid, 88%), transparent);
+  /* Mostly solid: the page behind only tints it, so its text never
+     competes with the messages (blur where the browser supports it) */
+  backdrop-filter: blur(28px) saturate(160%);
   box-shadow:
     var(--shadow-2xl),
     inset 0 1px 0 color-mix(in srgb, var(--color-sheen) 10%, transparent);
   color: var(--color-base-content);
 
-  /* Closed: invisible and out of the way; it grows from the bubble */
+  /* Closed: invisible and out of the way */
   opacity: 0;
   visibility: hidden;
-  transform: translateY(12px) scale(0.96);
-  transform-origin: bottom left;
   transition:
     opacity 0.18s ease,
     transform 0.22s cubic-bezier(0.2, 0.7, 0.2, 1),
@@ -120,6 +105,136 @@ html[data-theme="carceral-light"] .theme-icon-moon {
 /* The feed sits on the glass, not on the room's stage color */
 .intro-messenger-panel #chat-feed {
   background: transparent;
+}
+
+/* The grab handle on top of the phone sheet (hidden on computers) */
+.intro-messenger-grab {
+  display: none;
+}
+
+/* ---- Computers: the bottom-left corner stack ---- */
+
+@media (hover: hover) and (pointer: fine) {
+  .intro-corner {
+    display: block;
+  }
+
+  .intro-theme-toggle,
+  .intro-messenger-toggle {
+    left: 24px;
+    box-shadow: var(--shadow-xl);
+  }
+
+  /* The theme button at the bottom; the chat bubble one step above it */
+  .intro-theme-toggle {
+    bottom: 24px;
+  }
+  .intro-messenger-toggle {
+    bottom: 84px;
+  }
+
+  .intro-messenger-panel {
+    left: 24px;
+    bottom: 144px;
+    /* Shrinks to fit a narrow window, keeping the 24px margins */
+    width: min(400px, calc(100vw - 48px));
+    height: min(640px, calc(100vh - 176px));
+    border-radius: 24px;
+    /* It grows from the bubble */
+    transform: translateY(12px) scale(0.96);
+    transform-origin: bottom left;
+  }
+}
+
+/* ---- Phones: the bottom bar and the sheet ---- */
+
+@media (pointer: coarse) and (max-width: 767px) {
+  .intro-corner {
+    display: block;
+  }
+
+  /* The bar: slim glass, above the browser's bar and the home indicator */
+  .intro-phone-bar {
+    --bar-h: 64px;
+    position: fixed;
+    inset: auto 0 0 0;
+    z-index: 55;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: calc(var(--bar-h) + env(safe-area-inset-bottom));
+    padding: 0 68px env(safe-area-inset-bottom);
+    border-top: 1px solid color-mix(in srgb, var(--color-line) 80%, transparent);
+    background: color-mix(in srgb, var(--color-base-100) 78%, transparent);
+    backdrop-filter: blur(20px) saturate(160%);
+    font-size: 12px;
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+
+  .intro-phone-bar-link {
+    color: var(--color-muted);
+    text-decoration: none;
+  }
+
+  /* The two buttons sit over the bar's ends, centred in it */
+  .intro-theme-toggle,
+  .intro-messenger-toggle {
+    bottom: calc(env(safe-area-inset-bottom) + 10px);
+    width: 44px;
+    height: 44px;
+    min-height: 44px;
+  }
+  .intro-messenger-toggle {
+    left: 12px;
+  }
+  .intro-theme-toggle {
+    right: 12px;
+  }
+
+  /* The page's own footer links move into the bar; the last card clears it */
+  body:has(.intro-phone-bar) .intro-stage .powered-by {
+    display: none;
+  }
+  body:has(.intro-phone-bar) .intro-stage {
+    padding-bottom: calc(64px + env(safe-area-inset-bottom) + 24px);
+  }
+
+  /* The messenger: a sheet sliding up from the bar (from the keyboard's
+     top while typing: --cc-kb, set by assets/js/intro_messenger.js) */
+  .intro-messenger-panel {
+    left: 0;
+    right: 0;
+    bottom: max(
+      calc(64px + env(safe-area-inset-bottom)),
+      var(--cc-kb, 0px)
+    );
+    width: 100%;
+    height: calc(
+      100dvh - max(calc(64px + env(safe-area-inset-bottom)), var(--cc-kb, 0px)) -
+        48px
+    );
+    border-radius: 24px 24px 0 0;
+    border-bottom: 0;
+    /* Over a whole phone screen of content: nearly solid */
+    --glass-solid: 96%;
+    transform: translateY(24px);
+  }
+
+  .intro-messenger-grab {
+    display: block;
+    width: 40px;
+    height: 5px;
+    margin: 8px auto 0;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--color-base-content) 30%, transparent);
+  }
+
+  .intro-messenger-head {
+    padding-top: 10px;
+    touch-action: none;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -70,7 +70,6 @@
   border: 1px solid var(--color-line);
   box-shadow: 0 12px 36px color-mix(in srgb, var(--color-scrim) 45%, transparent);
   backdrop-filter: blur(18px) saturate(140%);
-  -webkit-backdrop-filter: blur(18px) saturate(140%);
 }
 
 #room-reaction-fab,

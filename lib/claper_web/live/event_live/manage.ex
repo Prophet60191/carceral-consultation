@@ -37,6 +37,7 @@ defmodule ClaperWeb.EventLive.Manage do
       Claper.Events.Event.subscribe(event.uuid)
       Presentations.subscribe(event.presentation_file.id)
       Events.subscribe_user_events(socket.assigns.current_user.id)
+      Claper.Materials.subscribe(event)
       Events.record_event_activity(event)
     end
 
@@ -474,6 +475,21 @@ defmodule ClaperWeb.EventLive.Manage do
   # A breakout started or stopped: its row shows Start or Live.
   def handle_info({:breakout, :changed, _run_id}, socket),
     do: {:noreply, socket |> interactions_at_position(socket.assigns.state.position)}
+
+  # Materials changed (here, or by another facilitator): both Materials
+  # cards (sidebar, settings window) reload.
+  def handle_info(:open_materials_add, socket) do
+    send_update(ClaperWeb.EventLive.MaterialsAddComponent, id: "materials-add", open: true)
+    {:noreply, socket}
+  end
+
+  def handle_info(:materials_changed, socket) do
+    for id <- ["settings-pane-materials", "settings-modal-pane-materials"] do
+      send_update(ClaperWeb.EventLive.MaterialsComponent, id: id, refresh: true)
+    end
+
+    {:noreply, socket}
+  end
 
   def handle_info(_, socket) do
     {:noreply, socket}

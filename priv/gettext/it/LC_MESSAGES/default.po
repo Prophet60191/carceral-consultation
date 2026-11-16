@@ -616,6 +616,7 @@ msgstr "Anonimo"
 #: lib/claper_web/live/event_live/embed_component.ex
 #: lib/claper_web/live/event_live/form_component.ex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/messenger.ex
 #: lib/claper_web/live/event_live/poll_component.ex
 #: lib/claper_web/live/event_live/quiz_component.ex
@@ -712,6 +713,7 @@ msgid "See current web content"
 msgstr "Vedi contenuto web corrente"
 
 #: lib/claper_web/live/embed_live/form_component.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
@@ -1366,6 +1368,7 @@ msgstr "Picco di pubblico"
 #: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
 #: lib/claper_web/live/admin_live/user_live/form_component.ex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #: lib/claper_web/templates/user_reauth/new.html.heex
 #, elixir-autogen, elixir-format
@@ -2624,6 +2627,7 @@ msgstr "Devi accedere per continuare"
 
 #: lib/claper_web/live/breakout_live/components.ex
 #: lib/claper_web/live/event_live/event_form_component.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #, elixir-autogen, elixir-format
@@ -4319,6 +4323,7 @@ msgid "Choose image"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/brand_live.ex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #, elixir-autogen, elixir-format
 msgid "Choose one file."
 msgstr ""
@@ -5192,6 +5197,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Move down"
@@ -5199,6 +5205,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Move up"
@@ -5546,6 +5553,8 @@ msgstr ""
 
 #: lib/claper_web/live/admin_live/brand_live.ex
 #: lib/claper_web/live/breakout_live/builder.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Remove"
@@ -7043,3 +7052,210 @@ msgstr "Il nome e il logo sopra la scheda (Admin › Marchio). Disattiva per una
 #, elixir-autogen, elixir-format
 msgid "The presentation will appear here."
 msgstr "La presentazione apparirà qui."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "7 days after the event ended. Shown in your local time."
+msgstr "7 giorni dopo la fine dell'evento. Mostrato nell'ora locale."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "7 days after the event ends, unless you choose a time."
+msgstr "7 giorni dopo la fine dell'evento, a meno che tu non scelga un orario."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "A PDF people download from the page they get after the event."
+msgstr "Un PDF da scaricare dalla pagina che si riceve dopo l'evento."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "A PDF people open during the event, from the page icon."
+msgstr "Un PDF da aprire durante l'evento, dall'icona della pagina."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add a handout"
+msgstr "Aggiungi una dispensa"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add material"
+msgstr "Aggiungi materiale"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add take-home"
+msgstr "Aggiungi da portare a casa"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Handouts"
+msgstr "Aggiunto alle dispense"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Handouts and Take-home"
+msgstr "Aggiunto alle dispense e da portare a casa"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Take-home"
+msgstr "Aggiunto a da portare a casa"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Adding..."
+msgstr "Aggiunta..."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Also add to Take-home (it gets its own switch)"
+msgstr "Aggiungi anche a da portare a casa (con un proprio interruttore)"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Available until"
+msgstr "Disponibile fino al"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose PDF"
+msgstr "Scegli PDF"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a PDF file."
+msgstr "Scegli un file PDF."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a PDF to upload."
+msgstr "Scegli un PDF da caricare."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a time after the event starts."
+msgstr "Scegli un orario successivo all'inizio dell'evento."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Download"
+msgstr "Scarica"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Drag and drop a PDF here, or"
+msgstr "Trascina qui un PDF, oppure"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Give it a title of up to 120 characters."
+msgstr "Dagli un titolo di massimo 120 caratteri."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Give it a title."
+msgstr "Dagli un titolo."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Handout"
+msgstr "Dispensa"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Handouts"
+msgstr "Dispense"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Materials"
+msgstr "Materiali"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "No PDF of these slides"
+msgstr "Nessun PDF di queste diapositive"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "PDFs on the page people get after the event. None yet."
+msgstr "PDF nella pagina che si riceve dopo l'evento. Ancora nessuno."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "PDFs people open during the event. None yet."
+msgstr "PDF da aprire durante l'evento. Ancora nessuno."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "People won't be able to open or download it any more."
+msgstr "Non sarà più possibile aprirlo o scaricarlo."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Remove this PDF?"
+msgstr "Rimuovere questo PDF?"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show %{title}"
+msgstr "Mostra %{title}"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Shown in your local time. The take-home page closes then."
+msgstr "Nell'ora locale. La pagina da portare a casa si chiude allora."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Slides"
+msgstr "Diapositive"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Take-home"
+msgstr "Da portare a casa"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That PDF is larger than 25 MB."
+msgstr "Questo PDF supera i 25 MB."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file couldn't be uploaded."
+msgstr "Impossibile caricare il file."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file is empty."
+msgstr "Il file è vuoto."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file isn't a PDF."
+msgstr "Il file non è un PDF."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "The presentation as a PDF"
+msgstr "La presentazione in PDF"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "This server can't store files for events."
+msgstr "Questo server non può archiviare file per gli eventi."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Up to 25 MB."
+msgstr "Fino a 25 MB."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "What people see in the list."
+msgstr "Ciò che si vede nell'elenco."

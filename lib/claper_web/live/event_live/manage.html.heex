@@ -23,6 +23,7 @@
         <.live_component
           id="settings-modal-pane"
           module={ClaperWeb.EventLive.ManagerSettingsComponent}
+          event={@event}
           create={@create}
           state={@state}
           show_shortcut={false}
@@ -37,6 +38,14 @@
   </div>
 
   <%!-- Reorder this slide's interactions (Jose, 2026-11-14) --%>
+  <%!-- Adding a handout or take-home PDF (opened from either Materials card;
+       after the settings window, so it shows above it) --%>
+  <.live_component
+    id="materials-add"
+    module={ClaperWeb.EventLive.MaterialsAddComponent}
+    event_id={@event.id}
+  />
+
   <div
     :if={@reorder}
     id="reorder-modal"
@@ -662,6 +671,7 @@
         <.live_component
           id="settings-pane"
           module={ClaperWeb.EventLive.ManagerSettingsComponent}
+          event={@event}
           create={@create}
           state={@state}
           current_interaction={@current_interaction}

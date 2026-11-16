@@ -23,6 +23,13 @@ defmodule ClaperWeb.EventLive.ManagerSettingsComponent do
         create={@create}
         show_shortcut={@show_shortcut}
       />
+      <%!-- Handouts and take-home PDFs (docs/MATERIALS.md) --%>
+      <.live_component
+        :if={assigns[:event]}
+        id={"#{@id}-materials"}
+        module={ClaperWeb.EventLive.MaterialsComponent}
+        event_id={@event.id}
+      />
     </div>
     """
   end

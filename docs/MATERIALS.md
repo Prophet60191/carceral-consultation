@@ -104,3 +104,23 @@ Each step ends complete: checks, tests, a real-browser test, a commit.
 - Tests: `test/claper/materials_test.exs`,
   `test/claper_web/controllers/material_controller_test.exs`.
 
+
+## How the Materials card is built (step 2)
+
+- **The card** `ClaperWeb.EventLive.MaterialsComponent`, in the manage
+  screen's settings (`ManagerSettingsComponent`, so it appears in the
+  sidebar and in the settings window on smaller screens; ids are prefixed
+  per copy). Handouts and Take-home lists: each item with its switch, move
+  up / down, download, and remove (confirmed). Take-home also has the
+  Slides switch (off and disabled when the slides have no PDF) and
+  **Available until** (the shared date-time field: shown in local time,
+  stored as UTC; must be after the event's start).
+- **The add window** `ClaperWeb.EventLive.MaterialsAddComponent`, once per
+  manage screen at its top level (opened by either card with
+  `:open_materials_add`; a window inside the settings window would be cut
+  off): Handout or Take-home, then the PDF (drag and drop or choose, up to
+  25 MB), the title (filled from the file name) and, for a handout, "Also
+  add to Take-home".
+- **Live:** the manage screen listens on the materials channel and reloads
+  both cards, so a change by another facilitator shows at once.
+- Tests: `test/claper_web/live/materials_card_test.exs`.

@@ -614,6 +614,7 @@ msgstr "匿名"
 #: lib/claper_web/live/event_live/embed_component.ex
 #: lib/claper_web/live/event_live/form_component.ex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/messenger.ex
 #: lib/claper_web/live/event_live/poll_component.ex
 #: lib/claper_web/live/event_live/quiz_component.ex
@@ -710,6 +711,7 @@ msgid "See current web content"
 msgstr "現在のWebコンテンツを見る"
 
 #: lib/claper_web/live/embed_live/form_component.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
@@ -1364,6 +1366,7 @@ msgstr "最大参加者数"
 #: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
 #: lib/claper_web/live/admin_live/user_live/form_component.ex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #: lib/claper_web/templates/user_reauth/new.html.heex
 #, elixir-autogen, elixir-format
@@ -2622,6 +2625,7 @@ msgstr "続けるにはログインしてください"
 
 #: lib/claper_web/live/breakout_live/components.ex
 #: lib/claper_web/live/event_live/event_form_component.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #, elixir-autogen, elixir-format
@@ -4302,6 +4306,7 @@ msgid "Choose image"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/brand_live.ex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #, elixir-autogen, elixir-format
 msgid "Choose one file."
 msgstr ""
@@ -5175,6 +5180,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Move down"
@@ -5182,6 +5188,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Move up"
@@ -5529,6 +5536,8 @@ msgstr ""
 
 #: lib/claper_web/live/admin_live/brand_live.ex
 #: lib/claper_web/live/breakout_live/builder.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Remove"
@@ -7026,3 +7035,210 @@ msgstr "カードの上の名前とマーク（管理 › ブランド）。表�
 #, elixir-autogen, elixir-format
 msgid "The presentation will appear here."
 msgstr "プレゼンテーションはここに表示されます。"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "7 days after the event ended. Shown in your local time."
+msgstr "イベント終了から7日後。現地時間で表示。"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "7 days after the event ends, unless you choose a time."
+msgstr "時間を選ばない場合、イベント終了から7日後。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "A PDF people download from the page they get after the event."
+msgstr "イベント後のページからダウンロードするPDF。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "A PDF people open during the event, from the page icon."
+msgstr "イベント中にページアイコンから開くPDF。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add a handout"
+msgstr "配布資料を追加"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add material"
+msgstr "資料を追加"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add take-home"
+msgstr "持ち帰り資料を追加"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Handouts"
+msgstr "配布資料に追加しました"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Handouts and Take-home"
+msgstr "配布資料と持ち帰り資料に追加しました"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Take-home"
+msgstr "持ち帰り資料に追加しました"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Adding..."
+msgstr "追加中..."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Also add to Take-home (it gets its own switch)"
+msgstr "持ち帰り資料にも追加（個別のスイッチ付き）"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Available until"
+msgstr "公開期限"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose PDF"
+msgstr "PDFを選択"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a PDF file."
+msgstr "PDFファイルを選んでください。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a PDF to upload."
+msgstr "アップロードするPDFを選んでください。"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a time after the event starts."
+msgstr "イベント開始より後の時間を選んでください。"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Download"
+msgstr "ダウンロード"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Drag and drop a PDF here, or"
+msgstr "ここにPDFをドラッグ＆ドロップ、または"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Give it a title of up to 120 characters."
+msgstr "120文字以内のタイトルを付けてください。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Give it a title."
+msgstr "タイトルを付けてください。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Handout"
+msgstr "配布資料"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Handouts"
+msgstr "配布資料"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Materials"
+msgstr "資料"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "No PDF of these slides"
+msgstr "このスライドのPDFはありません"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "PDFs on the page people get after the event. None yet."
+msgstr "イベント後のページのPDF。まだありません。"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "PDFs people open during the event. None yet."
+msgstr "イベント中に開くPDF。まだありません。"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "People won't be able to open or download it any more."
+msgstr "開くこともダウンロードすることもできなくなります。"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Remove this PDF?"
+msgstr "このPDFを削除しますか？"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show %{title}"
+msgstr "%{title}を表示"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Shown in your local time. The take-home page closes then."
+msgstr "現地時間で表示。この時刻に持ち帰りページが閉じます。"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Slides"
+msgstr "スライド"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Take-home"
+msgstr "持ち帰り資料"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That PDF is larger than 25 MB."
+msgstr "このPDFは25MBを超えています。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file couldn't be uploaded."
+msgstr "ファイルをアップロードできませんでした。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file is empty."
+msgstr "ファイルが空です。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file isn't a PDF."
+msgstr "このファイルはPDFではありません。"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "The presentation as a PDF"
+msgstr "プレゼンテーションのPDF"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "This server can't store files for events."
+msgstr "このサーバーはイベントのファイルを保存できません。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Up to 25 MB."
+msgstr "25MBまで。"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "What people see in the list."
+msgstr "一覧に表示される名前です。"

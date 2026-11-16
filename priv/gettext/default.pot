@@ -617,6 +617,7 @@ msgstr ""
 #: lib/claper_web/live/event_live/embed_component.ex
 #: lib/claper_web/live/event_live/form_component.ex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/messenger.ex
 #: lib/claper_web/live/event_live/poll_component.ex
 #: lib/claper_web/live/event_live/quiz_component.ex
@@ -713,6 +714,7 @@ msgid "See current web content"
 msgstr ""
 
 #: lib/claper_web/live/embed_live/form_component.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
@@ -1367,6 +1369,7 @@ msgstr ""
 #: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
 #: lib/claper_web/live/admin_live/user_live/form_component.ex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #: lib/claper_web/templates/user_reauth/new.html.heex
 #, elixir-autogen, elixir-format
@@ -2625,6 +2628,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/components.ex
 #: lib/claper_web/live/event_live/event_form_component.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #, elixir-autogen, elixir-format
@@ -4320,6 +4324,7 @@ msgid "Choose image"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/brand_live.ex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #, elixir-autogen, elixir-format
 msgid "Choose one file."
 msgstr ""
@@ -5193,6 +5198,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Move down"
@@ -5200,6 +5206,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Move up"
@@ -5547,6 +5554,8 @@ msgstr ""
 
 #: lib/claper_web/live/admin_live/brand_live.ex
 #: lib/claper_web/live/breakout_live/builder.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Remove"
@@ -7043,4 +7052,211 @@ msgstr ""
 #: lib/claper_web/live/event_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "The presentation will appear here."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "7 days after the event ended. Shown in your local time."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "7 days after the event ends, unless you choose a time."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "A PDF people download from the page they get after the event."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "A PDF people open during the event, from the page icon."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add a handout"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add material"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add take-home"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Handouts"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Handouts and Take-home"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Take-home"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Adding..."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Also add to Take-home (it gets its own switch)"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Available until"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose PDF"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a PDF file."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a PDF to upload."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a time after the event starts."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Download"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Drag and drop a PDF here, or"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Give it a title of up to 120 characters."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Give it a title."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Handout"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Handouts"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Materials"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "No PDF of these slides"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "PDFs on the page people get after the event. None yet."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "PDFs people open during the event. None yet."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "People won't be able to open or download it any more."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Remove this PDF?"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show %{title}"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Shown in your local time. The take-home page closes then."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Slides"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Take-home"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That PDF is larger than 25 MB."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file couldn't be uploaded."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file is empty."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file isn't a PDF."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "The presentation as a PDF"
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "This server can't store files for events."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Up to 25 MB."
+msgstr ""
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "What people see in the list."
 msgstr ""

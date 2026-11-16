@@ -615,6 +615,7 @@ msgstr "Anoniem"
 #: lib/claper_web/live/event_live/embed_component.ex
 #: lib/claper_web/live/event_live/form_component.ex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/messenger.ex
 #: lib/claper_web/live/event_live/poll_component.ex
 #: lib/claper_web/live/event_live/quiz_component.ex
@@ -711,6 +712,7 @@ msgid "See current web content"
 msgstr "Bekijk huidige webinhoud"
 
 #: lib/claper_web/live/embed_live/form_component.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
@@ -1365,6 +1367,7 @@ msgstr "Publiekspiek"
 #: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
 #: lib/claper_web/live/admin_live/user_live/form_component.ex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #: lib/claper_web/templates/user_reauth/new.html.heex
 #, elixir-autogen, elixir-format
@@ -2625,6 +2628,7 @@ msgstr "Je moet inloggen om door te gaan"
 
 #: lib/claper_web/live/breakout_live/components.ex
 #: lib/claper_web/live/event_live/event_form_component.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #, elixir-autogen, elixir-format
@@ -4320,6 +4324,7 @@ msgid "Choose image"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/brand_live.ex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #, elixir-autogen, elixir-format
 msgid "Choose one file."
 msgstr ""
@@ -5193,6 +5198,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Move down"
@@ -5200,6 +5206,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Move up"
@@ -5547,6 +5554,8 @@ msgstr ""
 
 #: lib/claper_web/live/admin_live/brand_live.ex
 #: lib/claper_web/live/breakout_live/builder.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Remove"
@@ -7044,3 +7053,210 @@ msgstr "De naam en het logo boven de kaart (Beheer › Merk). Zet uit voor een p
 #, elixir-autogen, elixir-format
 msgid "The presentation will appear here."
 msgstr "De presentatie verschijnt hier."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "7 days after the event ended. Shown in your local time."
+msgstr "7 dagen na het einde van het evenement. In je lokale tijd."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "7 days after the event ends, unless you choose a time."
+msgstr "7 dagen na het einde van het evenement, tenzij je een tijd kiest."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "A PDF people download from the page they get after the event."
+msgstr "Een pdf die mensen downloaden van de pagina na het evenement."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "A PDF people open during the event, from the page icon."
+msgstr "Een pdf die mensen tijdens het evenement openen via het pagina-icoon."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add a handout"
+msgstr "Hand-out toevoegen"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add material"
+msgstr "Materiaal toevoegen"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add take-home"
+msgstr "Meeneemmateriaal toevoegen"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Handouts"
+msgstr "Toegevoegd aan hand-outs"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Handouts and Take-home"
+msgstr "Toegevoegd aan hand-outs en meeneemmateriaal"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Take-home"
+msgstr "Toegevoegd aan meeneemmateriaal"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Adding..."
+msgstr "Toevoegen..."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Also add to Take-home (it gets its own switch)"
+msgstr "Ook toevoegen aan meeneemmateriaal (met eigen schakelaar)"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Available until"
+msgstr "Beschikbaar tot"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose PDF"
+msgstr "Pdf kiezen"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a PDF file."
+msgstr "Kies een pdf-bestand."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a PDF to upload."
+msgstr "Kies een pdf om te uploaden."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a time after the event starts."
+msgstr "Kies een tijd na de start van het evenement."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Download"
+msgstr "Downloaden"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Drag and drop a PDF here, or"
+msgstr "Sleep hier een pdf naartoe, of"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Give it a title of up to 120 characters."
+msgstr "Geef het een titel van maximaal 120 tekens."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Give it a title."
+msgstr "Geef het een titel."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Handout"
+msgstr "Hand-out"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Handouts"
+msgstr "Hand-outs"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Materials"
+msgstr "Materialen"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "No PDF of these slides"
+msgstr "Geen pdf van deze dia's"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "PDFs on the page people get after the event. None yet."
+msgstr "Pdf's op de pagina na het evenement. Nog geen."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "PDFs people open during the event. None yet."
+msgstr "Pdf's die mensen tijdens het evenement openen. Nog geen."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "People won't be able to open or download it any more."
+msgstr "Mensen kunnen het dan niet meer openen of downloaden."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Remove this PDF?"
+msgstr "Deze pdf verwijderen?"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show %{title}"
+msgstr "%{title} tonen"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Shown in your local time. The take-home page closes then."
+msgstr "In je lokale tijd. De meeneempagina sluit dan."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Slides"
+msgstr "Dia's"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Take-home"
+msgstr "Meeneemmateriaal"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That PDF is larger than 25 MB."
+msgstr "Die pdf is groter dan 25 MB."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file couldn't be uploaded."
+msgstr "Dat bestand kon niet worden geüpload."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file is empty."
+msgstr "Dat bestand is leeg."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file isn't a PDF."
+msgstr "Dat bestand is geen pdf."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "The presentation as a PDF"
+msgstr "De presentatie als pdf"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "This server can't store files for events."
+msgstr "Deze server kan geen bestanden voor evenementen opslaan."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Up to 25 MB."
+msgstr "Tot 25 MB."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "What people see in the list."
+msgstr "Wat mensen in de lijst zien."

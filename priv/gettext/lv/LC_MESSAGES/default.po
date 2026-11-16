@@ -619,6 +619,7 @@ msgstr "Anonīms"
 #: lib/claper_web/live/event_live/embed_component.ex
 #: lib/claper_web/live/event_live/form_component.ex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/messenger.ex
 #: lib/claper_web/live/event_live/poll_component.ex
 #: lib/claper_web/live/event_live/quiz_component.ex
@@ -715,6 +716,7 @@ msgid "See current web content"
 msgstr "Skatiet pašreizējo tīmekļa saturu"
 
 #: lib/claper_web/live/embed_live/form_component.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
@@ -1369,6 +1371,7 @@ msgstr "Auditorijas maksimums"
 #: lib/claper_web/live/admin_live/oidc_provider_live/form_component.ex
 #: lib/claper_web/live/admin_live/user_live/form_component.ex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #: lib/claper_web/templates/user_reauth/new.html.heex
 #, elixir-autogen, elixir-format
@@ -2627,6 +2630,7 @@ msgstr "Jums ir jāpiesakās, lai turpinātu"
 
 #: lib/claper_web/live/breakout_live/components.ex
 #: lib/claper_web/live/event_live/event_form_component.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
 #, elixir-autogen, elixir-format
@@ -4337,6 +4341,7 @@ msgid "Choose image"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/brand_live.ex
+#: lib/claper_web/live/event_live/materials_add_component.ex
 #, elixir-autogen, elixir-format
 msgid "Choose one file."
 msgstr ""
@@ -5210,6 +5215,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Move down"
@@ -5217,6 +5223,7 @@ msgstr ""
 
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/manage.html.heex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Move up"
@@ -5564,6 +5571,8 @@ msgstr ""
 
 #: lib/claper_web/live/admin_live/brand_live.ex
 #: lib/claper_web/live/breakout_live/builder.html.heex
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Remove"
@@ -7061,3 +7070,210 @@ msgstr "Nosaukums un zīme virs kartītes (Administrēšana › Zīmols). Izslē
 #, elixir-autogen, elixir-format
 msgid "The presentation will appear here."
 msgstr "Prezentācija parādīsies šeit."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "7 days after the event ended. Shown in your local time."
+msgstr "7 dienas pēc pasākuma beigām. Rādīts vietējā laikā."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "7 days after the event ends, unless you choose a time."
+msgstr "7 dienas pēc pasākuma beigām, ja neizvēlaties laiku."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "A PDF people download from the page they get after the event."
+msgstr "PDF, ko lejupielādē no lapas pēc pasākuma."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "A PDF people open during the event, from the page icon."
+msgstr "PDF, ko atver pasākuma laikā ar lapas ikonu."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add a handout"
+msgstr "Pievienot izdales materiālu"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add material"
+msgstr "Pievienot materiālu"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add take-home"
+msgstr "Pievienot līdzņemšanai"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Handouts"
+msgstr "Pievienots izdales materiāliem"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Handouts and Take-home"
+msgstr "Pievienots izdales materiāliem un līdzņemšanai"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Added to Take-home"
+msgstr "Pievienots līdzņemšanai"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Adding..."
+msgstr "Pievieno..."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Also add to Take-home (it gets its own switch)"
+msgstr "Pievienot arī līdzņemšanai (ar savu slēdzi)"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Available until"
+msgstr "Pieejams līdz"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose PDF"
+msgstr "Izvēlēties PDF"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a PDF file."
+msgstr "Izvēlieties PDF failu."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a PDF to upload."
+msgstr "Izvēlieties augšupielādējamo PDF."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Choose a time after the event starts."
+msgstr "Izvēlieties laiku pēc pasākuma sākuma."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Download"
+msgstr "Lejupielādēt"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Drag and drop a PDF here, or"
+msgstr "Ievelciet šeit PDF vai"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Give it a title of up to 120 characters."
+msgstr "Norādiet nosaukumu līdz 120 rakstzīmēm."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Give it a title."
+msgstr "Norādiet nosaukumu."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Handout"
+msgstr "Izdales materiāls"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Handouts"
+msgstr "Izdales materiāli"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Materials"
+msgstr "Materiāli"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "No PDF of these slides"
+msgstr "Šiem slaidiem nav PDF"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "PDFs on the page people get after the event. None yet."
+msgstr "PDF lapā pēc pasākuma. Vēl nav."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "PDFs people open during the event. None yet."
+msgstr "PDF, ko atver pasākuma laikā. Vēl nav."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "People won't be able to open or download it any more."
+msgstr "To vairs nevarēs atvērt vai lejupielādēt."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Remove this PDF?"
+msgstr "Noņemt šo PDF?"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Show %{title}"
+msgstr "Rādīt %{title}"
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Shown in your local time. The take-home page closes then."
+msgstr "Vietējā laikā. Tad līdzņemšanas lapa tiek aizvērta."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Slides"
+msgstr "Slaidi"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "Take-home"
+msgstr "Līdzņemšanai"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That PDF is larger than 25 MB."
+msgstr "Šis PDF ir lielāks par 25 MB."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file couldn't be uploaded."
+msgstr "Failu neizdevās augšupielādēt."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file is empty."
+msgstr "Fails ir tukšs."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "That file isn't a PDF."
+msgstr "Šis fails nav PDF."
+
+#: lib/claper_web/live/event_live/materials_component.ex
+#, elixir-autogen, elixir-format
+msgid "The presentation as a PDF"
+msgstr "Prezentācija PDF formātā"
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "This server can't store files for events."
+msgstr "Šis serveris nevar glabāt pasākumu failus."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "Up to 25 MB."
+msgstr "Līdz 25 MB."
+
+#: lib/claper_web/live/event_live/materials_add_component.ex
+#, elixir-autogen, elixir-format
+msgid "What people see in the list."
+msgstr "Tas, ko redz sarakstā."

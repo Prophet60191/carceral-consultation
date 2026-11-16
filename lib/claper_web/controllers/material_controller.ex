@@ -37,13 +37,14 @@ defmodule ClaperWeb.MaterialController do
   end
 
   @doc "`/materials/slides/:event`: the slides' PDF, on the take-home page."
-  def slides(conn, %{"event" => event_uuid}) do
+  def slides(conn, %{"event" => event_uuid} = params) do
     now = NaiveDateTime.utc_now()
 
     with {:ok, uuid} <- Ecto.UUID.cast(event_uuid),
          %Event{} = event <- Repo.get_by(Event, uuid: uuid),
          true <- runs?(conn, event) or Materials.slides_available?(event, now),
          path when is_binary(path) <- Materials.slides_path(event) do
+      if params["download"] == "1", do: Materials.record_slides_download(event)
       send_pdf(conn, path, event.name)
     else
       _ -> not_found(conn)

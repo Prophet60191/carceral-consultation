@@ -53,6 +53,7 @@ defmodule Claper.Events.Event do
     # this time (nil: 7 days after the event ends), with or without the slides
     field :take_home_until, :naive_datetime
     field :take_home_slides, :boolean, default: false
+    field :slides_downloads, :integer, default: 0
 
     has_many :posts, Claper.Posts.Post
     has_many :leaders, Claper.Events.ActivityLeader, on_replace: :delete

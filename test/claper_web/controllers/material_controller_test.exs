@@ -108,6 +108,10 @@ defmodule ClaperWeb.MaterialControllerTest do
       assert response(conn, 200) == @pdf
       assert [disposition] = get_resp_header(conn, "content-disposition")
       assert disposition =~ "attachment"
+      assert Claper.Repo.get!(Claper.Events.Event, event.id).slides_downloads == 0
+
+      get(build_conn(), ~p"/materials/slides/#{event.uuid}?download=1")
+      assert Claper.Repo.get!(Claper.Events.Event, event.id).slides_downloads == 1
     end
 
     test "the original upload is never a public file", %{conn: conn, hash: hash} do

@@ -218,6 +218,31 @@ defmodule Claper.Materials do
     :ok
   end
 
+  @doc "Counts a download of the slides from the take-home page."
+  def record_slides_download(%Event{id: id}) do
+    from(e in Event, where: e.id == ^id) |> Repo.update_all(inc: [slides_downloads: 1])
+    :ok
+  end
+
+  @doc """
+  Download counts for the stats page: each material (in list order, both
+  kinds) and the slides.
+  """
+  def download_report(%Event{} = event) do
+    event = Repo.get!(Event, event.id)
+
+    %{
+      handouts: list_materials(event, "handout"),
+      take_homes: list_materials(event, "take_home"),
+      slides_on?: event.take_home_slides,
+      slides_downloads: event.slides_downloads
+    }
+  end
+
+  @doc "Whether the event has any materials (the stats page's Materials tab)."
+  def any?(%Event{id: event_id}),
+    do: Repo.exists?(from m in Material, where: m.event_id == ^event_id)
+
   ## The take-home page
 
   @doc "Whether the slides are on the take-home page."

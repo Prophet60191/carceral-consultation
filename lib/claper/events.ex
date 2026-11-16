@@ -907,7 +907,8 @@ defmodule Claper.Events do
         :presentation_file,
         :expired_at,
         :materials,
-        :take_home_until
+        :take_home_until,
+        :slides_downloads
       ])
       |> Map.put(:leaders, [])
       |> Map.put(:code, "#{code}")

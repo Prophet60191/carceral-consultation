@@ -714,6 +714,7 @@ msgstr "現在のWebコンテンツを見る"
 #: lib/claper_web/live/embed_live/form_component.html.heex
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr "タイトル"
@@ -5335,6 +5336,7 @@ msgid "Number of groups"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/user_live.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #, elixir-autogen, elixir-format
 msgid "Off"
@@ -7148,6 +7150,7 @@ msgid "Give it a title."
 msgstr "タイトルを付けてください。"
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Handout"
 msgstr "配布資料"
@@ -7159,6 +7162,7 @@ msgid "Handouts"
 msgstr "配布資料"
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Materials"
 msgstr "資料"
@@ -7200,12 +7204,14 @@ msgstr "現地時間で表示。この時刻に持ち帰りページが閉じま
 
 #: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/event_live/take_home.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr "スライド"
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Take-home"
 msgstr "持ち帰り資料"
@@ -7299,3 +7305,18 @@ msgstr "このイベントは終了しました。持ち帰り資料はありま
 #, elixir-autogen, elixir-format
 msgid "To take home"
 msgstr "持ち帰り資料"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Counted when someone taps Download. Opening a handout in the room isn't counted. Who downloaded isn't recorded."
+msgstr "「ダウンロード」をタップしたときに数えます。会場で配布資料を開いても数えません。誰がダウンロードしたかは記録しません。"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Downloads"
+msgstr "ダウンロード数"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Kind"
+msgstr "種類"

@@ -719,6 +719,7 @@ msgstr "Voir le contenu web actuel"
 #: lib/claper_web/live/embed_live/form_component.html.heex
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr "Titre"
@@ -5370,6 +5371,7 @@ msgid "Number of groups"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/user_live.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #, elixir-autogen, elixir-format
 msgid "Off"
@@ -7183,6 +7185,7 @@ msgid "Give it a title."
 msgstr "Donnez-lui un titre."
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Handout"
 msgstr "Document"
@@ -7194,6 +7197,7 @@ msgid "Handouts"
 msgstr "Documents"
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Materials"
 msgstr "Documents"
@@ -7235,12 +7239,14 @@ msgstr "À votre heure locale. La page à emporter se ferme alors."
 
 #: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/event_live/take_home.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr "Diapositives"
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Take-home"
 msgstr "À emporter"
@@ -7334,3 +7340,18 @@ msgstr "Cet événement est terminé. Il n'y a rien à emporter."
 #, elixir-autogen, elixir-format
 msgid "To take home"
 msgstr "À emporter"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Counted when someone taps Download. Opening a handout in the room isn't counted. Who downloaded isn't recorded."
+msgstr "Compté quand quelqu'un appuie sur Télécharger. Ouvrir un document dans la salle n'est pas compté. Qui a téléchargé n'est pas enregistré."
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Downloads"
+msgstr "Téléchargements"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Kind"
+msgstr "Type"

@@ -743,6 +743,7 @@ msgstr "Se nuvarande webbinnehåll"
 #: lib/claper_web/live/embed_live/form_component.html.heex
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr "Titel"
@@ -5380,6 +5381,7 @@ msgid "Number of groups"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/user_live.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #, elixir-autogen, elixir-format
 msgid "Off"
@@ -7193,6 +7195,7 @@ msgid "Give it a title."
 msgstr "Ge den en titel."
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Handout"
 msgstr "Utdelningsmaterial"
@@ -7204,6 +7207,7 @@ msgid "Handouts"
 msgstr "Utdelningsmaterial"
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Materials"
 msgstr "Material"
@@ -7245,12 +7249,14 @@ msgstr "I din lokala tid. Sidan att ta med hem stängs då."
 
 #: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/event_live/take_home.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr "Bilder"
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Take-home"
 msgstr "Att ta med hem"
@@ -7344,3 +7350,18 @@ msgstr "Evenemanget har slutat. Det finns inget att ta med hem."
 #, elixir-autogen, elixir-format
 msgid "To take home"
 msgstr "Att ta med hem"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Counted when someone taps Download. Opening a handout in the room isn't counted. Who downloaded isn't recorded."
+msgstr "Räknas när någon trycker på Ladda ner. Att öppna ett utdelningsmaterial i rummet räknas inte. Vem som laddade ner sparas inte."
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Downloads"
+msgstr "Nedladdningar"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Kind"
+msgstr "Typ"

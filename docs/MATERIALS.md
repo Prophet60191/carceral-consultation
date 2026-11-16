@@ -1,7 +1,7 @@
 # Materials — design record
 
 Handouts during a workshop and PDFs to take home after it. Proposed and
-agreed with Jose on 2026-11-15. Nothing is built yet.
+agreed with Jose on 2026-11-15. Built the same day, in the five steps below.
 
 ## The two kinds
 
@@ -161,3 +161,14 @@ Each step ends complete: checks, tests, a real-browser test, a commit.
   `Claper.Materials.ended_event_with_code/2`, `take_home_items/2`,
   `take_home_offered?/2`, `take_home_configured?/1`.
 - Tests: `test/claper_web/live/take_home_test.exs`.
+
+## How download counts are built (step 5)
+
+- Each Download button counts (`?download=1`: `Claper.Materials.record_download/1`
+  per file, `record_slides_download/1` for the slides, kept on
+  `events.slides_downloads`). Opening a handout in the room's viewer isn't
+  a download and isn't counted. Counts only, never who.
+- **The stats page** (`StatLive.Index`) has a Materials tab, shown when the
+  event has materials or the slides switched on: each file (with "Off" when
+  switched off) and the slides, with their download counts.
+- Tests: `test/claper_web/live/materials_stats_test.exs`.

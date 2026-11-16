@@ -115,7 +115,7 @@ defmodule ClaperWeb.EventLive.TakeHome do
           <li :if={@items.slides?} id="take-home-slides" class="take-home-item panel">
             <.item_body title={gettext("Slides")} detail={@event.name} />
             <a
-              href={~p"/materials/slides/#{@event.uuid}"}
+              href={~p"/materials/slides/#{@event.uuid}?download=1"}
               download
               class="btn btn-primary"
               aria-label={gettext("Download the slides")}

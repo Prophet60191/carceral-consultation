@@ -219,6 +219,14 @@
           {gettext("Breakouts")}
         </:tab>
         <:tab
+          :if={:materials in @available_tabs}
+          active={@current_tab == :materials}
+          phx-click="change_tab"
+          phx-value-tab="materials"
+        >
+          {gettext("Materials")}
+        </:tab>
+        <:tab
           :if={:transcriptions in @available_tabs}
           active={@current_tab == :transcriptions}
           phx-click="change_tab"
@@ -630,6 +638,52 @@
               <p class="italic text-muted">{gettext("No quiz has been created")}</p>
             <% end %>
           </div>
+        <% :materials -> %>
+          <%!-- Download counts (docs/MATERIALS.md): counts only, never who --%>
+          <section id="materials-report" class="panel">
+            <div class="panel-header">
+              <h4 class="text-base font-semibold text-base-content">{gettext("Downloads")}</h4>
+            </div>
+            <table class="table table-zebra w-full">
+              <thead>
+                <tr>
+                  <th>{gettext("Title")}</th>
+                  <th>{gettext("Kind")}</th>
+                  <th class="text-right">{gettext("Downloads")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  :if={@material_report.slides_on? or @material_report.slides_downloads > 0}
+                  id="materials-report-slides"
+                >
+                  <td>{gettext("Slides")}</td>
+                  <td>{gettext("Take-home")}</td>
+                  <td class="text-right tabular-nums">{@material_report.slides_downloads}</td>
+                </tr>
+                <tr
+                  :for={m <- @material_report.handouts ++ @material_report.take_homes}
+                  id={"materials-report-#{m.uuid}"}
+                >
+                  <td>
+                    {m.title}
+                    <span :if={not m.enabled} class="badge badge-ghost ml-1">
+                      {gettext("Off")}
+                    </span>
+                  </td>
+                  <td>
+                    {if m.kind == "handout", do: gettext("Handout"), else: gettext("Take-home")}
+                  </td>
+                  <td class="text-right tabular-nums">{m.downloads}</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="p-3 text-xs text-muted">
+              {gettext(
+                "Counted when someone taps Download. Opening a handout in the room isn't counted. Who downloaded isn't recorded."
+              )}
+            </p>
+          </section>
         <% :transcriptions -> %>
           <div>
             <%= if length(@transcriptions) > 0 do %>

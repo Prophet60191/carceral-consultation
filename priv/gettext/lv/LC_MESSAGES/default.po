@@ -719,6 +719,7 @@ msgstr "Skatiet pašreizējo tīmekļa saturu"
 #: lib/claper_web/live/embed_live/form_component.html.heex
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr "Nosaukums"
@@ -5370,6 +5371,7 @@ msgid "Number of groups"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/user_live.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #, elixir-autogen, elixir-format
 msgid "Off"
@@ -7183,6 +7185,7 @@ msgid "Give it a title."
 msgstr "Norādiet nosaukumu."
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Handout"
 msgstr "Izdales materiāls"
@@ -7194,6 +7197,7 @@ msgid "Handouts"
 msgstr "Izdales materiāli"
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Materials"
 msgstr "Materiāli"
@@ -7235,12 +7239,14 @@ msgstr "Vietējā laikā. Tad līdzņemšanas lapa tiek aizvērta."
 
 #: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/event_live/take_home.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr "Slaidi"
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Take-home"
 msgstr "Līdzņemšanai"
@@ -7334,3 +7340,18 @@ msgstr "Šis pasākums ir beidzies. Nav nekā, ko paņemt līdzi."
 #, elixir-autogen, elixir-format
 msgid "To take home"
 msgstr "Līdzņemšanai"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Counted when someone taps Download. Opening a handout in the room isn't counted. Who downloaded isn't recorded."
+msgstr "Tiek skaitīts, kad kāds pieskaras Lejupielādēt. Izdales materiāla atvēršana telpā netiek skaitīta. Kas lejupielādēja, netiek reģistrēts."
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Downloads"
+msgstr "Lejupielādes"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Kind"
+msgstr "Veids"

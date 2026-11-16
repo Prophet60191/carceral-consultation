@@ -715,6 +715,7 @@ msgstr ""
 #: lib/claper_web/live/embed_live/form_component.html.heex
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr ""
@@ -5351,6 +5352,7 @@ msgid "Number of groups"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/user_live.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #, elixir-autogen, elixir-format
 msgid "Off"
@@ -7164,6 +7166,7 @@ msgid "Give it a title."
 msgstr ""
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Handout"
 msgstr ""
@@ -7175,6 +7178,7 @@ msgid "Handouts"
 msgstr ""
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Materials"
 msgstr ""
@@ -7216,12 +7220,14 @@ msgstr ""
 
 #: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/event_live/take_home.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr ""
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Take-home"
 msgstr ""
@@ -7314,4 +7320,19 @@ msgstr ""
 #: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "To take home"
+msgstr ""
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Counted when someone taps Download. Opening a handout in the room isn't counted. Who downloaded isn't recorded."
+msgstr ""
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Downloads"
+msgstr ""
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Kind"
 msgstr ""

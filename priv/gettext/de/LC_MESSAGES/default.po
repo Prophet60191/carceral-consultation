@@ -715,6 +715,7 @@ msgstr "Aktuelle Webinhalte anzeigen"
 #: lib/claper_web/live/embed_live/form_component.html.heex
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/quiz_live/quiz_component.html.heex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Title"
 msgstr "Titel"
@@ -5351,6 +5352,7 @@ msgid "Number of groups"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/user_live.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #: lib/claper_web/live/user_settings_live/two_factor.html.heex
 #, elixir-autogen, elixir-format
 msgid "Off"
@@ -7164,6 +7166,7 @@ msgid "Give it a title."
 msgstr "Geben Sie einen Titel ein."
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Handout"
 msgstr "Handout"
@@ -7175,6 +7178,7 @@ msgid "Handouts"
 msgstr "Handouts"
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Materials"
 msgstr "Materialien"
@@ -7216,12 +7220,14 @@ msgstr "In Ihrer Ortszeit. Dann schließt die Abschlussseite."
 
 #: lib/claper_web/live/event_live/materials_component.ex
 #: lib/claper_web/live/event_live/take_home.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr "Folien"
 
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Take-home"
 msgstr "Zum Mitnehmen"
@@ -7315,3 +7321,18 @@ msgstr "Diese Veranstaltung ist beendet. Es gibt nichts zum Mitnehmen."
 #, elixir-autogen, elixir-format
 msgid "To take home"
 msgstr "Zum Mitnehmen"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Counted when someone taps Download. Opening a handout in the room isn't counted. Who downloaded isn't recorded."
+msgstr "Gezählt, wenn jemand auf Herunterladen tippt. Das Öffnen eines Handouts im Raum zählt nicht. Wer heruntergeladen hat, wird nicht gespeichert."
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Downloads"
+msgstr "Downloads"
+
+#: lib/claper_web/live/stat_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Kind"
+msgstr "Art"

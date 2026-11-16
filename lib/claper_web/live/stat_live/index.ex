@@ -64,6 +64,8 @@ defmodule ClaperWeb.StatLive.Index do
      |> assign(:posts, posts)
      |> assign(:word_cloud_reports, word_cloud_reports)
      |> assign(:breakout_reports, breakout_reports(event))
+     # Handouts and take-home PDFs: download counts (docs/MATERIALS.md)
+     |> assign(:material_report, Claper.Materials.download_report(event))
      |> assign(:current_tab, :messages)}
   end
 
@@ -106,6 +108,7 @@ defmodule ClaperWeb.StatLive.Index do
   defp tab_to_atom("word_clouds"), do: :word_clouds
   defp tab_to_atom("transcriptions"), do: :transcriptions
   defp tab_to_atom("breakouts"), do: :breakouts
+  defp tab_to_atom("materials"), do: :materials
   defp tab_to_atom(_), do: :messages
 
   defp available_tabs(event, posts, has_transcriptions?) do
@@ -117,6 +120,7 @@ defmodule ClaperWeb.StatLive.Index do
       {:quizzes, event.presentation_file.quizzes},
       {:word_clouds, event.presentation_file.word_clouds},
       {:breakouts, Claper.Breakouts.list_breakouts(event.presentation_file.id)},
+      {:materials, Claper.Materials.any?(event) or event.take_home_slides},
       {:transcriptions, has_transcriptions?}
     ]
     |> Enum.filter(fn

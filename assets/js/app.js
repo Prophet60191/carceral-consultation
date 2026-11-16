@@ -614,6 +614,13 @@ Hooks.OpenPresenter = {
   },
 };
 
+// The slide area's full screen (where the browser has no real full screen,
+// e.g. iPhone) and "hide the slide" are kept as classes on <html>: LiveView
+// redraws #focus-slot whenever a message or reaction arrives, and would undo
+// anything set on it (2026-11-15, Jose's phone: the slide snapped back).
+const htmlClass = (name, on) => document.documentElement.classList.toggle(name, on);
+const hasHtmlClass = (name) => document.documentElement.classList.contains(name);
+
 Hooks.AttendeeFocus = {
   mounted() {
     this.focusKey = this.el.dataset.focusKey;
@@ -635,8 +642,8 @@ Hooks.AttendeeFocus = {
       if (fullscreenButton) {
         if (document.fullscreenElement) {
           document.exitFullscreen?.();
-        } else if (this.el.classList.contains("focus-fallback-fullscreen")) {
-          this.el.classList.remove("focus-fallback-fullscreen");
+        } else if (hasHtmlClass("cc-slide-fullscreen")) {
+          htmlClass("cc-slide-fullscreen", false);
         } else {
           this.enterFullscreen();
         }
@@ -644,7 +651,7 @@ Hooks.AttendeeFocus = {
       }
     };
     this.onKeyDown = (event) => {
-      if (event.key === "Escape") this.el.classList.remove("focus-fallback-fullscreen");
+      if (event.key === "Escape") htmlClass("cc-slide-fullscreen", false);
     };
     this.el.addEventListener("click", this.onClick);
     document.addEventListener("keydown", this.onKeyDown);
@@ -661,28 +668,34 @@ Hooks.AttendeeFocus = {
       }
       this.focusKey = nextKey;
     }
+    // A poll or quiz taking the slide's place ends the slide's full screen
+    if (this.el.dataset.interactionMode === "true") {
+      htmlClass("cc-slide-fullscreen", false);
+    }
     this.restoreCollapse();
   },
   destroyed() {
     this.el.removeEventListener("click", this.onClick);
     document.removeEventListener("keydown", this.onKeyDown);
+    htmlClass("cc-slide-fullscreen", false);
+    htmlClass("cc-slide-collapsed", false);
   },
   restoreCollapse() {
-    const interactionMode = this.el.dataset.interactionMode === "true";
     const collapsed = localStorage.getItem(this.collapseKey) === "collapsed";
-    this.el.classList.toggle("focus-collapsed", collapsed && !interactionMode);
+    htmlClass("cc-slide-collapsed", collapsed);
   },
   enterFullscreen() {
     if (!this.el.requestFullscreen) {
-      this.el.classList.add("focus-fallback-fullscreen");
+      htmlClass("cc-slide-fullscreen", true);
       return;
     }
 
     this.el.requestFullscreen().catch(() => {
-      this.el.classList.add("focus-fallback-fullscreen");
+      htmlClass("cc-slide-fullscreen", true);
     });
   },
 };
+
 
 Hooks.AttendeeCaptions = {
   mounted() {
@@ -706,11 +719,12 @@ Hooks.AttendeeCaptions = {
     this.restoreCollapse();
   },
   destroyed() {
+    htmlClass("cc-captions-collapsed", false);
     this.el.removeEventListener("click", this.onClick);
   },
   restoreCollapse() {
     const collapsed = localStorage.getItem(this.collapseKey) === "collapsed";
-    this.el.classList.toggle("caption-collapsed", collapsed);
+    htmlClass("cc-captions-collapsed", collapsed);
   },
 };
 

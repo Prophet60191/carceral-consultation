@@ -95,7 +95,9 @@
   background: var(--color-stage);
 }
 
-#focus-slot.focus-fallback-fullscreen {
+/* Full screen where the browser has none (iPhone): a class on <html>, kept
+   through LiveView's redraws (assets/js/app.js, AttendeeFocus) */
+html.cc-slide-fullscreen #focus-slot {
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -105,34 +107,35 @@
   background: var(--color-stage);
 }
 
-#focus-slot.focus-collapsed {
+/* "Hide the slide" (class on <html>); never while a poll or quiz is shown */
+html.cc-slide-collapsed #focus-slot:not([data-interaction-mode="true"]) {
   height: 3rem;
   min-height: 3rem;
   max-height: 3rem;
 }
 
-#focus-slot.focus-collapsed #focus-media,
-#focus-slot.focus-collapsed [data-focus-collapse],
-#focus-slot.focus-collapsed [data-focus-fullscreen] {
+html.cc-slide-collapsed #focus-slot:not([data-interaction-mode="true"]) #focus-media,
+html.cc-slide-collapsed #focus-slot:not([data-interaction-mode="true"]) [data-focus-collapse],
+html.cc-slide-collapsed #focus-slot:not([data-interaction-mode="true"]) [data-focus-fullscreen] {
   display: none;
 }
 
-#focus-slot.focus-collapsed [data-focus-collapsed-bar] {
+html.cc-slide-collapsed #focus-slot:not([data-interaction-mode="true"]) [data-focus-collapsed-bar] {
   display: flex;
 }
 
-#caption-panel.caption-collapsed {
+html.cc-captions-collapsed #caption-panel {
   height: 3rem;
   min-height: 3rem;
   max-height: 3rem;
 }
 
-#caption-panel.caption-collapsed [data-caption-content],
-#caption-panel.caption-collapsed [data-caption-collapse] {
+html.cc-captions-collapsed #caption-panel [data-caption-content],
+html.cc-captions-collapsed #caption-panel [data-caption-collapse] {
   display: none;
 }
 
-#caption-panel.caption-collapsed [data-caption-collapsed-bar] {
+html.cc-captions-collapsed #caption-panel [data-caption-collapsed-bar] {
   display: flex;
 }
 

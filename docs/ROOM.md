@@ -16,14 +16,14 @@ The slide fills the window, and everything else floats over it:
 
 ## Phones and tablets
 
-Phones and tablets share one layout: the slide on top (expand to full screen or hide it), then captions, then the message feed with the message box at the bottom. The messenger wrapper used on computers is `display: contents` here, so the feed and the message box sit in the room exactly as before; the bubble and the theme button are hidden.
+Phones and tablets share one layout: the slide on top (expand to full screen or hide it), then captions, then the message feed with the message box at the bottom. The messenger's wrapper and panel are `display: contents` here, so the feed and the message box are the room's own rows; the bubble, the panel header and the theme button are hidden.
 
 ## How it is built
 
-- **Styles:** `assets/css/room_desktop.css` holds the computer layout and the phone/tablet fallbacks for the messenger wrapper. The glass look is shared with the intro page's messenger in `assets/css/intro_messenger.css` (`.room-messenger-panel` next to `.intro-messenger-panel`).
+- **One messenger component** (Jose, 2026-11-15: "they should be the same and reusable"): `ClaperWeb.EventLive.Messenger` draws the bubble, the red dot, the glass panel with its header, and the light/dark button (`theme_button/1`), for the intro page (`place={:intro}`) and the live room (`place={:room}`, `inline_on_touch`). Its look and placement, both pages, all devices, are in `assets/css/messenger.css`. `assets/css/room_desktop.css` holds only the room's own layout: the slide, the top corners, the interaction card, captions and reactions.
 - **One message system:** `ClaperWeb.EventLive.MessagesComponents` (`feed/1`, `composer/1`, `identity_menu/1`) draws the messages, the message box and the "post as" menu, on the intro page and in the room, on every device.
 - **Open/closed is the server's:** `messenger_open` and `messenger_unread` assigns; events `toggle-messenger` and `close-messenger`. The red dot is set for any message that isn't your own while the messenger is closed.
-- **The hook:** `IntroMessenger` (`assets/js/intro_messenger.js`) serves both messengers. It finds the panel and bubble by `[data-messenger-panel]` and `[data-messenger-toggle]`.
+- **The hook:** `Messenger` (`assets/js/messenger.js`) serves both pages. It finds the panel and bubble by `[data-messenger-panel]` and `[data-messenger-toggle]`.
 - **The slide behind an interaction:** in interaction mode the slide image is drawn as `.room-slide-backdrop` (hidden on phones and tablets) so the card has something to sit on.
 
 ## Device rules

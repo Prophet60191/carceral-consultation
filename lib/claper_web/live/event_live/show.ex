@@ -473,7 +473,7 @@ defmodule ClaperWeb.EventLive.Show do
 
   @impl true
   # The intro page's messenger (Jose, 2026-11-15): the bubble opens and
-  # closes it; clicking outside it or Escape closes it (IntroMessenger hook)
+  # closes it; clicking outside it or Escape closes it (Messenger hook)
   def handle_event("toggle-messenger", _params, socket) do
     {:noreply,
      socket

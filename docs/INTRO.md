@@ -168,7 +168,7 @@ On computers (any device with a mouse or trackpad, at any window width; a narrow
 - **The red dot:** a red dot on the bubble means someone else's message arrived while the messenger was closed; opening it clears the dot. Your own messages never light it.
 - **"Allow messages"** now applies from the moment people join, not only after the start (the server always accepted it; only the page was missing). It's on by default, so existing events show the bubble unless messages are turned off.
 - **Unchanged:** the big screen before the start (the join page and QR code), phones and tablets (to be discussed), and the "About this event" view over the slides.
-- **Files:** server state (open, red dot) in `EventLive.Show`, closing behavior in `assets/js/intro_messenger.js`, the look in `assets/css/intro_messenger.css`.
+- **Files:** server state (open, red dot) in `EventLive.Show`, the component `ClaperWeb.EventLive.Messenger` (shared with the live room), closing behavior in `assets/js/messenger.js`, the look in `assets/css/messenger.css`.
 
 ### Phones and tablets: the bottom bar (2026-11-15, Jose)
 
@@ -178,7 +178,7 @@ On phones and tablets (any touch screen; tablets take the phone's layout, Jose 2
 - **Lesson from Jose's iPhone (2026-11-15):** the intro page redraws every second (the countdown), and each redraw undoes any style a script sets on a redrawn element. So nothing may set styles on the messenger. A first fix that resized the sheet from script, and pinned the page with `position: fixed`, made taps inconsistent on a real iPhone while passing in emulation. State that must survive lives on `<html>` (a class, or `--sheet-drag` during a swipe). The message box's name and Send buttons are 44 px on touch screens, including in the live room.
 - **With messages off,** the bar keeps the theme button.
 - **Tablets:** the same bar and sheet, with the sheet centered and at most 640 px wide so lines stay readable, and the cards in one column (the side-by-side layout is for computers only).
-- **Same buttons as on computers:** one set, placed per device in `assets/css/intro_messenger.css`.
+- **Same buttons as on computers:** one set, placed per device in `assets/css/messenger.css`.
 - **Frosted glass was never blurring outside Safari.** The build kept only the hand-written `-webkit-backdrop-filter`, so Chrome got no blur for this or for the live room's message box. Only the standard `backdrop-filter` is written now, and the build adds Safari's prefix itself. Never write `-webkit-backdrop-filter` by hand.
 
 ### Theme button (2026-11-15, Jose)

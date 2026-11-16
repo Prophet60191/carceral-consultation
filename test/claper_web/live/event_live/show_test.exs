@@ -38,7 +38,13 @@ defmodule ClaperWeb.EventLive.ShowTest do
     assert Floki.attribute(document, "#post-form", "phx-hook") == ["PostForm"]
     assert "attendee-composer" in classes(document, "#post-form")
     assert Floki.find(document, "#room-topbar") != []
-    assert Floki.find(document, "#room-composer") != []
+    assert Floki.find(document, "#messenger-composer") != []
+    # The same messenger and theme button as the intro page's (Messenger)
+    assert "messenger" in classes(document, "#room-messenger")
+    assert Floki.attribute(document, "#room-messenger", "phx-hook") == ["Messenger"]
+    assert Floki.find(document, "#room-messenger #messenger-composer #post-form") != []
+    assert Floki.find(document, "#room-messenger-toggle[data-messenger-toggle]") != []
+    assert Floki.find(document, "#room-theme #room-theme-toggle[data-theme-toggle]") != []
     assert Floki.attribute(document, "[data-reaction-icon]", "draggable") == ["false"]
     assert "pointer-events-none" in classes(document, "[data-reaction-icon]")
     assert Floki.find(document, "#top-identity-button") == []

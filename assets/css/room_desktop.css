@@ -2,26 +2,14 @@
   The live room on computers (Jose, 2026-11-15): the slide fills the screen.
   Top left: the menu. Top right: the attendee count. Bottom left: the theme
   button, with the message bubble above it, opening the glass messenger
-  (looks shared with the intro page's: assets/css/intro_messenger.css).
+  (the same component as the intro page's: assets/css/messenger.css).
   Bottom right: live reactions. Polls, quizzes, forms and the like show as a
   solid card over the slide (no glass); captions run as a strip across the
   bottom of the slide. Phones and tablets keep their layout: the messages
   stay inline, as before.
 */
 
-/* Phones and tablets: the messenger wrapper is invisible to the layout, so
-   the messages and the message box sit in the room exactly as before */
-.room-messenger,
-#room-messenger-panel {
-  display: contents;
-}
-#room-messenger-panel {
-  visibility: visible;
-  opacity: 1;
-}
-.room-messenger-head,
-.room-messenger-toggle,
-.room-theme,
+/* The slide behind an interaction: computers only (below) */
 .room-slide-backdrop {
   display: none;
 }
@@ -127,63 +115,8 @@
     box-shadow: var(--shadow-lg);
   }
 
-  /* Bottom left: the theme button, the message bubble above it */
-  .room-theme {
-    display: block;
-  }
-  .room-messenger-toggle {
-    display: inline-flex;
-  }
-  .room-corner-btn {
-    position: fixed;
-    left: 24px;
-    z-index: 60;
-    box-shadow: var(--shadow-xl);
-  }
-  .room-theme-toggle {
-    bottom: 24px;
-  }
-  .room-messenger-toggle {
-    bottom: 84px;
-  }
-
-  /* The messenger: the intro page's glass panel, in the same place */
-  .room-messenger {
-    display: block;
-  }
-  #room-messenger-panel {
-    display: flex;
-    flex-direction: column;
-    left: 24px;
-    bottom: 144px;
-    width: min(400px, calc(100vw - 48px));
-    height: min(640px, calc(100vh - 176px));
-    border-radius: 24px;
-    visibility: hidden;
-    opacity: 0;
-    transform: translateY(12px) scale(0.96);
-    transform-origin: bottom left;
-  }
-  .room-messenger[data-open="true"] #room-messenger-panel {
-    visibility: visible;
-    opacity: 1;
-    transform: none;
-  }
-  .room-messenger-head {
-    display: flex;
-  }
-  #room-messenger-panel #chat-panel {
-    flex: 1 1 auto;
-    min-height: 0;
-  }
-  #room-messenger-panel #chat-feed {
-    padding-bottom: 16px;
-  }
-  #room-messenger-panel #room-composer {
-    position: relative;
-    inset: auto;
-    padding: 4px 12px 12px;
-  }
+  /* Bottom left: the theme button and the message bubble, the shared
+     messenger's own corner stack (assets/css/messenger.css) */
 
   /* Live reactions: over the whole room, their button bottom right */
   #reacts {
@@ -194,12 +127,5 @@
     left: auto;
     right: 88px;
     bottom: 24px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  #room-messenger-panel {
-    transform: none !important;
-    transition: none;
   }
 }

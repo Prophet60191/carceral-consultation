@@ -9,7 +9,7 @@
 @import './badges.css';
 @import './fields.css';
 @import './tooltip.css';
-@import './intro_messenger.css';
+@import './messenger.css';
 @import './room_desktop.css';
 
 @plugin "daisyui" {
@@ -163,7 +163,7 @@ html.cc-captions-collapsed #caption-panel [data-caption-collapsed-bar] {
     padding-bottom: 10rem;
   }
 
-  #room-composer textarea {
+  #messenger-composer textarea {
     max-height: 2.75rem;
   }
 

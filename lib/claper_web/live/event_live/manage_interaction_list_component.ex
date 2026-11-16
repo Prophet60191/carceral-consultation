@@ -92,69 +92,22 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
         <span class="font-bold text-sm text-base-content">{gettext("Interactions")}</span>
       </div>
 
-      <div class="grid grid-cols-4 gap-1">
-        <.action_button patch={~p"/e/#{@event_code}/manage/add/poll"} label={gettext("Poll")}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-            />
-          </svg>
-        </.action_button>
-        <.action_button patch={~p"/e/#{@event_code}/manage/add/form"} label={gettext("Form")}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-            />
-          </svg>
-        </.action_button>
-        <.action_button patch={~p"/e/#{@event_code}/manage/add/quiz"} label={gettext("Quiz")}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="2"
-            stroke="currentColor"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
-            />
-          </svg>
-        </.action_button>
-
-        <div class="static">
-          <button
-            id="interaction-more-button"
-            phx-click={
-              JS.toggle(to: "#interaction-more-menu")
-              |> JS.dispatch("cc:place-menu", to: "#interaction-more-menu")
-            }
-            aria-haspopup="menu"
-            class="btn btn-ghost btn-stacked w-full"
+      <%!-- One "Add" combobox in place of the Poll / Form / Quiz / More chips,
+           with Reorder beside it (Jose, 2026-11-16) --%>
+      <div class="flex items-center gap-2">
+        <ClaperWeb.Component.Combobox.combobox
+          id="add-interaction"
+          label={gettext("Add an interaction")}
+          class="flex-1"
+        >
+          <:option
+            patch={~p"/e/#{@event_code}/manage/add/poll"}
+            label={gettext("Poll")}
+            description={gettext("Add a poll to gauge your audience's opinion.")}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              class="h-5 w-5 text-primary"
+              class="size-4"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
@@ -163,197 +116,158 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
               <path
                 stroke-linecap="round"
                 stroke-linejoin="round"
-                d="M12 6.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 12.75a.75.75 0 110-1.5.75.75 0 010 1.5zM12 18.75a.75.75 0 110-1.5.75.75 0 010 1.5z"
+                d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
               />
             </svg>
-            <span class="font-bold text-xs leading-normal">{gettext("More")}</span>
-          </button>
-
-          <%!-- Floats above the page (FloatingMenu hook), so the scrolling
-               Interactions panel never cuts it off (Jose, 2026-11-14) --%>
-          <div
-            id="interaction-more-menu"
-            role="menu"
-            phx-hook="FloatingMenu"
-            data-anchor="#interaction-drag-list"
-            data-button="#interaction-more-button"
-            phx-click-away={JS.hide(to: "#interaction-more-menu")}
-            class="hidden fixed bg-base-200 border border-line rounded-2xl p-2 shadow-lg z-50 overflow-y-auto"
+          </:option>
+          <:option
+            patch={~p"/e/#{@event_code}/manage/add/form"}
+            label={gettext("Form")}
+            description={gettext("Create a form to collect feedback from your audience.")}
           >
-            <%!-- Reorder this slide's interactions (Jose, 2026-11-14); handled by
-                 the manage page, which owns the dialog --%>
-            <button
-              type="button"
-              id="open-reorder"
-              phx-click={JS.hide(to: "#interaction-more-menu") |> JS.push("open-reorder")}
-              disabled={length(@interactions) < 2}
-              class="menu-item w-full items-start p-2 text-left"
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="size-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              stroke-width="2"
             >
-              <div class="flex items-center justify-center w-9 h-9 rounded-full bg-selected text-primary shrink-0">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="h-5 w-5"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="2"
-                  stroke="currentColor"
-                  aria-hidden="true"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
-                  />
-                </svg>
-              </div>
-              <div class="min-w-0">
-                <p class="font-bold text-sm text-base-content leading-snug">{gettext("Reorder")}</p>
-                <p class="text-xs text-muted leading-tight">
-                  {if length(@interactions) < 2,
-                    do: gettext("Add a second interaction to this slide to reorder."),
-                    else: gettext("Change the order of this slide's interactions.")}
-                </p>
-              </div>
-            </button>
-            <div class="my-1 border-t border-line" role="separator"></div>
-            <.popup_item
-              patch={~p"/e/#{@event_code}/manage/add/poll"}
-              title={gettext("Poll")}
-              description={gettext("Add a poll to gauge your audience's opinion.")}
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
+              />
+            </svg>
+          </:option>
+          <:option
+            patch={~p"/e/#{@event_code}/manage/add/embed"}
+            label={gettext("Web Content")}
+            description={gettext("Embed external web content into your presentation.")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="size-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M16 8v8m-4-5v5m-4-2v2m-2 4h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
-                />
-              </svg>
-            </.popup_item>
-            <.popup_item
-              patch={~p"/e/#{@event_code}/manage/add/form"}
-              title={gettext("Form")}
-              description={gettext("Create a form to collect feedback from your audience.")}
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
+              />
+            </svg>
+          </:option>
+          <:option
+            patch={~p"/e/#{@event_code}/manage/add/quiz"}
+            label={gettext("Quiz")}
+            description={gettext("Test your audience's knowledge with a quiz.")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="size-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                stroke-width="2"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"
-                />
-              </svg>
-            </.popup_item>
-            <.popup_item
-              patch={~p"/e/#{@event_code}/manage/add/embed"}
-              title={gettext("Web Content")}
-              description={gettext("Embed external web content into your presentation.")}
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
+              />
+            </svg>
+          </:option>
+          <:option
+            navigate={~p"/e/#{@event_code}/breakouts/new"}
+            label={gettext("Breakout")}
+            description={
+              gettext("Split the room into small groups, each with material and questions.")
+            }
+          >
+            <ClaperWeb.BreakoutLive.Icons.breakout class="size-4" />
+          </:option>
+          <:option
+            patch={~p"/e/#{@event_code}/manage/add/word_cloud"}
+            label={gettext("Word Cloud")}
+            description={gettext("Let your audience answer in their own words.")}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="size-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M14.25 9.75L16.5 12l-2.25 2.25m-4.5 0L7.5 12l2.25-2.25M6 20.25h12A2.25 2.25 0 0020.25 18V6A2.25 2.25 0 0018 3.75H6A2.25 2.25 0 003.75 6v12A2.25 2.25 0 006 20.25z"
-                />
-              </svg>
-            </.popup_item>
-            <.popup_item
-              patch={~p"/e/#{@event_code}/manage/add/quiz"}
-              title={gettext("Quiz")}
-              description={gettext("Test your audience's knowledge with a quiz.")}
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
+              />
+            </svg>
+          </:option>
+          <:option
+            :if={@transcription_globally_enabled}
+            patch={transcription_patch(@event_code, @transcription_config)}
+            disabled={transcription_persisted?(@transcription_config)}
+            badge={gettext("Global")}
+            label={gettext("Transcription")}
+            description={
+              if transcription_persisted?(@transcription_config),
+                do: gettext("Already added to this presentation."),
+                else: gettext("Live transcribe presenter audio for your audience.")
+            }
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="size-4"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="2"
+              stroke="currentColor"
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"
-                />
-              </svg>
-            </.popup_item>
-            <.popup_item
-              navigate={~p"/e/#{@event_code}/breakouts/new"}
-              title={gettext("Breakout")}
-              description={
-                gettext("Split the room into small groups, each with material and questions.")
-              }
-            >
-              <ClaperWeb.BreakoutLive.Icons.breakout class="h-5 w-5" />
-            </.popup_item>
-            <.popup_item
-              patch={~p"/e/#{@event_code}/manage/add/word_cloud"}
-              title={gettext("Word Cloud")}
-              description={gettext("Let your audience answer in their own words.")}
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M2.25 15a4.5 4.5 0 0 0 4.5 4.5H18a3.75 3.75 0 0 0 1.332-7.257 3 3 0 0 0-3.758-3.848 5.25 5.25 0 0 0-10.233 2.33A4.502 4.502 0 0 0 2.25 15Z"
-                />
-              </svg>
-            </.popup_item>
-            <.popup_item
-              :if={@transcription_globally_enabled}
-              patch={transcription_patch(@event_code, @transcription_config)}
-              disabled={transcription_persisted?(@transcription_config)}
-              badge={gettext("Global")}
-              title={gettext("Transcription")}
-              description={
-                if transcription_persisted?(@transcription_config),
-                  do: gettext("Already added to this presentation."),
-                  else: gettext("Live transcribe presenter audio for your audience.")
-              }
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                class="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke-width="2"
-                stroke="currentColor"
-              >
-                <path
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"
-                />
-              </svg>
-            </.popup_item>
-          </div>
-        </div>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v8.25a3 3 0 0 1-3 3Z"
+              />
+            </svg>
+          </:option>
+        </ClaperWeb.Component.Combobox.combobox>
+        <%!-- Reorder this slide's interactions (Jose, 2026-11-14); handled by
+             the manage page, which owns the dialog --%>
+        <button
+          type="button"
+          id="open-reorder"
+          phx-click="open-reorder"
+          disabled={length(@interactions) < 2}
+          aria-label={gettext("Reorder")}
+          data-tooltip={
+            if length(@interactions) < 2,
+              do: gettext("Add a second interaction to this slide to reorder."),
+              else: gettext("Change the order of this slide's interactions.")
+          }
+          class="btn btn-outline btn-square shrink-0"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="size-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="2"
+            stroke="currentColor"
+            aria-hidden="true"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 7.5 7.5 3m0 0L12 7.5M7.5 3v13.5m13.5 0L16.5 21m0 0L12 16.5m4.5 4.5V7.5"
+            />
+          </svg>
+        </button>
       </div>
 
       <div
@@ -596,52 +510,4 @@ defmodule ClaperWeb.EventLive.ManageInteractionListComponent do
        do: true
 
   defp transcription_persisted?(_), do: false
-
-  defp action_button(assigns) do
-    ~H"""
-    <.link patch={@patch} class="btn btn-ghost btn-stacked">
-      <div class="text-primary">
-        {render_slot(@inner_block)}
-      </div>
-      <span class="font-bold text-xs leading-normal">{@label}</span>
-    </.link>
-    """
-  end
-
-  defp popup_item(assigns) do
-    assigns =
-      assigns
-      |> assign_new(:disabled, fn -> false end)
-      |> assign_new(:badge, fn -> nil end)
-
-    ~H"""
-    <%= if @disabled do %>
-      <div class="menu-item items-start p-2" aria-disabled="true" aria-disabled="true">
-        <div class="flex items-center justify-center w-9 h-9 rounded-full bg-selected text-primary shrink-0">
-          {render_slot(@inner_block)}
-        </div>
-        <div class="min-w-0">
-          <div class="flex items-center gap-2">
-            <p class="font-bold text-sm text-base-content leading-snug">{@title}</p>
-            <span :if={@badge} class="badge badge-sm badge-soft badge-primary">{@badge}</span>
-          </div>
-          <p class="text-xs text-muted leading-tight">{@description}</p>
-        </div>
-      </div>
-    <% else %>
-      <.link patch={assigns[:patch]} navigate={assigns[:navigate]} class="menu-item items-start p-2">
-        <div class="flex items-center justify-center w-9 h-9 rounded-full bg-selected text-primary shrink-0">
-          {render_slot(@inner_block)}
-        </div>
-        <div class="min-w-0">
-          <div class="flex items-center gap-2">
-            <p class="font-bold text-sm text-base-content leading-snug">{@title}</p>
-            <span :if={@badge} class="badge badge-sm badge-soft badge-primary">{@badge}</span>
-          </div>
-          <p class="text-xs text-muted leading-tight">{@description}</p>
-        </div>
-      </.link>
-    <% end %>
-    """
-  end
 end

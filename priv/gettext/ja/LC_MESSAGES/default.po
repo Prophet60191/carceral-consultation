@@ -1225,6 +1225,7 @@ msgid "Forms"
 msgstr "フォーム"
 
 #: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#: lib/claper_web/live/intro_live/builder.html.heex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Interactions"
@@ -1980,6 +1981,7 @@ msgid "Processing..."
 msgstr "処理中…"
 
 #: lib/claper_web/live/event_live/index.html.heex
+#: lib/claper_web/views/components/combobox_component.ex
 #, elixir-autogen, elixir-format
 msgid "Search"
 msgstr "検索"
@@ -2009,11 +2011,6 @@ msgstr "クイズで参加者の理解度をチェックしましょう。"
 #, elixir-autogen, elixir-format
 msgid "External accounts connected to your profile"
 msgstr "プロフィールに連携している外部アカウント"
-
-#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
-#, elixir-autogen, elixir-format
-msgid "More"
-msgstr "その他"
 
 #: lib/claper_web/live/admin_live/audit_log_live.html.heex
 #: lib/claper_web/live/admin_live/user_live.html.heex
@@ -2626,6 +2623,7 @@ msgstr "続けるにはログインしてください"
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
+#: lib/claper_web/views/components/combobox_component.ex
 #, elixir-autogen, elixir-format
 msgid "Add"
 msgstr "追加"
@@ -2797,6 +2795,7 @@ msgstr "ニックネームを設定"
 msgid "Set your nickname to participate"
 msgstr "参加するにはニックネームを設定してください"
 
+#: lib/claper_web/live/event_live/manage_audience_responses_component.ex
 #: lib/claper_web/live/event_live/messages_components.ex
 #, elixir-autogen, elixir-format
 msgid "new messages"
@@ -3917,12 +3916,6 @@ msgstr ""
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Add to the page"
-msgstr ""
-
-#: lib/claper_web/live/breakout_live/builder.html.heex
-#: lib/claper_web/live/intro_live/builder.html.heex
-#, elixir-autogen, elixir-format
-msgid "Add:"
 msgstr ""
 
 #: lib/claper_web/live/intro_live/builder.ex
@@ -5288,16 +5281,6 @@ msgstr ""
 #: lib/claper_web/live/intro_live/components.ex
 #, elixir-autogen, elixir-format
 msgid "Nothing here yet."
-msgstr ""
-
-#: lib/claper_web/live/breakout_live/builder.html.heex
-#, elixir-autogen, elixir-format
-msgid "Nothing here yet. Use the buttons above to add something to read or look at, then the questions, in the order the group should work through them."
-msgstr ""
-
-#: lib/claper_web/live/intro_live/builder.html.heex
-#, elixir-autogen, elixir-format
-msgid "Nothing here yet. Use the buttons above to add the first block."
 msgstr ""
 
 #: lib/claper_web/live/breakout_live/library.ex
@@ -7320,3 +7303,38 @@ msgstr "種類"
 #, elixir-autogen, elixir-format
 msgid "Shared"
 msgstr "共有"
+
+#: lib/claper_web/live/intro_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Add a block"
+msgstr "ブロックを追加"
+
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add an interaction"
+msgstr "インタラクションを追加"
+
+#: lib/claper_web/live/breakout_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Add material or a question"
+msgstr "資料や質問を追加"
+
+#: lib/claper_web/live/intro_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Blocks"
+msgstr "ブロック"
+
+#: lib/claper_web/live/breakout_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Nothing here yet. Use Add above to add something to read or look at, then the questions, in the order the group should work through them."
+msgstr "まだ何もありません。上の「追加」から、読むものや見るもの、続いて質問を、グループが取り組む順に追加してください。"
+
+#: lib/claper_web/live/intro_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Nothing here yet. Use Add above to add the first block."
+msgstr "まだ何もありません。上の「追加」から最初のブロックを追加してください。"
+
+#: lib/claper_web/views/components/combobox_component.ex
+#, elixir-autogen, elixir-format
+msgid "Nothing matches."
+msgstr "一致するものはありません。"

@@ -1226,6 +1226,7 @@ msgid "Forms"
 msgstr ""
 
 #: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#: lib/claper_web/live/intro_live/builder.html.heex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Interactions"
@@ -1981,6 +1982,7 @@ msgid "Processing..."
 msgstr ""
 
 #: lib/claper_web/live/event_live/index.html.heex
+#: lib/claper_web/views/components/combobox_component.ex
 #, elixir-autogen, elixir-format
 msgid "Search"
 msgstr ""
@@ -2009,11 +2011,6 @@ msgstr ""
 #: lib/claper_web/live/user_settings_live/show.html.heex
 #, elixir-autogen, elixir-format
 msgid "External accounts connected to your profile"
-msgstr ""
-
-#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
-#, elixir-autogen, elixir-format
-msgid "More"
 msgstr ""
 
 #: lib/claper_web/live/admin_live/audit_log_live.html.heex
@@ -2627,6 +2624,7 @@ msgstr ""
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
+#: lib/claper_web/views/components/combobox_component.ex
 #, elixir-autogen, elixir-format
 msgid "Add"
 msgstr ""
@@ -2798,6 +2796,7 @@ msgstr ""
 msgid "Set your nickname to participate"
 msgstr ""
 
+#: lib/claper_web/live/event_live/manage_audience_responses_component.ex
 #: lib/claper_web/live/event_live/messages_components.ex
 #, elixir-autogen, elixir-format, fuzzy
 msgid "new messages"
@@ -3933,12 +3932,6 @@ msgstr ""
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Add to the page"
-msgstr ""
-
-#: lib/claper_web/live/breakout_live/builder.html.heex
-#: lib/claper_web/live/intro_live/builder.html.heex
-#, elixir-autogen, elixir-format
-msgid "Add:"
 msgstr ""
 
 #: lib/claper_web/live/intro_live/builder.ex
@@ -5304,16 +5297,6 @@ msgstr ""
 #: lib/claper_web/live/intro_live/components.ex
 #, elixir-autogen, elixir-format
 msgid "Nothing here yet."
-msgstr ""
-
-#: lib/claper_web/live/breakout_live/builder.html.heex
-#, elixir-autogen, elixir-format
-msgid "Nothing here yet. Use the buttons above to add something to read or look at, then the questions, in the order the group should work through them."
-msgstr ""
-
-#: lib/claper_web/live/intro_live/builder.html.heex
-#, elixir-autogen, elixir-format
-msgid "Nothing here yet. Use the buttons above to add the first block."
 msgstr ""
 
 #: lib/claper_web/live/breakout_live/library.ex
@@ -7335,4 +7318,39 @@ msgstr ""
 #: lib/claper_web/live/event_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Shared"
+msgstr ""
+
+#: lib/claper_web/live/intro_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Add a block"
+msgstr ""
+
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add an interaction"
+msgstr ""
+
+#: lib/claper_web/live/breakout_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Add material or a question"
+msgstr ""
+
+#: lib/claper_web/live/intro_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Blocks"
+msgstr ""
+
+#: lib/claper_web/live/breakout_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Nothing here yet. Use Add above to add something to read or look at, then the questions, in the order the group should work through them."
+msgstr ""
+
+#: lib/claper_web/live/intro_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Nothing here yet. Use Add above to add the first block."
+msgstr ""
+
+#: lib/claper_web/views/components/combobox_component.ex
+#, elixir-autogen, elixir-format
+msgid "Nothing matches."
 msgstr ""

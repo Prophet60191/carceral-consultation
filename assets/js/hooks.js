@@ -305,61 +305,6 @@ const Hooks = {
       }
     },
   },
-  // A drop-down menu that floats above the page (position: fixed) under its
-  // button (above it only when there is little room below), as wide as its
-  // anchor (data-anchor) and no taller than the window, so a scrolling panel around it can't cut it off. The button
-  // dispatches "cc:place-menu" when it opens the menu; the menu closes when
-  // anything around it scrolls or the window resizes, since it would no
-  // longer line up.
-  FloatingMenu: {
-    mounted() {
-      // Measured on the next frame, once the menu is shown and has a height.
-      this.place = () => window.requestAnimationFrame(() => this.placeNow());
-      this.placeNow = () => {
-        if (getComputedStyle(this.el).display === "none") return;
-        const anchor = document.querySelector(this.el.dataset.anchor);
-        const button = document.querySelector(this.el.dataset.button);
-        if (!anchor || !button) return;
-        const a = anchor.getBoundingClientRect();
-        const b = button.getBoundingClientRect();
-        this.el.style.left = `${a.left}px`;
-        this.el.style.width = `${a.width}px`;
-        this.el.style.maxHeight = "none";
-        const needed = this.el.scrollHeight;
-        const below = window.innerHeight - b.bottom - 12;
-        const above = b.top - 12;
-        // Below the button, as drop-downs usually open, scrolling inside
-        // itself if it is taller than the room there; above it only when
-        // there is too little room below to be useful.
-        if (needed <= below || below >= 280 || below >= above) {
-          this.el.style.top = `${b.bottom + 4}px`;
-          this.el.style.maxHeight = `${Math.max(160, below)}px`;
-        } else {
-          const height = Math.min(needed, above);
-          this.el.style.top = `${b.top - 4 - height}px`;
-          this.el.style.maxHeight = `${height}px`;
-        }
-      };
-      this.close = (e) => {
-        if (e && e.target instanceof Node && this.el.contains(e.target)) return;
-        if (getComputedStyle(this.el).display !== "none") {
-          this.liveSocket.execJS(this.el, `[["hide",{"to":"#${this.el.id}"}]]`);
-        }
-      };
-      this.el.addEventListener("cc:place-menu", this.place);
-      // Any scroll (the panel, or the page on phones) except inside the menu.
-      document.addEventListener("scroll", this.close, { capture: true, passive: true });
-      window.addEventListener("resize", this.close);
-    },
-    updated() {
-      this.place();
-    },
-    destroyed() {
-      document.removeEventListener("scroll", this.close, { capture: true });
-      window.removeEventListener("resize", this.close);
-    },
-  },
-
   // A button that copies data-url to the clipboard and says "Copied" for a
   // moment (ClaperWeb.Component.CopyButton). The app runs on plain http on the home network, where browsers
   // block navigator.clipboard, so it falls back to a hidden text field and

@@ -31,6 +31,7 @@ import { Messenger } from "./messenger";
 import { PdfViewer } from "./pdf_viewer";
 import { ManagePages } from "./manage_pages";
 import { PostLongPress } from "./post_long_press";
+import { Combobox } from "./combobox";
 import "./admin-charts.js";
 
 // Get supported locales from backend configuration or fallback to default list
@@ -77,6 +78,8 @@ Hooks.PdfViewer = PdfViewer;
 Hooks.ManagePages = ManagePages;
 // Staff messages: long press for the actions on touch screens (assets/js/post_long_press.js)
 Hooks.PostLongPress = PostLongPress;
+// The "Add" combobox (assets/js/combobox.js, ClaperWeb.Component.Combobox)
+Hooks.Combobox = Combobox;
 // Format UTC server timestamps in the viewer's timezone after LiveView mounts.
 Hooks.LocalDate = {
   mounted() {

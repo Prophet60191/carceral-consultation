@@ -1,0 +1,94 @@
+/*
+  The "Add" combobox (ClaperWeb.Component.Combobox; Jose, 2026-11-16): one
+  button in place of a row of chips; its panel has a search box and the
+  choices, placed on the screen by the Combobox hook (assets/js/combobox.js).
+*/
+
+.combobox {
+  min-width: 0;
+}
+
+.combobox-trigger {
+  width: 100%;
+  justify-content: flex-start;
+  gap: 0.5rem;
+}
+
+.combobox-panel {
+  position: fixed;
+  z-index: 70;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px;
+  overflow: hidden;
+  border: 1px solid var(--color-line-strong);
+  border-radius: 12px;
+  background: var(--color-base-200);
+  color: var(--color-base-content);
+  box-shadow: var(--shadow-xl);
+}
+.combobox-panel[hidden] {
+  display: none;
+}
+
+.combobox-search {
+  flex-shrink: 0;
+  width: 100%;
+}
+
+.combobox-list {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.combobox-group {
+  padding: 8px 8px 2px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+}
+.combobox-group[hidden],
+.combobox-option[hidden] {
+  display: none;
+}
+
+.combobox-option {
+  display: flex;
+  width: 100%;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px;
+}
+.combobox-option[data-active] {
+  background: var(--color-selected);
+}
+.combobox-option[aria-disabled="true"] {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.combobox-option-icon {
+  display: flex;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9999px;
+  background: var(--color-selected);
+  color: var(--color-primary);
+}
+
+.combobox-empty {
+  padding: 12px 8px;
+  font-size: 0.875rem;
+  color: var(--color-muted);
+}
+.combobox-empty[hidden] {
+  display: none;
+}

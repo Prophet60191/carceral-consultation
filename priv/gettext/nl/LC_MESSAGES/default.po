@@ -1226,6 +1226,7 @@ msgid "Forms"
 msgstr "Formulieren"
 
 #: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#: lib/claper_web/live/intro_live/builder.html.heex
 #: lib/claper_web/live/stat_live/index.html.heex
 #, elixir-autogen, elixir-format
 msgid "Interactions"
@@ -1981,6 +1982,7 @@ msgid "Processing..."
 msgstr "Verwerken..."
 
 #: lib/claper_web/live/event_live/index.html.heex
+#: lib/claper_web/views/components/combobox_component.ex
 #, elixir-autogen, elixir-format
 msgid "Search"
 msgstr "Zoeken"
@@ -2010,11 +2012,6 @@ msgstr "Test de kennis van je publiek met een quiz."
 #, elixir-autogen, elixir-format
 msgid "External accounts connected to your profile"
 msgstr "Externe accounts gekoppeld aan je profiel"
-
-#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
-#, elixir-autogen, elixir-format
-msgid "More"
-msgstr "Meer"
 
 #: lib/claper_web/live/admin_live/audit_log_live.html.heex
 #: lib/claper_web/live/admin_live/user_live.html.heex
@@ -2629,6 +2626,7 @@ msgstr "Je moet inloggen om door te gaan"
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/form_live/form_component.html.heex
 #: lib/claper_web/live/poll_live/form_component.html.heex
+#: lib/claper_web/views/components/combobox_component.ex
 #, elixir-autogen, elixir-format
 msgid "Add"
 msgstr "Toevoegen"
@@ -2800,6 +2798,7 @@ msgstr "Kies een bijnaam"
 msgid "Set your nickname to participate"
 msgstr "Kies een bijnaam om deel te nemen"
 
+#: lib/claper_web/live/event_live/manage_audience_responses_component.ex
 #: lib/claper_web/live/event_live/messages_components.ex
 #, elixir-autogen, elixir-format
 msgid "new messages"
@@ -3935,12 +3934,6 @@ msgstr ""
 #: lib/claper_web/live/intro_live/builder.html.heex
 #, elixir-autogen, elixir-format
 msgid "Add to the page"
-msgstr ""
-
-#: lib/claper_web/live/breakout_live/builder.html.heex
-#: lib/claper_web/live/intro_live/builder.html.heex
-#, elixir-autogen, elixir-format
-msgid "Add:"
 msgstr ""
 
 #: lib/claper_web/live/intro_live/builder.ex
@@ -5306,16 +5299,6 @@ msgstr ""
 #: lib/claper_web/live/intro_live/components.ex
 #, elixir-autogen, elixir-format
 msgid "Nothing here yet."
-msgstr ""
-
-#: lib/claper_web/live/breakout_live/builder.html.heex
-#, elixir-autogen, elixir-format
-msgid "Nothing here yet. Use the buttons above to add something to read or look at, then the questions, in the order the group should work through them."
-msgstr ""
-
-#: lib/claper_web/live/intro_live/builder.html.heex
-#, elixir-autogen, elixir-format
-msgid "Nothing here yet. Use the buttons above to add the first block."
 msgstr ""
 
 #: lib/claper_web/live/breakout_live/library.ex
@@ -7338,3 +7321,38 @@ msgstr "Soort"
 #, elixir-autogen, elixir-format
 msgid "Shared"
 msgstr "Gedeeld"
+
+#: lib/claper_web/live/intro_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Add a block"
+msgstr "Blok toevoegen"
+
+#: lib/claper_web/live/event_live/manage_interaction_list_component.ex
+#, elixir-autogen, elixir-format
+msgid "Add an interaction"
+msgstr "Interactie toevoegen"
+
+#: lib/claper_web/live/breakout_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Add material or a question"
+msgstr "Materiaal of een vraag toevoegen"
+
+#: lib/claper_web/live/intro_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Blocks"
+msgstr "Blokken"
+
+#: lib/claper_web/live/breakout_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Nothing here yet. Use Add above to add something to read or look at, then the questions, in the order the group should work through them."
+msgstr "Nog niets. Gebruik Toevoegen hierboven om iets te lezen of te bekijken toe te voegen, daarna de vragen, in de volgorde waarin de groep ze moet doorlopen."
+
+#: lib/claper_web/live/intro_live/builder.html.heex
+#, elixir-autogen, elixir-format
+msgid "Nothing here yet. Use Add above to add the first block."
+msgstr "Nog niets. Gebruik Toevoegen hierboven om het eerste blok toe te voegen."
+
+#: lib/claper_web/views/components/combobox_component.ex
+#, elixir-autogen, elixir-format
+msgid "Nothing matches."
+msgstr "Niets gevonden."

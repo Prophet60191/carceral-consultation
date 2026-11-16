@@ -147,33 +147,40 @@
             </div>
           </form>
 
-          <div class="flex flex-wrap items-center gap-2">
-            <span class="text-sm text-muted">{gettext("Add:")}</span>
-            <.link
+          <%!-- One "Add" combobox in place of a row of chips (Jose, 2026-11-16):
+               blocks, then interactions (docs/INTRO.md, decision 11) --%>
+          <ClaperWeb.Component.Combobox.combobox
+            id="add-intro-block"
+            label={gettext("Add a block")}
+            class="max-w-sm"
+          >
+            <:option
               :for={kind <- ~w(heading text image stat agenda link)}
+              label={ClaperWeb.IntroLive.Components.kind_label(kind)}
+              group={gettext("Blocks")}
               patch={"#{base_path(assigns)}?add=#{kind}"}
-              class="btn btn-outline btn-sm"
             >
               <ClaperWeb.IntroLive.Components.icon kind={kind} class="size-4" />
-              {ClaperWeb.IntroLive.Components.kind_label(kind)}
-            </.link>
-            <button type="button" class="btn btn-outline btn-sm" phx-click="add_divider">
+            </:option>
+            <:option
+              label={ClaperWeb.IntroLive.Components.kind_label("divider")}
+              group={gettext("Blocks")}
+              click="add_divider"
+            >
               <ClaperWeb.IntroLive.Components.icon kind="divider" class="size-4" />
-              {ClaperWeb.IntroLive.Components.kind_label("divider")}
-            </button>
-            <%!-- Interactions (docs/INTRO.md, decision 11) --%>
-            <.link
+            </:option>
+            <:option
               :for={kind <- ~w(poll quiz form word_cloud embed)}
+              label={ClaperWeb.IntroLive.Components.kind_label(kind)}
+              group={gettext("Interactions")}
               patch={"#{base_path(assigns)}?add=#{kind}"}
-              class="btn btn-outline btn-sm"
             >
               <ClaperWeb.IntroLive.Components.icon kind={kind} class="size-4" />
-              {ClaperWeb.IntroLive.Components.kind_label(kind)}
-            </.link>
-          </div>
+            </:option>
+          </ClaperWeb.Component.Combobox.combobox>
 
           <p :if={@page.blocks == []} class="text-sm text-muted">
-            {gettext("Nothing here yet. Use the buttons above to add the first block.")}
+            {gettext("Nothing here yet. Use Add above to add the first block.")}
           </p>
 
           <ol :if={@page.blocks != []} class="flex flex-col gap-2">

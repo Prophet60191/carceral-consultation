@@ -198,20 +198,23 @@
       </div>
 
       <div class="flex flex-col gap-3 p-3">
-        <div class="flex flex-wrap items-center gap-2">
-          <span class="text-sm text-muted">{gettext("Add:")}</span>
-          <.link
+        <%!-- One "Add" combobox in place of a row of chips (Jose, 2026-11-16) --%>
+        <ClaperWeb.Component.Combobox.combobox
+          id={"add-piece-#{packet.id}"}
+          label={gettext("Add material or a question")}
+          class="max-w-sm"
+        >
+          <:option
             :for={type <- Claper.Breakouts.PieceType.types()}
+            label={type.label()}
             patch={"#{base_path(assigns)}?add=#{type.kind()}&packet=#{packet.id}"}
-            class="btn btn-outline btn-sm"
           >
             <ClaperWeb.BreakoutLive.Icons.piece kind={type.kind()} class="size-4" />
-            {type.label()}
-          </.link>
-        </div>
+          </:option>
+        </ClaperWeb.Component.Combobox.combobox>
         <p :if={packet.pieces == []} class="text-sm text-muted">
           {gettext(
-            "Nothing here yet. Use the buttons above to add something to read or look at, then the questions, in the order the group should work through them."
+            "Nothing here yet. Use Add above to add something to read or look at, then the questions, in the order the group should work through them."
           )}
         </p>
 

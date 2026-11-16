@@ -137,3 +137,15 @@
     outline-offset: 2px;
   }
 }
+
+/* Phones held sideways (short screens): the buttons beside the slide again,
+   so the slide gets the card's whole height (a row under it left the slide
+   almost no room) */
+@media (max-width: 1023.98px) and (max-height: 500px) {
+  .preview-stage {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: minmax(0, 1fr);
+    grid-template-areas: "prev slide next";
+    align-items: center;
+  }
+}

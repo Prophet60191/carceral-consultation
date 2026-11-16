@@ -882,6 +882,9 @@ defmodule Claper.Events do
           page -> Claper.Intro.copy_page_to_event(page, event)
         end
       end)
+      |> Ecto.Multi.run(:materials, fn _repo, %{event: event} ->
+        Claper.Materials.copy_materials(original, event)
+      end)
 
     case Repo.transaction(multi) do
       {:ok, %{event: event}} -> {:ok, event}
@@ -897,7 +900,15 @@ defmodule Claper.Events do
 
     attrs =
       Map.from_struct(original)
-      |> Map.drop([:id, :inserted_at, :updated_at, :presentation_file, :expired_at])
+      |> Map.drop([
+        :id,
+        :inserted_at,
+        :updated_at,
+        :presentation_file,
+        :expired_at,
+        :materials,
+        :take_home_until
+      ])
       |> Map.put(:leaders, [])
       |> Map.put(:code, "#{code}")
       |> Map.put(:name, duplicate_event_name(original.name))
@@ -1142,6 +1153,7 @@ defmodule Claper.Events do
 
     with {:ok, event} <- Repo.transaction(fn -> purge_event(event) end) do
       clear_presentation_storage(event.presentation_file)
+      Claper.Materials.delete_event_files(event)
       broadcast_user_events(event.user_id, {:deleted, event})
 
       for leader <- leaders do

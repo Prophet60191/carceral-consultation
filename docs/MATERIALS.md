@@ -51,10 +51,18 @@ The same file can be both: a handout can also be added to Take-home.
 ## Settled on the details (sensible defaults, Jose may revisit)
 
 - Files: PDF only, up to 25 MB each, checked by content, not just name.
-- Storage: beside the slides on Dynames (in the nightly backup); files
-  follow the event's 365-day retention.
+- Storage: on the same volume as the slides on Dynames (in the nightly
+  backup), outside the public uploads folder. Files are kept until their
+  item or the event is deleted (event content is kept until the event is
+  deleted; the 365-day retention covers sign-in records only).
 - Served as downloads (`Content-Disposition: attachment`, `nosniff`); the
-  in-room viewer shows the PDF in a sandboxed frame.
+  in-room viewer draws the PDF itself (phones can't show a PDF inside a
+  page reliably: iPhones show only the first page).
+- **Found while planning:** the slides' original PDF sat in the public
+  uploads folder at an address every participant could work out from the
+  slide images. It is now never served publicly
+  (`ClaperWeb.Plugs.PrivateUploads`); the slides are handed out only
+  through the take-home page.
 - Download counts per file on the stats page (counts only, never who).
 - The default "available until" follows the event's end while Jose hasn't
   changed it; once he picks a time, it stays as he set it.
@@ -75,3 +83,24 @@ Each step ends complete: checks, tests, a real-browser test, a commit.
 4. **The take-home page:** shown when the event ends, until the set time;
    then the closed notice.
 5. **Stats:** download counts.
+
+## How storage is built (step 1)
+
+- **Tables** (`priv/repo/migrations/20261115100000_create_materials.exs`):
+  `materials` (event, kind `handout` / `take_home`, title, size, on/off,
+  position, download count); on `events`, `take_home_until` (nil: 7 days
+  after the end) and `take_home_slides`.
+- **Logic:** `Claper.Materials`: adding (PDF checked by content, 25 MB,
+  optional take-home copy), switching, renaming, ordering, removing (with
+  the file), the take-home window (`take_home_until/1`, `take_home_open?/2`),
+  who may have a file (`available?/3`, `slides_available?/2`), copying with
+  the event, deleting with it, download counts, and live updates on
+  `event:<uuid>:materials`.
+- **Files:** `<storage>/materials/<event uuid>/<material uuid>.pdf`. Local
+  storage only; with S3 storage, uploads are refused.
+- **Serving:** `ClaperWeb.MaterialController`: `/materials/:id` and
+  `/materials/slides/:event` (unique ids: event codes can repeat across
+  ended events). People who run the event always get their files.
+- Tests: `test/claper/materials_test.exs`,
+  `test/claper_web/controllers/material_controller_test.exs`.
+

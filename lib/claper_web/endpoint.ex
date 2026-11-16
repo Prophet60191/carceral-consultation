@@ -36,6 +36,9 @@ defmodule ClaperWeb.Endpoint do
     gzip: false,
     only: ClaperWeb.static_paths()
 
+  # A presentation's original upload is never public (take-home only)
+  plug ClaperWeb.Plugs.PrivateUploads
+
   plug Plug.Static,
     at: "/uploads",
     from: Path.join([Application.compile_env(:claper, :storage_dir), "uploads"]),

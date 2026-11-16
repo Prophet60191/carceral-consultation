@@ -243,6 +243,10 @@ defmodule ClaperWeb.Router do
     pipe_through([:browser])
 
     delete("/users/log_out", UserSessionController, :delete)
+    # Handouts, take-home files and the slides' PDF, checked per request
+    # (ClaperWeb.MaterialController, docs/MATERIALS.md)
+    get("/materials/slides/:event", MaterialController, :slides)
+    get("/materials/:id", MaterialController, :show)
     # The license notices and the source code link, open to everyone
     get("/about", PageController, :about)
     get("/privacy", PageController, :privacy)

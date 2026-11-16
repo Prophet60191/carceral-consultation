@@ -684,7 +684,8 @@
 .ticket-stage .intro-layout .intro-blocks {
     width: min(560px, 100%);
 }
-@media (min-width: 1180px) {
+/* Computers only: tablets keep the one column, like phones (Jose, 2026-11-15) */
+@media (min-width: 1180px) and (hover: hover) and (pointer: fine) {
     .ticket-stage .intro-layout:not(.intro-layout-single) {
         display: grid;
         grid-template-columns: minmax(0, 520px) minmax(0, 600px);

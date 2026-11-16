@@ -154,7 +154,7 @@ when an event is duplicated.
 
 ## Layout (2026-11-15, Jose)
 
-- **1180 px and wider:** the brand pill is centered at the top, with the ticket on the left (520 px) and the cards on the right (600 px). The ticket stays in view (sticky) while the cards scroll, so the name and countdown are always visible.
+- **Computers 1180 px and wider** (not tablets, which keep one column): the brand pill is centered at the top, with the ticket on the left (520 px) and the cards on the right (600 px). The ticket stays in view (sticky) while the cards scroll, so the name and countdown are always visible.
 - **Narrower:** one centered column, ticket above cards, both the same width (up to 560 px). Phones keep 16 px side margins.
 - **No cards** (or only headings with nothing under them): the ticket stands alone, centered.
 - **Headings with nothing under them** are hidden from participants. A new event's page starts as a lone "Welcome". The builder's preview still shows them, so a heading just added stays visible while you build.
@@ -170,14 +170,15 @@ On computers (any device with a mouse or trackpad, at any window width; a narrow
 - **Unchanged:** the big screen before the start (the join page and QR code), phones and tablets (to be discussed), and the "About this event" view over the slides.
 - **Files:** server state (open, red dot) in `EventLive.Show`, closing behavior in `assets/js/intro_messenger.js`, the look in `assets/css/intro_messenger.css`.
 
-### Phones: the bottom bar (2026-11-15, Jose)
+### Phones and tablets: the bottom bar (2026-11-15, Jose)
 
-On phones (a touch screen under 768 px), the chat bubble and theme button live in a slim bar fixed at the bottom, just above the browser's own bar (and the iPhone's home indicator).
+On phones and tablets (any touch screen; tablets take the phone's layout, Jose 2026-11-15), the chat bubble and theme button live in a slim bar fixed at the bottom, just above the browser's own bar (and the iPhone's home indicator).
 - **The bar:** the chat bubble on the left (with its red dot), "Powered by Claper · About this app" in the middle, and the theme button on the right. The page's own footer moves into the bar, and the page leaves room so the last card clears it.
 - **The messenger:** it slides up from the bar as a sheet the full width of the screen, nearly solid frosted glass with a grab handle. A swipe down on the handle or header closes it, as do ✕, a tap on the bubble or a tap outside. While it's open, the page behind doesn't scroll (the `cc-sheet-open` class on `<html>`), and Safari keeps the message box above the keyboard. On touch screens the cursor isn't placed in the box automatically: focusing it without a tap leaves an iPhone focused without a keyboard, and the next tap misbehaves.
 - **Lesson from Jose's iPhone (2026-11-15):** the intro page redraws every second (the countdown), and each redraw undoes any style a script sets on a redrawn element. So nothing may set styles on the messenger. A first fix that resized the sheet from script, and pinned the page with `position: fixed`, made taps inconsistent on a real iPhone while passing in emulation. State that must survive lives on `<html>` (a class, or `--sheet-drag` during a swipe). The message box's name and Send buttons are 44 px on touch screens, including in the live room.
 - **With messages off,** the bar keeps the theme button.
-- **Same buttons as on computers:** one set, placed per device in `assets/css/intro_messenger.css`. Tablets get nothing yet (to be designed).
+- **Tablets:** the same bar and sheet, with the sheet centered and at most 640 px wide so lines stay readable, and the cards in one column (the side-by-side layout is for computers only).
+- **Same buttons as on computers:** one set, placed per device in `assets/css/intro_messenger.css`.
 - **Frosted glass was never blurring outside Safari.** The build kept only the hand-written `-webkit-backdrop-filter`, so Chrome got no blur for this or for the live room's message box. Only the standard `backdrop-filter` is written now, and the build adds Safari's prefix itself. Never write `-webkit-backdrop-filter` by hand.
 
 ### Theme button (2026-11-15, Jose)

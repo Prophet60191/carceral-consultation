@@ -7,11 +7,11 @@
   - Computers (a mouse or trackpad, any window width): a stack in the
     bottom-left corner, from the bottom up: the theme button, the chat
     bubble, and the messenger as a floating glass panel when open.
-  - Phones (a touch screen under 768px): a slim glass bar fixed at the
-    bottom, just above the browser's own bar: the chat bubble on the left,
-    the license links in the middle, the theme button on the right; the
-    messenger slides up from the bar as a sheet.
-  - Tablets: nothing yet (to be designed).
+  - Phones and tablets (any touch screen; tablets like phones, Jose
+    2026-11-15): a slim glass bar fixed at the bottom, just above the
+    browser's own bar: the chat bubble on the left, the license links in
+    the middle, the theme button on the right; the messenger slides up from
+    the bar as a sheet (centred, at most 640px wide, on tablets).
 */
 
 .intro-corner,
@@ -148,7 +148,7 @@ html[data-theme="carceral-light"] .theme-icon-moon {
 
 /* ---- Phones: the bottom bar and the sheet ---- */
 
-@media (pointer: coarse) and (max-width: 767px) {
+@media (pointer: coarse) {
   .intro-corner {
     display: block;
   }
@@ -226,6 +226,9 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     height: calc(100dvh - 48px - 64px - env(safe-area-inset-bottom));
     border-radius: 24px 24px 0 0;
     border-bottom: 0;
+    /* Tablets: centred and no wider than 640px (long lines read badly) */
+    max-width: 640px;
+    margin-inline: auto;
     /* Over a whole phone screen of content: nearly solid */
     --glass-solid: 96%;
     transform: translateY(24px);

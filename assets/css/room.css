@@ -277,3 +277,21 @@
     transform: none;
   }
 }
+
+/* The take-home page (ClaperWeb.EventLive.TakeHome, docs/MATERIALS.md):
+   after the event, its PDFs with a download button each; the theme button
+   in its usual corner, clear of the last item */
+.take-home {
+  min-height: 100dvh;
+  padding-bottom: 96px;
+  background: var(--color-base-100);
+  color: var(--color-base-content);
+}
+.take-home-item {
+  display: flex;
+  /* A panel stacks its content; here the title and Download share a row */
+  flex-direction: row;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 12px 12px 14px;
+}

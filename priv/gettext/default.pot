@@ -861,6 +861,7 @@ msgstr ""
 #: lib/claper_web/live/event_live/manage.ex
 #: lib/claper_web/live/event_live/presenter.ex
 #: lib/claper_web/live/event_live/show.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Event doesn't exist"
 msgstr ""
@@ -7117,6 +7118,7 @@ msgid "Also add to Take-home (it gets its own switch)"
 msgstr ""
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Available until"
 msgstr ""
@@ -7143,6 +7145,7 @@ msgstr ""
 
 #: lib/claper_web/live/event_live/handouts.ex
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Download"
 msgstr ""
@@ -7214,6 +7217,7 @@ msgid "Shown in your local time. The take-home page closes then."
 msgstr ""
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr ""
@@ -7287,4 +7291,29 @@ msgstr ""
 #: lib/claper_web/live/event_live/handouts.ex
 #, elixir-autogen, elixir-format
 msgid "This handout can't be shown here."
+msgstr ""
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "Download %{title}"
+msgstr ""
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "Download the slides"
+msgstr ""
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "The materials for this event are no longer available."
+msgstr ""
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "This event has ended. There's nothing to take home from it."
+msgstr ""
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "To take home"
 msgstr ""

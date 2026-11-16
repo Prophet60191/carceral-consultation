@@ -858,6 +858,7 @@ msgstr "このイベントは終了しました"
 #: lib/claper_web/live/event_live/manage.ex
 #: lib/claper_web/live/event_live/presenter.ex
 #: lib/claper_web/live/event_live/show.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Event doesn't exist"
 msgstr "イベントが見つかりません"
@@ -7099,6 +7100,7 @@ msgid "Also add to Take-home (it gets its own switch)"
 msgstr "持ち帰り資料にも追加（個別のスイッチ付き）"
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Available until"
 msgstr "公開期限"
@@ -7125,6 +7127,7 @@ msgstr "イベント開始より後の時間を選んでください。"
 
 #: lib/claper_web/live/event_live/handouts.ex
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Download"
 msgstr "ダウンロード"
@@ -7196,6 +7199,7 @@ msgid "Shown in your local time. The take-home page closes then."
 msgstr "現地時間で表示。この時刻に持ち帰りページが閉じます。"
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr "スライド"
@@ -7270,3 +7274,28 @@ msgstr "ページ"
 #, elixir-autogen, elixir-format
 msgid "This handout can't be shown here."
 msgstr "この配布資料はここでは表示できません。"
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "Download %{title}"
+msgstr "%{title}をダウンロード"
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "Download the slides"
+msgstr "スライドをダウンロード"
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "The materials for this event are no longer available."
+msgstr "このイベントの資料は公開を終了しました。"
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "This event has ended. There's nothing to take home from it."
+msgstr "このイベントは終了しました。持ち帰り資料はありません。"
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "To take home"
+msgstr "持ち帰り資料"

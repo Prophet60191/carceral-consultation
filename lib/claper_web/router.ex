@@ -74,6 +74,8 @@ defmodule ClaperWeb.Router do
       pipe_through([:browser, :attendee_registration, ClaperWeb.Plugs.Iframe])
 
       live("/e/:code", EventLive.Show, :show)
+      # After the event: its take-home PDFs (docs/MATERIALS.md)
+      live("/e/:code/take-home", EventLive.TakeHome, :show)
     end
   end
 

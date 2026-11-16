@@ -863,6 +863,7 @@ msgstr "Šis notikums ir pārtraukts"
 #: lib/claper_web/live/event_live/manage.ex
 #: lib/claper_web/live/event_live/presenter.ex
 #: lib/claper_web/live/event_live/show.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Event doesn't exist"
 msgstr "Notikums neeksistē"
@@ -7134,6 +7135,7 @@ msgid "Also add to Take-home (it gets its own switch)"
 msgstr "Pievienot arī līdzņemšanai (ar savu slēdzi)"
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Available until"
 msgstr "Pieejams līdz"
@@ -7160,6 +7162,7 @@ msgstr "Izvēlieties laiku pēc pasākuma sākuma."
 
 #: lib/claper_web/live/event_live/handouts.ex
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Download"
 msgstr "Lejupielādēt"
@@ -7231,6 +7234,7 @@ msgid "Shown in your local time. The take-home page closes then."
 msgstr "Vietējā laikā. Tad līdzņemšanas lapa tiek aizvērta."
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr "Slaidi"
@@ -7305,3 +7309,28 @@ msgstr "Lapa"
 #, elixir-autogen, elixir-format
 msgid "This handout can't be shown here."
 msgstr "Šo izdales materiālu šeit nevar parādīt."
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "Download %{title}"
+msgstr "Lejupielādēt %{title}"
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "Download the slides"
+msgstr "Lejupielādēt slaidus"
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "The materials for this event are no longer available."
+msgstr "Šī pasākuma materiāli vairs nav pieejami."
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "This event has ended. There's nothing to take home from it."
+msgstr "Šis pasākums ir beidzies. Nav nekā, ko paņemt līdzi."
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "To take home"
+msgstr "Līdzņemšanai"

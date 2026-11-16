@@ -270,6 +270,49 @@ defmodule Claper.Materials do
   defp before?(_now, nil), do: false
   defp before?(now, until), do: NaiveDateTime.compare(now, until) == :lt
 
+  @doc """
+  The ended event with this code whose take-home page people are looking
+  for: the most recently ended one (codes can repeat across ended events),
+  or nil. Codes are compared as the app stores them (lowercase).
+  """
+  def ended_event_with_code(code, now \\ NaiveDateTime.utc_now()) when is_binary(code) do
+    code = String.downcase(code)
+
+    from(e in Event,
+      where: e.code == ^code and not is_nil(e.expired_at) and e.expired_at <= ^now,
+      order_by: [desc: e.expired_at],
+      limit: 1
+    )
+    |> Repo.one()
+  end
+
+  @doc """
+  What the take-home page offers now: the slides (when switched on and
+  there is a PDF) and the take-home files switched on, in order.
+  """
+  def take_home_items(%Event{} = event, now \\ NaiveDateTime.utc_now()) do
+    %{
+      slides?: slides_available?(event, now),
+      files: if(take_home_open?(event, now), do: list_enabled(event, "take_home"), else: [])
+    }
+  end
+
+  @doc """
+  Whether the event has a take-home page at all: the slides or a take-home
+  file switched on (whether or not the page has closed since).
+  """
+  def take_home_configured?(%Event{take_home_slides: true}), do: true
+  def take_home_configured?(%Event{} = event), do: list_enabled(event, "take_home") != []
+
+  @doc "Whether the event has anything on its take-home page now."
+  def take_home_offered?(%Event{} = event, now \\ NaiveDateTime.utc_now()) do
+    case take_home_items(event, now) do
+      %{slides?: true} -> true
+      %{files: [_ | _]} -> true
+      _ -> false
+    end
+  end
+
   ## Who may have a file
 
   @doc """

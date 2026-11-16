@@ -44,17 +44,24 @@ defmodule ClaperWeb.EventLive.Show do
         user: []
       )
 
-    if is_nil(event) do
-      {:ok,
-       socket
-       |> put_flash(:error, gettext("Event doesn't exist"))
-       |> redirect(to: "/")}
-    else
-      init(
-        socket,
-        event,
-        check_if_banned(event.presentation_file.presentation_state.banned, socket)
-      )
+    cond do
+      event ->
+        init(
+          socket,
+          event,
+          check_if_banned(event.presentation_file.presentation_state.banned, socket)
+        )
+
+      # The event has ended: its take-home page, if it has one
+      (ended = Claper.Materials.ended_event_with_code(code)) &&
+          Claper.Materials.take_home_configured?(ended) ->
+        {:ok, redirect(socket, to: ~p"/e/#{code}/take-home")}
+
+      true ->
+        {:ok,
+         socket
+         |> put_flash(:error, gettext("Event doesn't exist"))
+         |> redirect(to: "/")}
     end
   end
 
@@ -292,11 +299,19 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  # The event ended: its take-home page when it offers something
+  # (docs/MATERIALS.md); otherwise home, as before.
   def handle_info({:event_terminated, _event_uuid}, socket) do
-    {:noreply,
-     socket
-     |> put_flash(:error, gettext("This event has been terminated"))
-     |> push_navigate(to: ~p"/")}
+    event = Claper.Repo.get!(Claper.Events.Event, socket.assigns.event.id)
+
+    if Claper.Materials.take_home_offered?(event) do
+      {:noreply, push_navigate(socket, to: ~p"/e/#{event.code}/take-home")}
+    else
+      {:noreply,
+       socket
+       |> put_flash(:error, gettext("This event has been terminated"))
+       |> push_navigate(to: ~p"/")}
+    end
   end
 
   @impl true

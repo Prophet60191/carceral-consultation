@@ -146,3 +146,18 @@ Each step ends complete: checks, tests, a real-browser test, a commit.
   error notes live inside the part the page never redraws. Escape or ×
   closes it; Download saves the file.
 - Tests: `test/claper_web/live/handouts_room_test.exs`.
+
+## How the take-home page is built (step 4)
+
+- **The page** `ClaperWeb.EventLive.TakeHome` at `/e/:code/take-home`: the
+  slides (when switched on) and the take-home PDFs switched on, each with
+  Download; "Available until" in the viewer's local time (`LocalDate`
+  hook); after that time, "no longer available" (the page closes on screen
+  when the time comes). A running event sends people back to the room.
+- **Getting there:** when the event ends, phones in the room go to it if it
+  offers something (otherwise home, as before). Opening the event's link
+  after the end leads to it when the event had take-home material (the
+  most recently ended event with that code: codes can repeat).
+  `Claper.Materials.ended_event_with_code/2`, `take_home_items/2`,
+  `take_home_offered?/2`, `take_home_configured?/1`.
+- Tests: `test/claper_web/live/take_home_test.exs`.

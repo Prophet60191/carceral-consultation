@@ -859,6 +859,7 @@ msgstr "Este evento ha sido terminado"
 #: lib/claper_web/live/event_live/manage.ex
 #: lib/claper_web/live/event_live/presenter.ex
 #: lib/claper_web/live/event_live/show.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Event doesn't exist"
 msgstr "El evento no existe"
@@ -7115,6 +7116,7 @@ msgid "Also add to Take-home (it gets its own switch)"
 msgstr "Añadir también a Para llevar (con su propio interruptor)"
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Available until"
 msgstr "Disponible hasta"
@@ -7141,6 +7143,7 @@ msgstr "Elige una hora posterior al inicio del evento."
 
 #: lib/claper_web/live/event_live/handouts.ex
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Download"
 msgstr "Descargar"
@@ -7212,6 +7215,7 @@ msgid "Shown in your local time. The take-home page closes then."
 msgstr "En tu hora local. La página para llevar se cierra entonces."
 
 #: lib/claper_web/live/event_live/materials_component.ex
+#: lib/claper_web/live/event_live/take_home.ex
 #, elixir-autogen, elixir-format
 msgid "Slides"
 msgstr "Diapositivas"
@@ -7286,3 +7290,28 @@ msgstr "Página"
 #, elixir-autogen, elixir-format
 msgid "This handout can't be shown here."
 msgstr "Este material no se puede mostrar aquí."
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "Download %{title}"
+msgstr "Descargar %{title}"
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "Download the slides"
+msgstr "Descargar las diapositivas"
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "The materials for this event are no longer available."
+msgstr "Los materiales de este evento ya no están disponibles."
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "This event has ended. There's nothing to take home from it."
+msgstr "Este evento ha terminado. No hay nada para llevar."
+
+#: lib/claper_web/live/event_live/take_home.ex
+#, elixir-autogen, elixir-format
+msgid "To take home"
+msgstr "Para llevar"

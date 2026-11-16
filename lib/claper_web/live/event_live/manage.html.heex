@@ -630,6 +630,7 @@
       <!-- Slide Preview (only if presentation has slides) -->
       <div
         :if={@event.presentation_file.length > 0}
+        id="preview-pane"
         class="manage-page flex-shrink-0 h-2/5 p-4 pb-0"
       >
         <.live_component

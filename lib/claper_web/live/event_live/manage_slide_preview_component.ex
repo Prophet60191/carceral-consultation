@@ -80,8 +80,11 @@ defmodule ClaperWeb.EventLive.ManageSlidePreviewComponent do
           </button>
         </div>
       </div>
-      <div class="panel-inset flex-1 min-h-0 flex items-center justify-center gap-x-4 px-4 py-3 overflow-hidden">
-        <div class="flex-shrink-0">
+      <%!-- Phones and tablets: the slide as large as the card allows, at its own
+           shape, with previous / next in a row below it (Jose, 2026-11-16;
+           assets/css/manage_pages.css) --%>
+      <div class="preview-stage panel-inset flex-1 min-h-0 flex items-center justify-center gap-x-4 px-4 py-3 overflow-hidden">
+        <div class="preview-prev flex-shrink-0">
           <button
             :if={@current_position > 0}
             phx-click="current-page"
@@ -115,7 +118,7 @@ defmodule ClaperWeb.EventLive.ManageSlidePreviewComponent do
           </div>
         </div>
 
-        <div class="h-full aspect-video bg-base-200 rounded-lg border border-line overflow-hidden">
+        <div class="preview-slide h-full aspect-video bg-base-200 rounded-lg border border-line overflow-hidden">
           <img
             :if={@current_slide_url}
             src={@current_slide_url}
@@ -130,7 +133,7 @@ defmodule ClaperWeb.EventLive.ManageSlidePreviewComponent do
           </div>
         </div>
 
-        <div class="flex-shrink-0">
+        <div class="preview-next flex-shrink-0">
           <button
             :if={@current_position < @total_slides - 1}
             phx-click="current-page"

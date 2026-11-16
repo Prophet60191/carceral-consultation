@@ -128,6 +128,16 @@
   transform: translateX(-50%);
 }
 
+/* A running breakout covers the room (BreakoutLive.Components); on phones
+   and tablets it ends above the bottom bar, so the bar's buttons never sit
+   over its Back and Next */
+@media not all and (hover: hover) and (pointer: fine) {
+  #breakout-phone,
+  #breakout-outside {
+    bottom: var(--room-bottom, calc(64px + env(safe-area-inset-bottom)));
+  }
+}
+
 /* ---- Computers: no bottom bar, more room around everything ---- */
 
 @media (hover: hover) and (pointer: fine) {

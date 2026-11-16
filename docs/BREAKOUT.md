@@ -80,8 +80,10 @@ private channel per ticket.
     note-taker answering as each task says → Jose's messages at the top
     without losing your place → back to the slides at the end.
 20. **Answers can be changed until the breakout stops**, then they are final.
-21. **Reporting back shows on the phones too**, the way slides do: when a
-    group's work is on the big screen, every phone shows it.
+21. ~~**Reporting back shows on the phones too**, the way slides do: when a
+    group's work is on the big screen, every phone shows it.~~ **Reversed
+    2026-11-15 (Jose):** "Show on big screen" changes only the big screen;
+    every phone stays on its own group's work.
 22. **Who answers is decided when the task is made** (2026-11-14). Each
     answerable interaction's editor has a "Group answer" box: unticked, each
     person answers; ticked, the group answers once through a note-taker. A
@@ -242,7 +244,7 @@ and light, not confusable with error red or success green).
   accepted only for tasks they have reached), the note-taker request /
   hand-off on group-answer tasks, answering (`Components.piece_input/1`),
   group answers read-only for everyone but the note-taker, group-mates'
-  answers where shared, and the reporting-back view. People not in a group
+  answers where shared (reporting back is on the big screen only). People not in a group
   see `Components.outside_screen/1` (decision 24). A
   note-taker absent for 60 s is freed by the group's other phones (only if
   they still hold the role). Clearing an answer takes it back

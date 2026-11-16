@@ -59,8 +59,7 @@ defmodule ClaperWeb.BreakoutLive.ViewData do
       group_answers: group_answers,
       mates: mates,
       note_taker?: group.note_taker_identifier == me,
-      has_note_taker?: not is_nil(group.note_taker_identifier),
-      report: report(run)
+      has_note_taker?: not is_nil(group.note_taker_identifier)
     }
   end
 
@@ -70,7 +69,10 @@ defmodule ClaperWeb.BreakoutLive.ViewData do
   """
   def needs_note_taker?(pieces), do: Enum.any?(pieces, &(&1.answer_scope == "group"))
 
-  @doc "The group being reported back (on the big screen and phones), or nil."
+  @doc """
+  The group being reported back on the big screen, or nil. Phones keep
+  their own group's work meanwhile (Jose, 2026-11-15).
+  """
   def report(%Run{showing_group_id: nil}), do: nil
 
   def report(%Run{showing_group_id: id} = run) do

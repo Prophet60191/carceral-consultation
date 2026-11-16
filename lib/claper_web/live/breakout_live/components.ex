@@ -430,17 +430,7 @@ defmodule ClaperWeb.BreakoutLive.Components do
           </div>
         </div>
 
-        <%!-- Reporting back: the group on the big screen --%>
-        <div :if={@state.report} class="flex flex-col gap-3">
-          <p class="text-sm font-bold uppercase tracking-wide text-muted">
-            {gettext("Reporting back")}
-          </p>
-          <.group_heading number={@state.report.result.group.number} />
-          <.group_report result={@state.report.result} contents={@state.report.contents} />
-          <p class="text-sm text-muted">{gettext("Your group's work is saved.")}</p>
-        </div>
-
-        <div :if={!@state.report} class="flex flex-col gap-4">
+        <div class="flex flex-col gap-4">
           <%!-- One task at a time (decision 23) --%>
           <div :if={@state.total > 1} id="bk-progress" class="flex flex-col gap-2">
             <p :if={@state.step == 0} class="text-base-content">

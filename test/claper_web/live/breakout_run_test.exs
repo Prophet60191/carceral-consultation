@@ -159,7 +159,8 @@ defmodule ClaperWeb.BreakoutRunTest do
     assert has_element?(c, "#breakout-outside", "See the presenter to be assigned to a group.")
     assert Breakouts.membership(run, "phone-c") == nil
 
-    # Reporting back: the group on the big screen and on every phone.
+    # Reporting back: the group on the big screen only; phones keep their
+    # own group's work (Jose, 2026-11-15).
     group = hd(Breakouts.open_run(breakout).groups)
 
     # The card names its group once; its Answers section doesn't repeat it.
@@ -169,7 +170,8 @@ defmodule ClaperWeb.BreakoutRunTest do
     control |> element("#bk-group-#{group.id} button", "Show on big screen") |> render_click()
     assert has_element?(screen, "#breakout-screen", "Reporting back")
     assert render(screen) =~ "Group verdict"
-    assert render(b) =~ "Reporting back"
+    refute render(b) =~ "Reporting back"
+    assert has_element?(b, "#breakout-phone")
 
     # Stop: answers are final, phones and the big screen return to the slides.
     control |> element("button", "Stop breakout") |> render_click()

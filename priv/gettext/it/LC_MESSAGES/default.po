@@ -5622,7 +5622,6 @@ msgstr ""
 msgid "Replace this page with one from your library"
 msgstr ""
 
-#: lib/claper_web/live/breakout_live/components.ex
 #: lib/claper_web/live/event_live/presenter.html.heex
 #, elixir-autogen, elixir-format
 msgid "Reporting back"
@@ -6837,11 +6836,6 @@ msgstr ""
 #: lib/claper_web/live/breakout_live/components.ex
 #, elixir-autogen, elixir-format
 msgid "Your group's answers"
-msgstr ""
-
-#: lib/claper_web/live/breakout_live/components.ex
-#, elixir-autogen, elixir-format
-msgid "Your group's work is saved."
 msgstr ""
 
 #: lib/claper_web/live/intro_live/library.ex

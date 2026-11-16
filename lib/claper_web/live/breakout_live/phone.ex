@@ -7,7 +7,8 @@ defmodule ClaperWeb.BreakoutLive.Phone do
   While a breakout runs, the phone shows its group's screen instead of the
   slides: group number and color, its tasks one at a time (Back / Next,
   decision 23), the note-taker request on group answers, answering,
-  messages from the presenter, and reporting back. When it stops, the
+  messages from the presenter. Reporting back shows only on the big screen;
+  phones keep their group's work (Jose, 2026-11-15). When it stops, the
   slides come back.
 
   People connected when it starts were sorted into groups, and the groups
@@ -70,10 +71,6 @@ defmodule ClaperWeb.BreakoutLive.Phone do
   def handle_info({:breakout, kind, run_id, group_id}, socket) when kind in [:group, :answer] do
     case socket.assigns[:breakout_state] do
       %{run: %{id: ^run_id}, group: %{id: ^group_id}} ->
-        {:noreply, load(socket)}
-
-      # The group on the big screen may have changed answers.
-      %{run: %{id: ^run_id}, report: %{result: %{group: %{id: ^group_id}}}} ->
         {:noreply, load(socket)}
 
       _ ->

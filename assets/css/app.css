@@ -72,6 +72,15 @@
   backdrop-filter: blur(18px) saturate(140%);
 }
 
+/* Touch screens: the message box's buttons (name, Send) are thumb-sized,
+   like every other control (2026-11-15: at 32px they were missed). */
+@media (pointer: coarse) {
+  .attendee-composer .btn.btn-xs:is(.btn-square, .btn-circle) {
+    width: 2.75rem;
+    min-height: 2.75rem;
+  }
+}
+
 #room-reaction-fab,
 #room-reaction-fab button,
 #room-reaction-fab img {

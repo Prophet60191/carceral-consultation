@@ -55,23 +55,22 @@ export const IntroMessenger = {
     panel?.addEventListener("touchmove", this.onTouchMove, { passive: true });
     panel?.addEventListener("touchend", this.onTouchEnd);
 
-    // Phones: while the keyboard is open, the sheet sits on top of it
-    // (--cc-kb: how much of the window the keyboard covers)
-    this.onViewport = () => {
-      const vv = window.visualViewport;
-      if (!vv) return;
-      const covered = Math.max(
-        0,
-        window.innerHeight - vv.height - vv.offsetTop,
-      );
-      this.el.style.setProperty("--cc-kb", `${Math.round(covered)}px`);
-    };
+    // Phones: the sheet fills the part of the screen the keyboard leaves
+    // visible (Safari moves and shrinks it as the keyboard opens), and the
+    // page behind is locked while it is open, so taps land where aimed.
+    this.phone = window.matchMedia("(pointer: coarse) and (max-width: 767px)");
+    this.onViewport = () => this.layoutSheet();
     window.visualViewport?.addEventListener("resize", this.onViewport);
     window.visualViewport?.addEventListener("scroll", this.onViewport);
+    this.layoutSheet();
   },
 
   updated() {
     const open = this.isOpen();
+    if (open !== this.wasOpen) {
+      this.lockPage(open);
+      this.layoutSheet();
+    }
     if (open && !this.wasOpen) {
       const feed = this.el.querySelector("#chat-feed");
       if (feed) feed.scrollTop = feed.scrollHeight;
@@ -82,6 +81,7 @@ export const IntroMessenger = {
   },
 
   destroyed() {
+    this.lockPage(false);
     document.removeEventListener("pointerdown", this.onPointerDown, true);
     document.removeEventListener("keydown", this.onKeyDown);
     window.visualViewport?.removeEventListener("resize", this.onViewport);
@@ -90,5 +90,43 @@ export const IntroMessenger = {
 
   isOpen() {
     return this.el.dataset.open === "true";
+  },
+
+  // The visible area: everything above the keyboard. The bar (64px plus the
+  // home indicator) is left clear unless the keyboard covers it anyway.
+  layoutSheet() {
+    if (!this.phone?.matches) return;
+    const vv = window.visualViewport;
+    const top = vv ? vv.offsetTop : 0;
+    const height = vv ? vv.height : window.innerHeight;
+    const keyboard = window.innerHeight - height > 120;
+    const bar = this.el.ownerDocument.getElementById("intro-phone-bar");
+    const barH = keyboard || !bar ? 0 : bar.getBoundingClientRect().height;
+    const gap = 48; // the page stays visible above the sheet
+    this.el.style.setProperty("--sheet-top", `${Math.round(top + gap)}px`);
+    this.el.style.setProperty(
+      "--sheet-h",
+      `${Math.round(height - gap - barH)}px`,
+    );
+  },
+
+  // Phones: while the sheet is open, the page behind it can't scroll
+  lockPage(lock) {
+    const body = document.body;
+    if (lock && this.phone?.matches && this.lockedAt == null) {
+      this.lockedAt = window.scrollY;
+      body.style.position = "fixed";
+      body.style.top = `-${this.lockedAt}px`;
+      body.style.left = "0";
+      body.style.right = "0";
+    } else if (!lock && this.lockedAt != null) {
+      const y = this.lockedAt;
+      this.lockedAt = null;
+      body.style.position = "";
+      body.style.top = "";
+      body.style.left = "";
+      body.style.right = "";
+      window.scrollTo(0, y);
+    }
   },
 };

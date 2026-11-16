@@ -201,19 +201,18 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     padding-bottom: calc(64px + env(safe-area-inset-bottom) + 24px);
   }
 
-  /* The messenger: a sheet sliding up from the bar (from the keyboard's
-     top while typing: --cc-kb, set by assets/js/intro_messenger.js) */
+  /* The messenger: a sheet sliding up from the bar. Its top and height
+     follow the part of the screen the keyboard leaves visible (--sheet-top,
+     --sheet-h, set by assets/js/intro_messenger.js), so the message box and
+     Send stay where they are tapped; without the script: above the bar. */
   .intro-messenger-panel {
     left: 0;
     right: 0;
-    bottom: max(
-      calc(64px + env(safe-area-inset-bottom)),
-      var(--cc-kb, 0px)
-    );
+    top: var(--sheet-top, 48px);
     width: 100%;
-    height: calc(
-      100dvh - max(calc(64px + env(safe-area-inset-bottom)), var(--cc-kb, 0px)) -
-        48px
+    height: var(
+      --sheet-h,
+      calc(100dvh - 48px - 64px - env(safe-area-inset-bottom))
     );
     border-radius: 24px 24px 0 0;
     border-bottom: 0;

@@ -193,6 +193,21 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     right: 12px;
   }
 
+  /* Following a swipe down (--sheet-drag on <html>, set while dragging) */
+  .intro-messenger[data-open="true"] .intro-messenger-panel {
+    transform: translateY(var(--sheet-drag, 0px));
+  }
+  html.cc-sheet-dragging .intro-messenger-panel {
+    transition: none;
+  }
+
+  /* While the sheet is open, the page behind doesn't scroll */
+  html.cc-sheet-open,
+  html.cc-sheet-open body {
+    overflow: hidden;
+    overscroll-behavior: none;
+  }
+
   /* The page's own footer links move into the bar; the last card clears it */
   body:has(.intro-phone-bar) .intro-stage .powered-by {
     display: none;
@@ -201,19 +216,14 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     padding-bottom: calc(64px + env(safe-area-inset-bottom) + 24px);
   }
 
-  /* The messenger: a sheet sliding up from the bar. Its top and height
-     follow the part of the screen the keyboard leaves visible (--sheet-top,
-     --sheet-h, set by assets/js/intro_messenger.js), so the message box and
-     Send stay where they are tapped; without the script: above the bar. */
+  /* The messenger: a sheet sliding up from the bar, 48px below the top of
+     the screen. When the keyboard opens, Safari keeps the box above it. */
   .intro-messenger-panel {
     left: 0;
     right: 0;
-    top: var(--sheet-top, 48px);
+    bottom: calc(64px + env(safe-area-inset-bottom));
     width: 100%;
-    height: var(
-      --sheet-h,
-      calc(100dvh - 48px - 64px - env(safe-area-inset-bottom))
-    );
+    height: calc(100dvh - 48px - 64px - env(safe-area-inset-bottom));
     border-radius: 24px 24px 0 0;
     border-bottom: 0;
     /* Over a whole phone screen of content: nearly solid */

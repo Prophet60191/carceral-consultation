@@ -1,0 +1,76 @@
+/*
+  The manage screen on phones and tablets (Jose, 2026-11-16): under 1024px
+  (where the screen stacks its cards), Preview, Interactions and Audience
+  Responses sit in a row instead of a column, and you scroll left and right
+  through them, one at a time. The cards themselves don't change: same
+  size, look and behaviour, scrolling up and down inside as before. The
+  header doesn't change. Three dots at the bottom of the screen show which
+  card is in view (the ManagePages hook draws them). From 1024px the screen
+  keeps its columns.
+*/
+
+.manage-dots {
+  display: none;
+}
+
+@media (max-width: 1023.98px) {
+  .manage-pages {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    overscroll-behavior-x: contain;
+    scrollbar-width: none;
+  }
+  .manage-pages::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* The wrapper of Interactions and Responses steps aside, so the two are
+     pages of their own beside Preview */
+  .manage-pages-group {
+    display: contents;
+  }
+
+  /* Each card as it is (its size, look and behaviour unchanged), one per
+     screen width; only their arrangement changes */
+  .manage-page {
+    flex: 0 0 100%;
+    width: 100%;
+    align-self: flex-start;
+    /* Clear of the dots */
+    max-height: calc(100% - 36px - env(safe-area-inset-bottom));
+    overflow-y: auto;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+  }
+  /* Audience Responses filled the space left under the other cards and
+     scrolls its messages inside; beside them, that space is the full height */
+  #responses-pane {
+    height: calc(100% - 36px - env(safe-area-inset-bottom));
+  }
+
+  .manage-dots {
+    position: fixed;
+    left: 50%;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    z-index: 30;
+    display: flex;
+    gap: 8px;
+    padding: 6px 10px;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--color-base-200) 85%, transparent);
+    transform: translateX(-50%);
+    pointer-events: none;
+  }
+  .manage-dots > span {
+    width: 8px;
+    height: 8px;
+    border-radius: 9999px;
+    background: color-mix(in srgb, var(--color-base-content) 30%, transparent);
+    transition: background-color 0.15s ease;
+  }
+  .manage-dots > span[data-active] {
+    background: var(--color-base-content);
+  }
+}

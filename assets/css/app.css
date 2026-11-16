@@ -11,6 +11,7 @@
 @import './tooltip.css';
 @import './messenger.css';
 @import './room.css';
+@import './manage_pages.css';
 
 @plugin "daisyui" {
   themes: carceral --default, carceral-light;

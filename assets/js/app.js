@@ -29,6 +29,7 @@ import { installPasswordReveal } from "./password_reveal";
 import { installTooltips } from "./tooltip";
 import { Messenger } from "./messenger";
 import { PdfViewer } from "./pdf_viewer";
+import { ManagePages } from "./manage_pages";
 import "./admin-charts.js";
 
 // Get supported locales from backend configuration or fallback to default list
@@ -71,6 +72,8 @@ let Hooks = {};
 Hooks.Messenger = Messenger;
 // The handout viewer (assets/js/pdf_viewer.js, docs/MATERIALS.md)
 Hooks.PdfViewer = PdfViewer;
+// The manage screen's swipeable cards on phones and tablets (assets/js/manage_pages.js)
+Hooks.ManagePages = ManagePages;
 // Format UTC server timestamps in the viewer's timezone after LiveView mounts.
 Hooks.LocalDate = {
   mounted() {

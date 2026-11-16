@@ -618,9 +618,20 @@
     </aside>
     
 <!-- Center Content -->
-    <main class="flex-1 flex flex-col min-w-0 overflow-hidden bg-base-100">
+    <%!-- Phones and tablets (under 1024px): the three cards sit side by side and
+         you swipe between them; each card scrolls up and down on its own; dots
+         at the bottom show which one you're on (Jose, 2026-11-16;
+         assets/css/manage_pages.css, ManagePages hook) --%>
+    <main
+      id="manage-pages"
+      phx-hook="ManagePages"
+      class="manage-pages flex-1 flex flex-col min-w-0 overflow-hidden bg-base-100"
+    >
       <!-- Slide Preview (only if presentation has slides) -->
-      <div :if={@event.presentation_file.length > 0} class="flex-shrink-0 h-2/5 p-4 pb-0">
+      <div
+        :if={@event.presentation_file.length > 0}
+        class="manage-page flex-shrink-0 h-2/5 p-4 pb-0"
+      >
         <.live_component
           id="slide-preview"
           module={ClaperWeb.EventLive.ManageSlidePreviewComponent}
@@ -633,11 +644,11 @@
       </div>
       
 <!-- Bottom Section - Interactions & Options -->
-      <div class="flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
+      <div class="manage-pages-group flex-1 flex flex-col lg:flex-row overflow-y-auto lg:overflow-hidden">
         <!-- Interactions Panel -->
         <div
           id="interactions-pane"
-          class="lg:w-1/3 flex-shrink-0 p-4 lg:min-h-0 lg:flex lg:flex-col lg:overflow-hidden"
+          class="manage-page lg:w-1/3 flex-shrink-0 p-4 lg:min-h-0 lg:flex lg:flex-col lg:overflow-hidden"
         >
           <.live_component
             id="interaction-list"
@@ -650,7 +661,10 @@
         </div>
         
 <!-- Audience Responses Panel -->
-        <div class="min-h-[400px] lg:min-h-0 flex-1 flex flex-col overflow-hidden p-4">
+        <div
+          id="responses-pane"
+          class="manage-page min-h-[400px] lg:min-h-0 flex-1 flex flex-col overflow-hidden p-4"
+        >
           <ClaperWeb.EventLive.ManageAudienceResponsesComponent.render
             list_tab={@list_tab}
             post_count={@post_count}
@@ -663,6 +677,8 @@
         </div>
       </div>
     </main>
+    <%!-- The dots: drawn by the ManagePages hook, never redrawn by the page --%>
+    <div id="manage-dots" class="manage-dots" phx-update="ignore" aria-hidden="true"></div>
     
 <!-- Right Sidebar - Settings -->
     <%!-- Wider from 1440px so every settings label fits on one line (Jose, 2026-11-14) --%>

@@ -124,3 +124,25 @@ Each step ends complete: checks, tests, a real-browser test, a commit.
 - **Live:** the manage screen listens on the materials channel and reloads
   both cards, so a change by another facilitator shows at once.
 - Tests: `test/claper_web/live/materials_card_test.exs`.
+
+## How handouts in the room are built (step 3)
+
+- **The icon, list and viewer:** `ClaperWeb.EventLive.Handouts` (`button/1`,
+  `viewer/1`) in the live room; open or closed is the room's
+  (`handouts`, `handouts_menu`, `handout_open` in `EventLive.Show`), so
+  redraws never undo it. The room listens on the materials channel: a
+  handout switched on appears at once, and an open one switched off closes.
+- **Placement** (`assets/css/room.css`): phones and tablets, the right end of
+  the bottom bar (44 px), with the theme button now next to the message
+  bubble on the left (`assets/css/messenger.css`, both pages); computers,
+  bottom right above the full-screen button. With several handouts, a
+  count on the icon and a list above it.
+- **The viewer** draws the PDF itself with PDF.js 4.10.38
+  (`assets/js/pdf_viewer.js`): phones can't show a PDF inside a page
+  reliably. PDF.js is served as is from `/assets/pdfjs/` (copied at build
+  by `assets/scripts/copy-pdfjs.mjs`, loaded by `assets/js/pdfjs_loader.mjs`
+  the first time a handout opens), since `app.js` is built for older
+  browsers. Pages fit the screen's width and sharpness; the loading and
+  error notes live inside the part the page never redraws. Escape or ×
+  closes it; Download saves the file.
+- Tests: `test/claper_web/live/handouts_room_test.exs`.

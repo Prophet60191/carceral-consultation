@@ -394,6 +394,11 @@
           />
         </button>
       </div>
+
+      <%!-- Handouts (docs/MATERIALS.md): the page icon bottom right (the end
+           of the bottom bar on phones and tablets), and the viewer --%>
+      <ClaperWeb.EventLive.Handouts.button handouts={@handouts} menu_open={@handouts_menu} />
+      <ClaperWeb.EventLive.Handouts.viewer :if={@handout_open} handout={@handout_open} />
     </main>
   </div>
 <% else %>

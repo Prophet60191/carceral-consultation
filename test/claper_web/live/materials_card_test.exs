@@ -134,6 +134,9 @@ defmodule ClaperWeb.MaterialsCardTest do
     on_exit(fn -> File.rm(path) end)
     {:ok, _} = Materials.create_material(event, %{kind: "take_home", title: "Guide"}, path)
 
+    # The screen gets the change, then updates the card (send_update) as a
+    # second message: one render lets that second message through first.
+    render(view)
     assert view |> element(@card) |> render() =~ "Guide"
   end
 end

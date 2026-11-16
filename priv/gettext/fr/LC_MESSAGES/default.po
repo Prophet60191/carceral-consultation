@@ -618,6 +618,7 @@ msgstr "Anonyme"
 #: lib/claper_web/live/breakout_live/builder.html.heex
 #: lib/claper_web/live/event_live/embed_component.ex
 #: lib/claper_web/live/event_live/form_component.ex
+#: lib/claper_web/live/event_live/handouts.ex
 #: lib/claper_web/live/event_live/manage.html.heex
 #: lib/claper_web/live/event_live/materials_add_component.ex
 #: lib/claper_web/live/event_live/messenger.ex
@@ -7157,6 +7158,7 @@ msgstr "Choisissez un PDF à téléverser."
 msgid "Choose a time after the event starts."
 msgstr "Choisissez une heure après le début de l'événement."
 
+#: lib/claper_web/live/event_live/handouts.ex
 #: lib/claper_web/live/event_live/materials_component.ex
 #, elixir-autogen, elixir-format
 msgid "Download"
@@ -7182,6 +7184,7 @@ msgstr "Donnez-lui un titre."
 msgid "Handout"
 msgstr "Document"
 
+#: lib/claper_web/live/event_live/handouts.ex
 #: lib/claper_web/live/event_live/materials_component.ex
 #, elixir-autogen, elixir-format
 msgid "Handouts"
@@ -7277,3 +7280,28 @@ msgstr "Jusqu'à 25 Mo."
 #, elixir-autogen, elixir-format
 msgid "What people see in the list."
 msgstr "Ce qui s'affiche dans la liste."
+
+#: lib/claper_web/live/event_live/handouts.ex
+#, elixir-autogen, elixir-format
+msgid "Download it instead"
+msgstr "Le télécharger à la place"
+
+#: lib/claper_web/live/event_live/handouts.ex
+#, elixir-autogen, elixir-format
+msgid "Handout: %{title}"
+msgstr "Document : %{title}"
+
+#: lib/claper_web/live/event_live/handouts.ex
+#, elixir-autogen, elixir-format
+msgid "Opening the handout..."
+msgstr "Ouverture du document..."
+
+#: lib/claper_web/live/event_live/handouts.ex
+#, elixir-autogen, elixir-format
+msgid "Page"
+msgstr "Page"
+
+#: lib/claper_web/live/event_live/handouts.ex
+#, elixir-autogen, elixir-format
+msgid "This handout can't be shown here."
+msgstr "Ce document ne peut pas être affiché ici."

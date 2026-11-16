@@ -80,6 +80,7 @@ defmodule ClaperWeb.EventLive.Show do
   defp init(socket, event, false) do
     if connected?(socket) do
       Claper.Events.Event.subscribe(event.uuid)
+      Claper.Materials.subscribe(event)
       Claper.Presentations.subscribe(event.presentation_file.id)
 
       Presence.track(
@@ -126,6 +127,11 @@ defmodule ClaperWeb.EventLive.Show do
       # and whether messages arrived while it was closed (the red dot)
       |> assign(:messenger_open, false)
       |> assign(:messenger_unread, false)
+      # Handouts (docs/MATERIALS.md): the ones switched on, their list, and
+      # the one open in the viewer
+      |> assign(:handouts, Claper.Materials.list_enabled(event, "handout"))
+      |> assign(:handouts_menu, false)
+      |> assign(:handout_open, nil)
       |> stream(:posts, posts)
       |> assign(:post_count, Enum.count(posts))
       |> intro_assigns(event)
@@ -462,6 +468,25 @@ defmodule ClaperWeb.EventLive.Show do
   end
 
   @impl true
+  # A handout switched on, off, added or removed: the icon and list follow;
+  # an open handout that was switched off closes.
+  def handle_info(:materials_changed, socket) do
+    handouts = Claper.Materials.list_enabled(socket.assigns.event, "handout")
+
+    open =
+      case socket.assigns.handout_open do
+        %{uuid: uuid} -> Enum.find(handouts, &(&1.uuid == uuid))
+        nil -> nil
+      end
+
+    {:noreply,
+     assign(socket,
+       handouts: handouts,
+       handout_open: open,
+       handouts_menu: socket.assigns.handouts_menu and length(handouts) > 1
+     )}
+  end
+
   def handle_info(_, socket) do
     {:noreply, socket}
   end
@@ -483,6 +508,28 @@ defmodule ClaperWeb.EventLive.Show do
 
   def handle_event("close-messenger", _params, socket),
     do: {:noreply, assign(socket, :messenger_open, false)}
+
+  # Handouts (docs/MATERIALS.md): the page icon opens the only handout, or
+  # the list when there are several; the viewer closes back to the slide.
+  def handle_event("toggle_handouts", _params, socket) do
+    case socket.assigns.handouts do
+      [handout] -> {:noreply, assign(socket, handout_open: handout, handouts_menu: false)}
+      _ -> {:noreply, update(socket, :handouts_menu, &(!&1))}
+    end
+  end
+
+  def handle_event("close_handouts_menu", _params, socket),
+    do: {:noreply, assign(socket, :handouts_menu, false)}
+
+  def handle_event("open_handout", %{"id" => id}, socket) do
+    case Enum.find(socket.assigns.handouts, &(&1.uuid == id)) do
+      nil -> {:noreply, socket}
+      handout -> {:noreply, assign(socket, handout_open: handout, handouts_menu: false)}
+    end
+  end
+
+  def handle_event("close_handout", _params, socket),
+    do: {:noreply, assign(socket, :handout_open, nil)}
 
   def handle_event("bk_" <> _ = event, params, socket),
     do: ClaperWeb.BreakoutLive.Phone.handle_event(event, params, socket)

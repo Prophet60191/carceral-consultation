@@ -17,12 +17,12 @@ The slide fills the screen on every device, and everything else floats over it:
 ### Computers
 
 - **Bottom left:** the light/dark button, with the message bubble above it; the messenger opens as a glass panel above the bubble.
-- **Bottom right:** the live reactions button, beside the full-screen button.
+- **Bottom right:** the live reactions button, beside the full-screen button, and the handouts icon above the full-screen button (docs/MATERIALS.md).
 - Captions are centred and kept clear of the corner buttons on both sides.
 
 ### Phones and tablets (Jose: "make the same change to phone and tablet")
 
-- **The bottom bar**, the same as the intro page's: the message bubble at its left, the live reactions button in its middle, the light/dark button at its right. The slide fills the space above it.
+- **The bottom bar**, the same as the intro page's: the message bubble and the light/dark button at its left, the live reactions button in its middle, the handouts icon at its right (when a handout is on; Jose 2026-11-15: left is you, right is the event's material). The slide fills the space above it.
 - **Messages** slide up from the bar as a sheet (centred, at most 640 px wide, on tablets); swipe it down, tap outside it or tap the bubble to close it.
 
 ## How it is built

@@ -159,8 +159,15 @@ defmodule Claper.Materials do
   ## Changing
 
   @doc "Switches a material on or off for participants."
-  def set_enabled(%Material{} = material, enabled) when is_boolean(enabled),
-    do: change_material(material, %{enabled: enabled})
+  # Written even when the copy at hand already says so: the switch's value
+  # is what counts, not how fresh the caller's copy is.
+  def set_enabled(%Material{} = material, enabled) when is_boolean(enabled) do
+    material
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.force_change(:enabled, enabled)
+    |> Repo.update()
+    |> tap(&broadcast_for/1)
+  end
 
   @doc "Renames a material."
   def rename(%Material{} = material, title), do: change_material(material, %{title: title})

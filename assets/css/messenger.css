@@ -174,9 +174,11 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 2px;
     height: calc(var(--bar-h) + env(safe-area-inset-bottom));
-    padding: 0 68px env(safe-area-inset-bottom);
+    /* Clear of the two buttons on the left and the one on the right */
+    padding: 0 68px env(safe-area-inset-bottom) 116px;
+    flex-direction: column;
     border-top: 1px solid color-mix(in srgb, var(--color-line) 80%, transparent);
     background: color-mix(in srgb, var(--color-base-100) 78%, transparent);
     backdrop-filter: blur(20px) saturate(160%);
@@ -189,8 +191,14 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     color: var(--color-muted);
     text-decoration: none;
   }
+  /* The links stack in the middle; the dot between them isn't needed */
+  .phone-bar > span[aria-hidden="true"] {
+    display: none;
+  }
 
-  /* The two buttons sit over the bar's ends, centred in it */
+  /* Left end of the bar: the chat bubble, then the theme button (the right
+     end is the event's material: the handouts icon in the live room, Jose
+     2026-11-15) */
   .theme-toggle,
   .messenger-toggle {
     bottom: calc(env(safe-area-inset-bottom) + 10px);
@@ -202,7 +210,11 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     left: 12px;
   }
   .theme-toggle {
-    right: 12px;
+    left: 64px;
+  }
+  /* With messages off there's no bubble: the theme button takes its place */
+  body:not(:has(.messenger-toggle)) .theme-toggle {
+    left: 12px;
   }
 
   /* Following a swipe down (--sheet-drag on <html>, set while dragging) */

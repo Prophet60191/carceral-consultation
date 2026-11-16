@@ -148,6 +148,8 @@ defmodule Claper.MixProject do
         "tailwind admin --minify",
         "esbuild default --minify",
         "sass default --no-source-map --style=compressed",
+        # The handout viewer's PDF renderer, served as is (docs/MATERIALS.md)
+        "cmd --cd assets node scripts/copy-pdfjs.mjs",
         "phx.digest"
       ]
     ]

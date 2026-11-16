@@ -4,7 +4,10 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
   @impl true
   def render(assigns) do
     ~H"""
-    <div class={if @width_class, do: @width_class, else: "sm:col-span-6"}>
+    <%!-- Full width on phones (the admin forms' 6-column grid otherwise gave
+         each field one sixth of the row, 2026-11-16); width_class sets the
+         width from the small breakpoint up --%>
+    <div class={["col-span-6", @width_class || "sm:col-span-6"]}>
       <div class="form-control w-full">
         <label class="label">
           <span class="label-text">{@label}</span>
@@ -131,7 +134,9 @@ defmodule ClaperWeb.AdminLive.FormFieldComponent do
             )}
         <% end %>
 
-        <label class="label">
+        <%!-- Help text wraps (daisyUI's label keeps one line, which ran past the
+             card on phones) --%>
+        <label class="label whitespace-normal">
           {error_tag(@form, @field)}
           <%= if @description do %>
             <span class="label-text-alt">{@description}</span>

@@ -43,6 +43,32 @@
     outline: none;
     transition: border-color 150ms, box-shadow 150ms, background-color 150ms;
   }
+  /* Date and time fields (2026-11-16): iPhones and iPads draw their own
+     date control, which keeps a fixed minimum width and ignores the
+     field's, so the field ran past its card. These follow their card like
+     any field; on Apple touch devices the native look is turned off for
+     that (tapping still opens the date picker), and the value sits at the
+     left like other fields' text. */
+  .input[type="date"],
+  .input[type="datetime-local"],
+  .input[type="time"],
+  .input[type="month"] {
+    min-width: 0;
+    max-width: 100%;
+  }
+  @supports (-webkit-touch-callout: none) {
+    .input[type="date"],
+    .input[type="datetime-local"],
+    .input[type="time"],
+    .input[type="month"] {
+      -webkit-appearance: none;
+      appearance: none;
+    }
+  }
+  .input::-webkit-date-and-time-value {
+    text-align: left;
+  }
+
   .input::placeholder,
   .textarea::placeholder,
   .input input::placeholder {

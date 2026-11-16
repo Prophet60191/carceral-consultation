@@ -64,9 +64,11 @@ defmodule ClaperWeb.EventLive.MessagesComponents do
       {gettext("Be the first to ask a question or share a thought.")}
     </div>
 
+    <%!-- Never redrawn by the page, so a "new messages" count stays until read --%>
     <button
       id="new-messages-chip"
       type="button"
+      phx-update="ignore"
       class={["btn btn-primary btn-sm absolute left-1/2 z-20 hidden -translate-x-1/2", @chip_class]}
     >
       <span data-unread-count></span> {gettext("new messages")}&nbsp;↓

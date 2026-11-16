@@ -49,7 +49,11 @@ defmodule ClaperWeb.EventLive.ManageAudienceResponsesComponent do
       </ClaperWeb.Component.Tabs.tabs>
       
     <!-- Tab Content -->
-      <div class="flex-1 overflow-y-auto overflow-x-hidden">
+      <%!-- Messages in chat order (Jose, 2026-11-16): newest at the bottom; each
+           list scrolls itself and follows new messages while you're at the
+           bottom, or shows "new messages" when you've scrolled up (RoomFeed,
+           the same as participants' phones) --%>
+      <div class="relative flex min-h-0 flex-1 flex-col overflow-hidden">
         <%= if @list_tab == :posts do %>
           <div
             :if={@post_count == 0}
@@ -71,7 +75,15 @@ defmodule ClaperWeb.EventLive.ManageAudienceResponsesComponent do
             </svg>
             <p class="text-sm">{gettext("Messages from attendees will appear here.")}</p>
           </div>
-          <div :if={@post_count > 0} id="post-list" class="p-2 space-y-3" phx-update="stream">
+          <div
+            :if={@post_count > 0}
+            id="post-list"
+            class="h-full space-y-3 overflow-y-auto overflow-x-hidden p-2"
+            phx-update="stream"
+            phx-hook="RoomFeed"
+            data-chip="#staff-new-messages-chip"
+            data-item-prefix="posts-"
+          >
             <.live_component
               :for={{id, post} <- @streams.posts}
               module={ClaperWeb.EventLive.ManageablePostComponent}
@@ -128,10 +140,16 @@ defmodule ClaperWeb.EventLive.ManageAudienceResponsesComponent do
                 </button>
               </div>
             </div>
+            <%!-- By date: chat order, following new questions; by likes: a ranking,
+                 most liked at the top --%>
             <div
               id="question-list"
               class="flex-1 overflow-y-auto overflow-x-hidden p-2 space-y-3"
               phx-update="stream"
+              phx-hook="RoomFeed"
+              data-chip="#staff-new-messages-chip"
+              data-item-prefix="questions-"
+              data-follow={to_string(@sort_questions_by != "likes")}
             >
               <.live_component
                 :for={{id, post} <- @streams.questions}
@@ -166,8 +184,11 @@ defmodule ClaperWeb.EventLive.ManageAudienceResponsesComponent do
           <div
             :if={@pinned_post_count > 0}
             id="pinned-post-list"
-            class="p-2 space-y-3"
+            class="h-full space-y-3 overflow-y-auto overflow-x-hidden p-2"
             phx-update="stream"
+            phx-hook="RoomFeed"
+            data-chip="#staff-new-messages-chip"
+            data-item-prefix="pinned_posts-"
           >
             <.live_component
               :for={{id, post} <- @streams.pinned_posts}
@@ -206,7 +227,7 @@ defmodule ClaperWeb.EventLive.ManageAudienceResponsesComponent do
           </div>
           <div
             id="form-list"
-            class="p-2 space-y-3"
+            class="h-full space-y-3 overflow-y-auto overflow-x-hidden p-2"
             phx-update="stream"
             data-forms-nb={@form_submit_count}
             phx-hook="ScrollIntoDiv"
@@ -288,6 +309,17 @@ defmodule ClaperWeb.EventLive.ManageAudienceResponsesComponent do
             </div>
           </div>
         <% end %>
+
+        <%!-- Shown by RoomFeed when new messages arrive while you've scrolled
+             up; the page never redraws it, so it stays until you look --%>
+        <button
+          id="staff-new-messages-chip"
+          type="button"
+          phx-update="ignore"
+          class="btn btn-primary btn-sm absolute bottom-3 left-1/2 z-20 hidden -translate-x-1/2"
+        >
+          <span data-unread-count></span> {gettext("new messages")}&nbsp;↓
+        </button>
       </div>
     </div>
     """

@@ -197,9 +197,19 @@ Hooks.Scroll = {
   },
 };
 
+// A list of messages in chat order (newest at the bottom): it opens at the
+// newest, follows new messages while you're at the bottom, and otherwise
+// counts them on a "new messages" pill. Participants' feed and the staff
+// lists (manage screen, Jose 2026-11-16). data-item-prefix: the stream's
+// item ids ("posts-" by default); data-follow="false": a list sorted some
+// other way (questions by likes), which stays at the top.
 Hooks.RoomFeed = {
+  follows() {
+    return this.el.dataset.follow !== "false";
+  },
   mounted() {
     this.chip = document.querySelector(this.el.dataset.chip);
+    this.following = this.follows();
     this.unread = 0;
     this.atBottom = true;
     this.onScroll = () => {
@@ -218,13 +228,22 @@ Hooks.RoomFeed = {
     this.el.addEventListener("scroll", this.onScroll, { passive: true });
     this.el.addEventListener("room:message-sent", this.onMessageSent);
     this.chip?.addEventListener("click", this.onChipClick);
-    requestAnimationFrame(() => this.scrollToBottom(true));
+    if (this.following) requestAnimationFrame(() => this.scrollToBottom(true));
   },
   beforeUpdate() {
     this.wasAtBottom = this.distanceFromBottom() <= 48;
     this.previousPostCount = this.postCount();
   },
   updated() {
+    // Re-sorted (questions by date / by likes): to the newest, or the top
+    if (this.follows() !== this.following) {
+      this.following = this.follows();
+      if (this.following) requestAnimationFrame(() => this.scrollToBottom(true));
+      else this.el.scrollTo({ top: 0 });
+      return;
+    }
+    if (!this.following) return;
+
     const newPostCount = this.postCount();
     const hasNewPost = newPostCount > this.previousPostCount;
 
@@ -246,7 +265,8 @@ Hooks.RoomFeed = {
     clearTimeout(this.sentMessageTimeout);
   },
   postCount() {
-    return this.el.querySelectorAll(":scope > [id^='posts-']").length;
+    const prefix = this.el.dataset.itemPrefix || "posts-";
+    return this.el.querySelectorAll(`:scope > [id^='${prefix}']`).length;
   },
   distanceFromBottom() {
     return this.el.scrollHeight - this.el.scrollTop - this.el.clientHeight;

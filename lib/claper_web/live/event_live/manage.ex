@@ -163,14 +163,15 @@ defmodule ClaperWeb.EventLive.Manage do
   def handle_info({:post_created, post}, socket) do
     socket =
       socket
-      |> stream_insert(:posts, post, at: 0)
+      # Chat order (Jose, 2026-11-16): newest at the bottom
+      |> stream_insert(:posts, post)
       |> update(:post_count, fn post_count -> post_count + 1 end)
 
     case ClaperWeb.Helpers.body_without_links(post.body) =~ "?" do
       true ->
         {:noreply,
          socket
-         |> stream_insert(:questions, post, at: 0)
+         |> stream_insert(:questions, post)
          |> update(:question_count, fn question_count -> question_count + 1 end)
          |> push_event("scroll", %{})}
 
@@ -227,7 +228,8 @@ defmodule ClaperWeb.EventLive.Manage do
     updated_socket =
       socket
       |> stream_insert(:posts, post)
-      |> stream_insert(:pinned_posts, post, at: 0)
+      # Pinned in the order they were sent, like the other lists
+      |> stream(:pinned_posts, list_pinned_posts(socket, socket.assigns.event.uuid), reset: true)
       |> stream_insert(:questions, post)
       |> assign(:pinned_post_count, socket.assigns.pinned_post_count + 1)
 
@@ -1609,15 +1611,13 @@ defmodule ClaperWeb.EventLive.Manage do
 
   defp word_cloud_words(_interaction), do: []
 
-  defp list_pinned_posts(_socket, event_id) do
-    Claper.Posts.list_pinned_posts(event_id, [:event, :reactions])
-    |> Enum.reverse()
-  end
+  # Every list of messages in chat order, oldest first and newest at the
+  # bottom, as in messaging apps (Jose, 2026-11-16)
+  defp list_pinned_posts(_socket, event_id),
+    do: Claper.Posts.list_pinned_posts(event_id, [:event, :reactions])
 
-  defp list_all_posts(_socket, event_id) do
-    Claper.Posts.list_posts(event_id, [:event, :reactions])
-    |> Enum.reverse()
-  end
+  defp list_all_posts(_socket, event_id),
+    do: Claper.Posts.list_posts(event_id, [:event, :reactions])
 
   defp list_all_questions(_socket, event_id, sort \\ "date") do
     sort_atom =
@@ -1626,11 +1626,10 @@ defmodule ClaperWeb.EventLive.Manage do
         _ -> :date
       end
 
-    questions =
-      Claper.Posts.list_questions(event_id, [:event, :reactions], sort_atom)
-      |> Enum.filter(&(ClaperWeb.Helpers.body_without_links(&1.body) =~ "?"))
-
-    if sort_atom == :date, do: Enum.reverse(questions), else: questions
+    # By date: chat order (newest at the bottom); by likes: a ranking, most
+    # liked at the top
+    Claper.Posts.list_questions(event_id, [:event, :reactions], sort_atom)
+    |> Enum.filter(&(ClaperWeb.Helpers.body_without_links(&1.body) =~ "?"))
   end
 
   # Turns an interaction on: the big screen starts from the interaction's own

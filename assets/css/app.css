@@ -10,7 +10,7 @@
 @import './fields.css';
 @import './tooltip.css';
 @import './messenger.css';
-@import './room_desktop.css';
+@import './room.css';
 
 @plugin "daisyui" {
   themes: carceral --default, carceral-light;
@@ -108,23 +108,6 @@ html.cc-slide-fullscreen #focus-slot {
   background: var(--color-stage);
 }
 
-/* "Hide the slide" (class on <html>); never while a poll or quiz is shown */
-html.cc-slide-collapsed #focus-slot:not([data-interaction-mode="true"]) {
-  height: 3rem;
-  min-height: 3rem;
-  max-height: 3rem;
-}
-
-html.cc-slide-collapsed #focus-slot:not([data-interaction-mode="true"]) #focus-media,
-html.cc-slide-collapsed #focus-slot:not([data-interaction-mode="true"]) [data-focus-collapse],
-html.cc-slide-collapsed #focus-slot:not([data-interaction-mode="true"]) [data-focus-fullscreen] {
-  display: none;
-}
-
-html.cc-slide-collapsed #focus-slot:not([data-interaction-mode="true"]) [data-focus-collapsed-bar] {
-  display: flex;
-}
-
 html.cc-captions-collapsed #caption-panel {
   height: 3rem;
   min-height: 3rem;
@@ -150,28 +133,8 @@ html.cc-captions-collapsed #caption-panel [data-caption-collapsed-bar] {
 }
 
 @media (max-height: 500px) {
-  #focus-slot:not([data-interaction-mode="true"]) {
-    height: 7rem;
-    min-height: 7rem;
-  }
-
-  #chat-feed {
-    padding-bottom: 6rem;
-  }
-
-  #chat-feed[data-room-reactions="true"] {
-    padding-bottom: 10rem;
-  }
-
   #messenger-composer textarea {
     max-height: 2.75rem;
-  }
-
-  #room-reaction-fab [data-reaction-picker] {
-    position: fixed;
-    left: 4.75rem;
-    bottom: 4.75rem;
-    flex-direction: row;
   }
 }
 

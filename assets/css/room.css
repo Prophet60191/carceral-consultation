@@ -1,0 +1,169 @@
+/*
+  The live room (Jose, 2026-11-15; docs/ROOM.md): the slide fills the screen
+  and everything floats over it, on every device.
+
+  Top left: the menu. Top right: the attendee count. Polls, quizzes, forms
+  and the like show as a solid card over the slide (no glass); captions run
+  as a strip across the bottom of the slide.
+
+  - Computers: the theme button and the message bubble in the bottom-left
+    corner (the shared messenger, assets/css/messenger.css), live reactions
+    bottom right, next to the full-screen button.
+  - Phones and tablets: the bottom bar (the same as the intro page's), the
+    bubble at its left, the theme button at its right and the reactions
+    button in its middle; the slide fills the space above it.
+*/
+
+#attendee-room {
+  /* Space around the floating parts, and the bottom bar's height (none on
+     computers) */
+  --room-gap: 12px;
+  --room-bottom: calc(64px + env(safe-area-inset-bottom));
+}
+
+/* Top left the menu, top right the count, floating over the slide */
+#room-topbar {
+  position: absolute;
+  inset: 0 0 auto 0;
+  z-index: 40;
+  padding: max(var(--room-gap), env(safe-area-inset-top)) var(--room-gap)
+    var(--room-gap);
+  pointer-events: none;
+}
+#room-topbar button,
+#room-topbar .room-count {
+  pointer-events: auto;
+}
+#room-topbar .room-count {
+  min-height: 2.75rem;
+  padding: 0 14px;
+  border: 1px solid var(--color-line);
+  border-radius: 9999px;
+  background: color-mix(in srgb, var(--color-base-100) 85%, transparent);
+  box-shadow: var(--shadow-md);
+}
+
+/* The slide fills the room above the bottom bar */
+#focus-slot {
+  position: absolute;
+  inset: 0 0 var(--room-bottom) 0;
+  z-index: 10;
+  overflow: hidden;
+}
+#focus-slot [data-focus-fullscreen] {
+  position: absolute;
+  right: var(--room-gap);
+  bottom: var(--room-gap);
+  z-index: 20;
+}
+
+/* No slide yet (an event without a presentation) */
+#room-empty {
+  position: absolute;
+  inset: 0 0 var(--room-bottom) 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 24px;
+  text-align: center;
+}
+
+/* "New interaction": under the top bar, clear of the menu and the count */
+#new-interaction-badge {
+  top: 76px;
+}
+
+/* A poll, quiz or form: a solid card over the slide, which stays visible.
+   The interaction's own panel is the card (no second frame around it),
+   lifted off the slide by a shadow. */
+.room-slide-backdrop {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.room-interaction-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  z-index: 20;
+  transform: translate(-50%, -50%);
+  width: min(640px, calc(100% - 2 * var(--room-gap)));
+  /* Clear of the top bar and the captions */
+  max-height: calc(100% - 144px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  border-radius: 16px;
+  box-shadow: var(--shadow-2xl);
+}
+.room-interaction-card [id^="extended-"] {
+  border: 1px solid var(--color-line);
+}
+
+/* Captions: a strip across the bottom of the slide (on phones and tablets
+   clear of the full-screen button at its right) */
+#caption-panel {
+  position: absolute;
+  left: var(--room-gap);
+  right: calc(var(--room-gap) + 52px);
+  bottom: calc(var(--room-bottom) + var(--room-gap));
+  z-index: 30;
+  border: 1px solid var(--color-line);
+  border-radius: 16px;
+  background: color-mix(in srgb, var(--color-base-100) 92%, transparent);
+  box-shadow: var(--shadow-lg);
+}
+
+/* Live reactions: over the whole room; their button in the middle of the
+   bottom bar, its picker opening upward */
+#reacts {
+  position: fixed;
+}
+#room-reaction-fab {
+  position: fixed;
+  left: 50%;
+  bottom: calc(env(safe-area-inset-bottom) + 10px);
+  z-index: 60;
+  transform: translateX(-50%);
+}
+
+/* ---- Computers: no bottom bar, more room around everything ---- */
+
+@media (hover: hover) and (pointer: fine) {
+  #attendee-room {
+    --room-gap: 24px;
+    --room-bottom: 0px;
+  }
+
+  #room-topbar {
+    padding: 16px 20px;
+  }
+  #room-topbar .room-count {
+    min-height: 2.5rem;
+  }
+
+  .room-interaction-card {
+    max-height: min(80vh, calc(100% - 176px));
+  }
+  .room-interaction-card [id^="extended-"] {
+    padding: 24px;
+  }
+
+  /* Clear of the corner buttons on both sides (168px each: the reactions
+     and full-screen buttons on the right are the wider pair) */
+  #caption-panel {
+    left: 50%;
+    right: auto;
+    transform: translateX(-50%);
+    width: min(900px, calc(100% - 336px));
+  }
+
+  /* The reactions button bottom right, beside the full-screen button */
+  #room-reaction-fab {
+    left: auto;
+    right: 88px;
+    bottom: 24px;
+    transform: none;
+  }
+}

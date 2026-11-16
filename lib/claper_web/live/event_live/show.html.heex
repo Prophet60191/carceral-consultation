@@ -15,16 +15,13 @@
   <% captions_visible? =
     @transcription_config && @transcription_config.enabled &&
       @transcription_config.visibility in ["both", "attendee"] %>
-  <div class="h-[100dvh] overflow-hidden bg-stage lg:bg-base-100">
+  <%!-- The room (Jose, 2026-11-15; docs/ROOM.md): the slide fills the
+       screen, everything else floats over it. Placement per device is in
+       assets/css/room.css. --%>
+  <div class="h-[100dvh] overflow-hidden bg-stage">
     <main
       id="attendee-room"
-      class={[
-        "relative mx-auto grid h-[100dvh] w-full max-w-lg overflow-hidden bg-stage font-display shadow-2xl",
-        focus_content? && captions_visible? &&
-          "grid-rows-[auto_auto_auto_minmax(0,1fr)]",
-        focus_content? != captions_visible? && "grid-rows-[auto_auto_minmax(0,1fr)]",
-        !focus_content? && !captions_visible? && "grid-rows-[auto_minmax(0,1fr)]"
-      ]}
+      class="relative h-[100dvh] w-full overflow-hidden bg-stage font-display"
     >
       <div
         id="side-menu-shadow"
@@ -74,17 +71,14 @@
         {gettext("Reconnecting...")}
       </div>
 
-      <header
-        id="room-topbar"
-        class="relative z-30 bg-stage px-4 pb-3 pt-[max(0.75rem,env(safe-area-inset-top))]"
-      >
+      <header id="room-topbar">
         <div class="flex items-center justify-between gap-3">
           <button type="button" phx-click={toggle_side_menu()} class="btn btn-primary">
             <ClaperWeb.Icons.menu />
             <span>#{String.upcase(@event.code)}</span>
           </button>
 
-          <div class="room-count ml-auto inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-base-content">
+          <div class="room-count ml-auto inline-flex items-center gap-2 text-sm font-semibold text-base-content">
             <ClaperWeb.Icons.online_users />
             <span id="counter" phx-update="ignore" phx-hook="UpdateAttendees">
               {@attendees_nb}
@@ -93,18 +87,17 @@
         </div>
       </header>
 
+      <p :if={!focus_content?} id="room-empty" class="text-sm text-muted">
+        {gettext("The presentation will appear here.")}
+      </p>
+
       <section
         :if={focus_content?}
         id="focus-slot"
         phx-hook="AttendeeFocus"
         data-focus-key={focus_key(@current_interaction, @state.position)}
-        data-collapse-key={"focus-slot:#{@event.uuid}"}
         data-interaction-mode={to_string(interaction_mode?)}
-        class={[
-          "relative z-10 min-h-0 overflow-hidden border-y border-line bg-stage transition-[height] duration-300",
-          interaction_mode? && "h-auto max-h-[40dvh]",
-          !interaction_mode? && "h-[40dvh] min-h-40 max-h-[26rem]"
-        ]}
+        class="bg-stage"
       >
         <div
           id="new-interaction-badge"
@@ -113,8 +106,8 @@
           {gettext("New interaction")}
         </div>
 
-        <%!-- Computers: a poll, quiz or form shows as a card over the slide,
-             which stays visible behind it (assets/css/room_desktop.css) --%>
+        <%!-- A poll, quiz or form shows as a card over the slide, which stays
+             visible behind it (assets/css/room.css) --%>
         <img
           :if={interaction_mode? && @current_slide_url}
           src={@current_slide_url}
@@ -124,7 +117,7 @@
 
         <%= case @current_interaction do %>
           <% %Claper.Polls.Poll{} -> %>
-            <div class="room-interaction-card max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class="room-interaction-card">
               <.live_component
                 module={ClaperWeb.EventLive.PollComponent}
                 id={"#{@current_interaction.id}-poll"}
@@ -139,7 +132,7 @@
               />
             </div>
           <% %Claper.Forms.Form{} -> %>
-            <div class="room-interaction-card max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class="room-interaction-card">
               <.live_component
                 module={ClaperWeb.EventLive.FormComponent}
                 id={"#{@current_interaction.id}-form"}
@@ -153,7 +146,7 @@
               />
             </div>
           <% %Claper.Quizzes.Quiz{} -> %>
-            <div class="room-interaction-card max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class="room-interaction-card">
               <.live_component
                 module={ClaperWeb.EventLive.QuizComponent}
                 id={"#{@current_interaction.id}-quiz"}
@@ -169,7 +162,7 @@
               />
             </div>
           <% %Claper.WordClouds.WordCloud{} -> %>
-            <div class="room-interaction-card max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class="room-interaction-card">
               <.live_component
                 module={ClaperWeb.EventLive.WordCloudComponent}
                 id={"#{@current_interaction.id}-word-cloud"}
@@ -179,7 +172,7 @@
               />
             </div>
           <% %Claper.Embeds.Embed{attendee_visibility: true} -> %>
-            <div class="room-interaction-card max-h-[40dvh] overflow-y-auto overscroll-contain p-3">
+            <div class="room-interaction-card">
               <.live_component
                 id={"#{@current_interaction.id}-embed"}
                 module={ClaperWeb.EventLive.EmbedComponent}
@@ -202,7 +195,7 @@
           type="button"
           data-focus-fullscreen
           aria-label={gettext("Open fullscreen")}
-          class="btn btn-overlay btn-circle absolute right-3 top-3 z-20"
+          class="btn btn-overlay btn-circle"
         >
           <svg
             class="h-5 w-5"
@@ -218,47 +211,6 @@
             />
           </svg>
         </button>
-
-        <button
-          :if={focus_content? && !interaction_mode?}
-          type="button"
-          data-focus-collapse
-          aria-label={gettext("Hide presentation")}
-          class="btn btn-overlay btn-circle absolute right-16 top-3 z-20"
-        >
-          <svg
-            class="h-5 w-5"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-          >
-            <path stroke-linecap="round" stroke-linejoin="round" d="m6 15 6-6 6 6" />
-          </svg>
-        </button>
-
-        <div
-          :if={focus_content? && !interaction_mode?}
-          data-focus-collapsed-bar
-          class="hidden h-full items-center px-4"
-        >
-          <button
-            type="button"
-            data-focus-show
-            class="pressable flex min-h-11 w-full items-center justify-between text-sm font-semibold text-base-content"
-          >
-            <span>{gettext("Show presentation")}</span>
-            <svg
-              class="h-5 w-5"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path stroke-linecap="round" stroke-linejoin="round" d="m6 9 6 6 6-6" />
-            </svg>
-          </button>
-        </div>
       </section>
 
       <section
@@ -266,7 +218,7 @@
         id="caption-panel"
         phx-hook="AttendeeCaptions"
         data-collapse-key={"caption-panel:#{@event.uuid}"}
-        class="relative z-10 min-h-12 max-h-32 overflow-hidden border-b border-line bg-stage transition-[height] duration-300"
+        class="min-h-12 max-h-32 overflow-hidden transition-[height] duration-300"
       >
         <div
           data-caption-content
@@ -323,14 +275,12 @@
         </div>
       </section>
 
-      <%!-- The messenger (ClaperWeb.EventLive.Messenger, the same one as the
-           intro page's): on computers the bubble and glass panel in the
-           bottom-left corner, above the theme button; on phones and tablets
-           the messages inline in the room (Jose, 2026-11-15). --%>
+      <%!-- The messenger and theme button (ClaperWeb.EventLive.Messenger, the
+           same as the intro page's): on computers the bottom-left corner
+           stack; on phones and tablets the ends of the bottom bar, the
+           messages opening as a sheet (Jose, 2026-11-15). --%>
       <ClaperWeb.EventLive.Messenger.messenger
         id="room-messenger"
-        place={:room}
-        inline_on_touch
         open={@messenger_open}
         unread={@messenger_unread}
         streams={@streams}
@@ -348,10 +298,13 @@
         post_changeset={@post_changeset}
       />
 
-      <ClaperWeb.EventLive.Messenger.theme_button id="room-theme" class="room-theme" />
+      <ClaperWeb.EventLive.Messenger.theme_button id="room-theme" />
+
+      <ClaperWeb.EventLive.Messenger.phone_bar id="room-phone-bar" />
 
       <%!-- Live reactions: floating over the room, and their button (bottom
-           right on computers) --%>
+           right on computers, the middle of the bottom bar on phones and
+           tablets) --%>
       <div
         id="reacts"
         phx-hook="GlobalReacts"
@@ -365,7 +318,7 @@
         :if={@state.message_reaction_enabled}
         id="room-reaction-fab"
         phx-hook="RoomReactionFab"
-        class="absolute bottom-20 left-4 z-20 flex w-14 flex-col items-center gap-2"
+        class="flex w-14 flex-col items-center gap-2"
       >
         <div
           data-reaction-picker
@@ -458,32 +411,28 @@
     countdown={@countdown}
   />
 
-  <%!-- Phones (Jose, 2026-11-15): a slim bar fixed at the bottom, just above
-       the browser's own bar: the chat bubble on the left, the license links
-       in the middle, the theme button on the right (the two buttons below are
-       placed over it on phones; on computers they stack in the corner). --%>
-  <nav id="intro-phone-bar" class="intro-phone-bar" aria-label={gettext("About this app")}>
-    <a href="https://claper.co" target="_blank" rel="noopener" class="intro-phone-bar-link">
+  <%!-- Phones and tablets (Jose, 2026-11-15): the bottom bar, the license
+       links in its middle (the same bar as the live room's) --%>
+  <ClaperWeb.EventLive.Messenger.phone_bar id="intro-phone-bar">
+    <a href="https://claper.co" target="_blank" rel="noopener" class="phone-bar-link">
       {gettext("Powered by Claper")}
     </a>
     <span aria-hidden="true">·</span>
-    <a href="/about" target="_blank" rel="noopener" class="intro-phone-bar-link">
+    <a href="/about" target="_blank" rel="noopener" class="phone-bar-link">
       {gettext("About this app")}
     </a>
-  </nav>
+  </ClaperWeb.EventLive.Messenger.phone_bar>
 
   <%!-- Light or dark for participants, and the messenger (Jose,
        2026-11-15): on computers the bottom-left corner stack; on phones and
        tablets over the ends of the bar above. The same components as the
        live room's (ClaperWeb.EventLive.Messenger); people can talk before
        the start when messages are on. --%>
-  <ClaperWeb.EventLive.Messenger.theme_button id="intro-theme" class="intro-corner intro-theme" />
+  <ClaperWeb.EventLive.Messenger.theme_button id="intro-theme" />
 
   <ClaperWeb.EventLive.Messenger.messenger
     :if={@state.chat_enabled}
     id="intro-messenger"
-    place={:intro}
-    class="intro-corner"
     open={@messenger_open}
     unread={@messenger_unread}
     streams={@streams}

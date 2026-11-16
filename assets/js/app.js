@@ -624,20 +624,7 @@ const hasHtmlClass = (name) => document.documentElement.classList.contains(name)
 Hooks.AttendeeFocus = {
   mounted() {
     this.focusKey = this.el.dataset.focusKey;
-    this.collapseKey = this.el.dataset.collapseKey;
     this.onClick = (event) => {
-      if (event.target.closest("[data-focus-collapse]")) {
-        localStorage.setItem(this.collapseKey, "collapsed");
-        this.restoreCollapse();
-        return;
-      }
-
-      if (event.target.closest("[data-focus-show]")) {
-        localStorage.setItem(this.collapseKey, "expanded");
-        this.restoreCollapse();
-        return;
-      }
-
       const fullscreenButton = event.target.closest("[data-focus-fullscreen]");
       if (fullscreenButton) {
         if (document.fullscreenElement) {
@@ -655,7 +642,6 @@ Hooks.AttendeeFocus = {
     };
     this.el.addEventListener("click", this.onClick);
     document.addEventListener("keydown", this.onKeyDown);
-    this.restoreCollapse();
   },
   updated() {
     const nextKey = this.el.dataset.focusKey;
@@ -672,17 +658,11 @@ Hooks.AttendeeFocus = {
     if (this.el.dataset.interactionMode === "true") {
       htmlClass("cc-slide-fullscreen", false);
     }
-    this.restoreCollapse();
   },
   destroyed() {
     this.el.removeEventListener("click", this.onClick);
     document.removeEventListener("keydown", this.onKeyDown);
     htmlClass("cc-slide-fullscreen", false);
-    htmlClass("cc-slide-collapsed", false);
-  },
-  restoreCollapse() {
-    const collapsed = localStorage.getItem(this.collapseKey) === "collapsed";
-    htmlClass("cc-slide-collapsed", collapsed);
   },
   enterFullscreen() {
     if (!this.el.requestFullscreen) {

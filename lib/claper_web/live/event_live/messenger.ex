@@ -1,25 +1,25 @@
 defmodule ClaperWeb.EventLive.Messenger do
   @moduledoc """
-  The participant's messenger and theme button (Jose, 2026-11-15): one
-  component, used by the intro page (before Start Event) and the live room
-  (after it), so the two are the same and can't drift apart.
+  The participant's messenger, theme button and bottom bar (Jose,
+  2026-11-15): one set of components, used by the intro page (before Start
+  Event) and the live room (after it), so the two are the same, on every
+  device, and can't drift apart.
 
   The messenger is a chat bubble that opens a frosted-glass panel holding
   the event's messages (`ClaperWeb.EventLive.MessagesComponents`: the feed,
   the message box and the "post as" menu). The page owns open or closed
   (`messenger_open`, events `toggle-messenger` and `close-messenger`) and
-  the red dot (`messenger_unread`); the `Messenger` hook (`assets/js/messenger.js`) closes it on a
-  click outside or Escape.
+  the red dot (`messenger_unread`); the `Messenger` hook
+  (`assets/js/messenger.js`) closes it on a click outside or Escape.
 
-  Where it sits is the stylesheet's job, keyed by `place`:
+  Where it sits is the stylesheet's job (`assets/css/messenger.css`), the
+  same on both pages:
 
-    * Computers, both places: the bottom-left corner, the theme button under
-      the bubble, the panel above it.
-    * `:intro`, phones and tablets: a sheet over the bottom bar.
-    * `:room`, phones and tablets: the messages inline in the room
-      (`inline_on_touch`), with no bubble.
-
-  All of it is in `assets/css/messenger.css`.
+    * Computers: the bottom-left corner, the theme button under the bubble,
+      the panel above it.
+    * Phones and tablets: the bottom bar (`phone_bar/1`), the bubble at its
+      left end and the theme button at its right; the panel is a sheet
+      sliding up from the bar.
 
   Only one messenger is ever on the page, so the fixed ids inside it
   (#chat-panel, #messenger-composer and the message system's own) stay
@@ -35,13 +35,8 @@ defmodule ClaperWeb.EventLive.Messenger do
     required: true,
     doc: "e.g. \"intro-messenger\"; parts get -panel, -toggle, -dot"
 
-  attr :place, :atom, values: [:intro, :room], required: true
   attr :open, :boolean, required: true
   attr :unread, :boolean, required: true
-
-  attr :inline_on_touch, :boolean,
-    default: false,
-    doc: "phones and tablets show the panel's contents inline (the live room)"
 
   attr :class, :any, default: nil
   # The message system's data (MessagesComponents.feed/composer/identity_menu)
@@ -61,18 +56,14 @@ defmodule ClaperWeb.EventLive.Messenger do
 
   def messenger(assigns) do
     ~H"""
-    <div
-      id={@id}
-      class={["messenger", "messenger--#{@place}", @class]}
-      phx-hook="Messenger"
-      data-open={to_string(@open)}
-    >
+    <div id={@id} class={["messenger", @class]} phx-hook="Messenger" data-open={to_string(@open)}>
       <section
         id={"#{@id}-panel"}
         class="messenger-panel"
         data-messenger-panel
+        role="dialog"
         aria-labelledby={"#{@id}-title"}
-        inert={!@open && !@inline_on_touch}
+        inert={!@open}
       >
         <%!-- Phones: a handle to swipe the sheet down by --%>
         <div class="messenger-grab" aria-hidden="true"></div>
@@ -167,6 +158,24 @@ defmodule ClaperWeb.EventLive.Messenger do
         </span>
       </button>
     </div>
+    """
+  end
+
+  @doc """
+  Phones and tablets: a slim glass bar fixed at the bottom of the screen,
+  just above the browser's own bar. The bubble and the theme button sit over
+  its ends; the page puts what it likes in the middle (the license links on
+  the intro page; the live room's reactions button sits there). Hidden on
+  computers.
+  """
+  attr :id, :string, required: true
+  slot :inner_block
+
+  def phone_bar(assigns) do
+    ~H"""
+    <nav id={@id} class="phone-bar" aria-label={gettext("About this app")}>
+      {render_slot(@inner_block)}
+    </nav>
     """
   end
 

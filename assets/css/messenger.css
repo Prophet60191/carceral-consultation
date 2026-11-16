@@ -1,23 +1,20 @@
 /*
-  The participant's messenger and theme button (Jose, 2026-11-15): one
-  component (ClaperWeb.EventLive.Messenger), used by the intro page before
-  Start Event and by the live room after it. The messages inside are
-  ClaperWeb.EventLive.MessagesComponents.
+  The participant's messenger, theme button and bottom bar (Jose,
+  2026-11-15): one set of components (ClaperWeb.EventLive.Messenger), the
+  same on the intro page before Start Event and in the live room after it.
+  The messages inside are ClaperWeb.EventLive.MessagesComponents.
 
-  - Computers (a mouse or trackpad, any window width), both pages: a stack in
-    the bottom-left corner, from the bottom up: the theme button, the chat
+  - Computers (a mouse or trackpad, any window width): a stack in the
+    bottom-left corner, from the bottom up: the theme button, the chat
     bubble, and the messenger as a floating glass panel when open.
-  - Phones and tablets, intro page (.messenger--intro): a slim glass bar
-    fixed at the bottom, just above the browser's own bar: the chat bubble on
-    the left, the license links in the middle, the theme button on the
-    right; the messenger slides up from the bar as a sheet (centred, at most
-    640px wide, on tablets).
-  - Phones and tablets, live room (.messenger--room): no bubble and no theme
-    button; the messages and the message box sit inline in the room.
+  - Phones and tablets (any touch screen; tablets like phones): a slim glass
+    bar fixed at the bottom, just above the browser's own bar: the chat
+    bubble on the left, the theme button on the right, the page's own item
+    in the middle; the messenger slides up from the bar as a sheet (centred,
+    at most 640px wide, on tablets).
 */
 
-.intro-corner,
-.intro-phone-bar {
+.phone-bar {
   display: none;
 }
 
@@ -134,13 +131,9 @@ html[data-theme="carceral-light"] .theme-icon-moon {
   display: none;
 }
 
-/* ---- Computers: the bottom-left corner stack, on both pages ---- */
+/* ---- Computers: the bottom-left corner stack ---- */
 
 @media (hover: hover) and (pointer: fine) {
-  .intro-corner {
-    display: block;
-  }
-
   .theme-toggle,
   .messenger-toggle {
     left: 24px;
@@ -168,57 +161,12 @@ html[data-theme="carceral-light"] .theme-icon-moon {
   }
 }
 
-/* ---- Live room, phones and tablets: the messages inline in the room ---- */
+/* ---- Phones and tablets (every device that isn't a computer): the bottom
+   bar and the sheet ---- */
 
 @media not all and (hover: hover) and (pointer: fine) {
-  /* The wrapper and the panel are invisible to the layout, so the feed and
-     the message box are the room's own rows */
-  .messenger--room,
-  .messenger--room .messenger-panel {
-    display: contents;
-  }
-  .messenger--room .messenger-panel {
-    visibility: visible;
-    opacity: 1;
-  }
-  .messenger--room .messenger-grab,
-  .messenger--room .messenger-head,
-  .messenger--room .messenger-toggle,
-  .room-theme {
-    display: none;
-  }
-  .messenger--room #chat-panel {
-    background: var(--color-stage);
-  }
-  .messenger--room #chat-feed {
-    height: 100%;
-    padding-bottom: 6rem;
-    background: transparent;
-  }
-  .messenger--room #chat-feed[data-room-reactions="true"] {
-    padding-bottom: 10rem;
-  }
-  .messenger--room .messenger-chip {
-    bottom: 5rem;
-  }
-  /* The message box floats over the bottom of the feed */
-  .messenger--room .messenger-composer {
-    position: absolute;
-    inset: auto 0 0 0;
-    z-index: 30;
-    padding: 8px 12px max(12px, env(safe-area-inset-bottom));
-  }
-}
-
-/* ---- Intro page, phones and tablets: the bottom bar and the sheet ---- */
-
-@media (pointer: coarse) {
-  .intro-corner {
-    display: block;
-  }
-
   /* The bar: slim glass, above the browser's bar and the home indicator */
-  .intro-phone-bar {
+  .phone-bar {
     --bar-h: 64px;
     position: fixed;
     inset: auto 0 0 0;
@@ -237,31 +185,31 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     white-space: nowrap;
   }
 
-  .intro-phone-bar-link {
+  .phone-bar-link {
     color: var(--color-muted);
     text-decoration: none;
   }
 
   /* The two buttons sit over the bar's ends, centred in it */
-  .intro-theme .theme-toggle,
-  .messenger--intro .messenger-toggle {
+  .theme-toggle,
+  .messenger-toggle {
     bottom: calc(env(safe-area-inset-bottom) + 10px);
     width: 44px;
     height: 44px;
     min-height: 44px;
   }
-  .messenger--intro .messenger-toggle {
+  .messenger-toggle {
     left: 12px;
   }
-  .intro-theme .theme-toggle {
+  .theme-toggle {
     right: 12px;
   }
 
   /* Following a swipe down (--sheet-drag on <html>, set while dragging) */
-  .messenger--intro[data-open="true"] .messenger-panel {
+  .messenger[data-open="true"] .messenger-panel {
     transform: translateY(var(--sheet-drag, 0px));
   }
-  html.cc-sheet-dragging .messenger--intro .messenger-panel {
+  html.cc-sheet-dragging .messenger-panel {
     transition: none;
   }
 
@@ -273,16 +221,16 @@ html[data-theme="carceral-light"] .theme-icon-moon {
   }
 
   /* The page's own footer links move into the bar; the last card clears it */
-  body:has(.intro-phone-bar) .intro-stage .powered-by {
+  body:has(.phone-bar) .intro-stage .powered-by {
     display: none;
   }
-  body:has(.intro-phone-bar) .intro-stage {
+  body:has(.phone-bar) .intro-stage {
     padding-bottom: calc(64px + env(safe-area-inset-bottom) + 24px);
   }
 
   /* The messenger: a sheet sliding up from the bar, 48px below the top of
      the screen. When the keyboard opens, Safari keeps the box above it. */
-  .messenger--intro .messenger-panel {
+  .messenger-panel {
     left: 0;
     right: 0;
     bottom: calc(64px + env(safe-area-inset-bottom));
@@ -298,7 +246,7 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     transform: translateY(24px);
   }
 
-  .messenger--intro .messenger-grab {
+  .messenger-grab {
     display: block;
     width: 40px;
     height: 5px;
@@ -307,7 +255,7 @@ html[data-theme="carceral-light"] .theme-icon-moon {
     background: color-mix(in srgb, var(--color-base-content) 30%, transparent);
   }
 
-  .messenger--intro .messenger-head {
+  .messenger-head {
     padding-top: 10px;
     touch-action: none;
   }

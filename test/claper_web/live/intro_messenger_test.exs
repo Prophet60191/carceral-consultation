@@ -47,6 +47,7 @@ defmodule ClaperWeb.IntroMessengerTest do
     assert has_element?(a, "#intro-messenger #post-form #postFormTA")
     assert has_element?(a, "#intro-messenger #chat-feed")
     assert has_element?(a, ~s(#intro-messenger.messenger[phx-hook="Messenger"]))
+    assert has_element?(a, "#intro-phone-bar.phone-bar")
     assert has_element?(a, "#intro-messenger #messenger-composer #post-form")
 
     a |> element("#intro-messenger-toggle") |> render_click()

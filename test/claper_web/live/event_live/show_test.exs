@@ -26,13 +26,13 @@ defmodule ClaperWeb.EventLive.ShowTest do
     document = Floki.parse_document!(html)
 
     assert "h-[100dvh]" in classes(document, "#attendee-room")
-    assert "grid-rows-[auto_auto_minmax(0,1fr)]" in classes(document, "#attendee-room")
     assert "z-[60]" in classes(document, "#side-menu")
-    assert "h-[40dvh]" in classes(document, "#focus-slot")
     assert Floki.find(document, "#focus-media img") != []
-    assert Floki.find(document, "[data-focus-collapse]") != []
-    assert Floki.find(document, "[data-focus-show]") != []
-    assert document |> Floki.find("[data-focus-show]") |> Floki.text() =~ "Show presentation"
+    assert Floki.find(document, "[data-focus-fullscreen]") != []
+    # The slide fills the room on every device: no "hide the slide"
+    assert Floki.find(document, "[data-focus-collapse]") == []
+    assert Floki.find(document, "[data-focus-show]") == []
+    assert Floki.find(document, "#room-empty") == []
     assert "overflow-y-auto" in classes(document, "#chat-feed")
     assert Floki.attribute(document, "#chat-feed", "phx-hook") == ["RoomFeed"]
     assert Floki.attribute(document, "#post-form", "phx-hook") == ["PostForm"]
@@ -45,6 +45,8 @@ defmodule ClaperWeb.EventLive.ShowTest do
     assert Floki.find(document, "#room-messenger #messenger-composer #post-form") != []
     assert Floki.find(document, "#room-messenger-toggle[data-messenger-toggle]") != []
     assert Floki.find(document, "#room-theme #room-theme-toggle[data-theme-toggle]") != []
+    # Phones and tablets: the same bottom bar as the intro page's
+    assert "phone-bar" in classes(document, "#room-phone-bar")
     assert Floki.attribute(document, "[data-reaction-icon]", "draggable") == ["false"]
     assert "pointer-events-none" in classes(document, "[data-reaction-icon]")
     assert Floki.find(document, "#top-identity-button") == []
@@ -105,7 +107,10 @@ defmodule ClaperWeb.EventLive.ShowTest do
     document = Floki.parse_document!(html)
 
     assert Floki.find(document, "#focus-slot") == []
-    assert "grid-rows-[auto_minmax(0,1fr)]" in classes(document, "#attendee-room")
+
+    assert document |> Floki.find("#room-empty") |> Floki.text() =~
+             "The presentation will appear here."
+
     refute html =~ "Waiting for content"
   end
 
@@ -127,7 +132,6 @@ defmodule ClaperWeb.EventLive.ShowTest do
 
     document = Floki.parse_document!(html)
 
-    assert "grid-rows-[auto_auto_auto_minmax(0,1fr)]" in classes(document, "#attendee-room")
     assert Floki.attribute(document, "#caption-panel", "phx-hook") == ["AttendeeCaptions"]
     assert Floki.find(document, "[data-caption-collapse]") != []
     assert Floki.find(document, "[data-caption-show]") != []

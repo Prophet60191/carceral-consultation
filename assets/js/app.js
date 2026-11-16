@@ -30,6 +30,7 @@ import { installTooltips } from "./tooltip";
 import { Messenger } from "./messenger";
 import { PdfViewer } from "./pdf_viewer";
 import { ManagePages } from "./manage_pages";
+import { PostLongPress } from "./post_long_press";
 import "./admin-charts.js";
 
 // Get supported locales from backend configuration or fallback to default list
@@ -74,6 +75,8 @@ Hooks.Messenger = Messenger;
 Hooks.PdfViewer = PdfViewer;
 // The manage screen's swipeable cards on phones and tablets (assets/js/manage_pages.js)
 Hooks.ManagePages = ManagePages;
+// Staff messages: long press for the actions on touch screens (assets/js/post_long_press.js)
+Hooks.PostLongPress = PostLongPress;
 // Format UTC server timestamps in the viewer's timezone after LiveView mounts.
 Hooks.LocalDate = {
   mounted() {

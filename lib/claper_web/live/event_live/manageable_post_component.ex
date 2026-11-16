@@ -14,7 +14,15 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
       |> assign(:avatar_emoji, avatar_emoji(assigns.post))
 
     ~H"""
-    <div id={"#{@id}"} class="flex items-end gap-2 group">
+    <%!-- Phones and tablets: a long press on the bubble opens the actions
+         that hovering shows on a computer (PostLongPress hook) --%>
+    <div
+      id={"#{@id}"}
+      class="flex items-end gap-2 group"
+      phx-hook={if !@readonly, do: "PostLongPress"}
+      data-open-menu={JS.add_class("post-menu-open", to: "##{@id}")}
+      data-close-menus={JS.remove_class("post-menu-open", to: ".post-menu-open")}
+    >
       <!-- Left: time + avatar -->
       <div class="flex flex-col items-center gap-2 shrink-0">
         <span class="text-xs text-muted leading-4">
@@ -38,7 +46,7 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
     <!-- Actions (visible on hover) -->
           <div
             :if={!@readonly}
-            class="relative z-20 ml-auto flex items-center divide-x divide-line border border-line rounded-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity shrink-0"
+            class="post-actions relative z-20 ml-auto flex items-center divide-x divide-line border border-line rounded-lg opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity shrink-0"
           >
             <div data-tooltip-side="bottom" data-tooltip={gettext("Reply")}>
               <button
@@ -210,10 +218,13 @@ defmodule ClaperWeb.EventLive.ManageablePostComponent do
           >
             <path d="M0 16H16V0C16 5.33333 5.33333 16 0 16Z" fill="currentColor" />
           </svg>
-          <div class={[
-            "rounded-tl-2xl rounded-tr-2xl rounded-br-2xl flex-1 min-w-0 px-3 py-4 relative overflow-hidden bg-base-300",
-            bubble_tint
-          ]}>
+          <div
+            data-post-bubble
+            class={[
+              "post-bubble rounded-tl-2xl rounded-tr-2xl rounded-br-2xl flex-1 min-w-0 px-3 py-4 relative overflow-hidden bg-base-300",
+              bubble_tint
+            ]}
+          >
             <!-- Watermark icons -->
             <div
               :if={is_question || @post.pinned}

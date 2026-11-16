@@ -74,3 +74,22 @@
     background: var(--color-base-content);
   }
 }
+
+/* Staff messages on touch screens (Jose, 2026-11-16): a long press on the
+   bubble opens the actions hovering shows on a computer (PostLongPress
+   hook). The browser's own long-press callout and text selection would get
+   in the way, so the bubble doesn't offer them on touch screens. */
+.post-menu-open .post-actions {
+  opacity: 1;
+}
+@media (pointer: coarse) {
+  .post-bubble {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  .post-menu-open .post-bubble {
+    outline: 2px solid var(--color-line-strong);
+    outline-offset: 2px;
+  }
+}

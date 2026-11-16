@@ -1294,11 +1294,6 @@ msgstr "有効"
 msgid "Load more"
 msgstr "もっと見る"
 
-#: lib/claper_web/live/event_live/index.html.heex
-#, elixir-autogen, elixir-format
-msgid "Shared with you"
-msgstr "共有されたイベント"
-
 #: lib/claper/quizzes/quiz_question.ex
 #, elixir-autogen, elixir-format
 msgid "must have at least one correct answer"
@@ -7320,3 +7315,8 @@ msgstr "ダウンロード数"
 #, elixir-autogen, elixir-format
 msgid "Kind"
 msgstr "種類"
+
+#: lib/claper_web/live/event_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Shared"
+msgstr "共有"

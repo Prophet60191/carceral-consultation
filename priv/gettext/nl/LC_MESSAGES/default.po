@@ -1295,11 +1295,6 @@ msgstr "Actief"
 msgid "Load more"
 msgstr "Meer laden"
 
-#: lib/claper_web/live/event_live/index.html.heex
-#, elixir-autogen, elixir-format
-msgid "Shared with you"
-msgstr "Gedeeld met jou"
-
 #: lib/claper/quizzes/quiz_question.ex
 #, elixir-autogen, elixir-format
 msgid "must have at least one correct answer"
@@ -7338,3 +7333,8 @@ msgstr "Downloads"
 #, elixir-autogen, elixir-format
 msgid "Kind"
 msgstr "Soort"
+
+#: lib/claper_web/live/event_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Shared"
+msgstr "Gedeeld"

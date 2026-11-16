@@ -1295,11 +1295,6 @@ msgstr "Aktív"
 msgid "Load more"
 msgstr "Több betöltése"
 
-#: lib/claper_web/live/event_live/index.html.heex
-#, elixir-autogen, elixir-format
-msgid "Shared with you"
-msgstr "Önnel megosztva"
-
 #: lib/claper/quizzes/quiz_question.ex
 #, elixir-autogen, elixir-format
 msgid "must have at least one correct answer"
@@ -7336,3 +7331,8 @@ msgstr "Letöltések"
 #, elixir-autogen, elixir-format
 msgid "Kind"
 msgstr "Típus"
+
+#: lib/claper_web/live/event_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Shared"
+msgstr "Megosztott"

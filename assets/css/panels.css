@@ -110,6 +110,7 @@
     }
   }
 
+
   .panel-inset {
     border: 1px solid var(--color-line);
     border-radius: 0.75rem;
@@ -423,5 +424,23 @@
   /* Big screen: scales with the window's smaller side */
   .brand-lockup-lg {
     --brand-h: clamp(1rem, 4.2vmin, 3.5rem);
+  }
+}
+
+/* Outside the layers, so it wins over the tabs' own spacing (a utility) */
+/* Phones: controls in the bar beside the title (My events' tabs, Jose
+   2026-11-16) sit tighter, so the title fits beside them; on the very
+   smallest phones the title steps aside for them (still read aloud) */
+.app-bar-phone-actions .tabs-segmented > * {
+  padding-inline: 0.625rem;
+}
+@media (max-width: 359px) {
+  .app-bar:has(.app-bar-phone-actions) .app-bar-title {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
   }
 }

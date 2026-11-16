@@ -1299,11 +1299,6 @@ msgstr "Aktīvs"
 msgid "Load more"
 msgstr "Ielādēt vairāk"
 
-#: lib/claper_web/live/event_live/index.html.heex
-#, elixir-autogen, elixir-format
-msgid "Shared with you"
-msgstr "Kopīgots ar jums"
-
 #: lib/claper/quizzes/quiz_question.ex
 #, elixir-autogen, elixir-format
 msgid "must have at least one correct answer"
@@ -7355,3 +7350,8 @@ msgstr "Lejupielādes"
 #, elixir-autogen, elixir-format
 msgid "Kind"
 msgstr "Veids"
+
+#: lib/claper_web/live/event_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Shared"
+msgstr "Kopīgotie"

@@ -128,7 +128,7 @@ defmodule ClaperWeb.Component.Tabs do
     "inline-flex items-center bg-base-300 rounded-full"
   end
 
-  defp container_classes(:segmented), do: segmented_group_class()
+  defp container_classes(:segmented), do: ["tabs-segmented", segmented_group_class()]
 
   # Base tab classes based on style
   defp tab_base_classes(:bordered) do

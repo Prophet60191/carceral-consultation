@@ -20,11 +20,18 @@ defmodule ClaperWeb.AppHeader do
   slot :search, doc: "desktop search box (optional)"
   slot :actions, doc: "desktop controls shown between the search and the account button"
 
+  slot :phone_actions,
+    doc: "phone controls between the title and the account button (My events: its tabs)"
+
   def header(assigns) do
     ~H"""
-    <%!-- Phone: title and account button. Page controls sit in the page body. --%>
-    <div class="lg:hidden app-bar sticky top-0 z-30 justify-between px-4">
-      <h1 class="app-bar-title capitalize">{@title}</h1>
+    <%!-- Phone: title, the page's phone controls if any (Jose, 2026-11-16:
+         My events' tabs), account button. Other controls sit in the page. --%>
+    <div class="lg:hidden app-bar sticky top-0 z-30 justify-between gap-2 px-4">
+      <h1 class="app-bar-title min-w-0 truncate capitalize">{@title}</h1>
+      <div :if={@phone_actions != []} class="app-bar-phone-actions flex shrink-0 items-center">
+        {render_slot(@phone_actions)}
+      </div>
       <.account_menu user={@user} compact />
     </div>
 

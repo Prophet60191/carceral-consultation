@@ -27,6 +27,35 @@
       </label>
     </form>
   </:search>
+  <:phone_actions>
+    <%!-- Phones: the tabs in the header, between the title and the account
+         button (Jose, 2026-11-16) --%>
+    <.tabs style={:segmented}>
+      <:tab
+        active={@active_tab == "not_expired"}
+        phx-click="change-tab"
+        phx-value-tab="not_expired"
+      >
+        {gettext("Active")}
+      </:tab>
+      <:tab
+        active={@active_tab == "expired"}
+        disabled={not @has_expired_events}
+        phx-click="change-tab"
+        phx-value-tab="expired"
+      >
+        {gettext("Done")}
+      </:tab>
+      <:tab
+        active={@active_tab == "invited"}
+        disabled={not @has_invited_events}
+        phx-click="change-tab"
+        phx-value-tab="invited"
+      >
+        {gettext("Shared")}
+      </:tab>
+    </.tabs>
+  </:phone_actions>
   <:actions>
     <%!-- In this order: tabs, grid/list, create (Jose, 2026-11-13) --%>
     <.tabs style={:segmented}>
@@ -51,7 +80,7 @@
         phx-click="change-tab"
         phx-value-tab="invited"
       >
-        {gettext("Shared with you")}
+        {gettext("Shared")}
       </:tab>
     </.tabs>
     <div
@@ -135,8 +164,8 @@
 <div class="px-4 lg:px-6 xl:px-12 pb-36 lg:pb-12">
   <!-- Filter Bar and Actions -->
   <div class="pt-4 lg:pt-6 pb-4 lg:pb-6">
-    <!-- Mobile: Search bar + Centered tabs -->
-    <div class="lg:hidden mb-4">
+    <%!-- Phones: the search box (the tabs are in the header) --%>
+    <div class="lg:hidden">
       <form phx-submit="search" phx-change="search" class="relative">
         <label class="input">
           <svg
@@ -162,33 +191,6 @@
           />
         </label>
       </form>
-    </div>
-    <div class="flex lg:hidden items-center justify-center">
-      <.tabs style={:segmented}>
-        <:tab
-          active={@active_tab == "not_expired"}
-          phx-click="change-tab"
-          phx-value-tab="not_expired"
-        >
-          {gettext("Active")}
-        </:tab>
-        <:tab
-          active={@active_tab == "expired"}
-          disabled={not @has_expired_events}
-          phx-click="change-tab"
-          phx-value-tab="expired"
-        >
-          {gettext("Done")}
-        </:tab>
-        <:tab
-          active={@active_tab == "invited"}
-          disabled={not @has_invited_events}
-          phx-click="change-tab"
-          phx-value-tab="invited"
-        >
-          {gettext("Shared with you")}
-        </:tab>
-      </.tabs>
     </div>
   </div>
   

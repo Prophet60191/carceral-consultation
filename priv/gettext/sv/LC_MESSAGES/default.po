@@ -1323,11 +1323,6 @@ msgstr "Aktiv"
 msgid "Load more"
 msgstr "Ladda mer"
 
-#: lib/claper_web/live/event_live/index.html.heex
-#, elixir-autogen, elixir-format
-msgid "Shared with you"
-msgstr "Delat med dig"
-
 #: lib/claper/quizzes/quiz_question.ex
 #, elixir-autogen, elixir-format
 msgid "must have at least one correct answer"
@@ -7365,3 +7360,8 @@ msgstr "Nedladdningar"
 #, elixir-autogen, elixir-format
 msgid "Kind"
 msgstr "Typ"
+
+#: lib/claper_web/live/event_live/index.html.heex
+#, elixir-autogen, elixir-format
+msgid "Shared"
+msgstr "Delade"
